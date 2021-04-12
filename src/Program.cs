@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
@@ -26,14 +25,19 @@ namespace Microsoft.CodeAnalysis.Tools
         internal const int UnableToLocateMSBuildExitCode = 3;
         internal const int UnableToLocateDotNetCliExitCode = 4;
 
-        private static readonly string[] s_standardInputKeywords = { "/dev/stdin", "-" };
+        private static readonly string[] s_standardInputKeywords = {
+            "/dev/stdin",
+            "-"
+        };
 
         private static ParseResult? s_parseResult;
 
         private static async Task<int> Main(string[] args)
         {
             var rootCommand = FormatCommand.CreateCommandLineOptions();
-            rootCommand.Handler = CommandHandler.Create(new FormatCommand.Handler(Run));
+            rootCommand.Handler = CommandHandler.Create(
+                new FormatCommand.Handler(Run)
+            );
 
             // Parse the incoming args so we can give warnings when deprecated options are used.
             s_parseResult = rootCommand.Parse(args);
@@ -62,7 +66,11 @@ namespace Microsoft.CodeAnalysis.Tools
 
             // Setup logging.
             var logLevel = GetLogLevel(verbosity);
-            var logger = SetupLogging(console, minimalLogLevel: logLevel, minimalErrorLevel: LogLevel.Warning);
+            var logger = SetupLogging(
+                console,
+                minimalLogLevel: logLevel,
+                minimalErrorLevel: LogLevel.Warning
+            );
 
             // Hook so we can cancel and exit when ctrl+c is pressed.
             var cancellationTokenSource = new CancellationTokenSource();
@@ -79,7 +87,10 @@ namespace Microsoft.CodeAnalysis.Tools
                 currentDirectory = Environment.CurrentDirectory;
 
                 var formatVersion = GetVersion();
-                logger.LogDebug(Resources.The_dotnet_format_version_is_0, formatVersion);
+                logger.LogDebug(
+                    Resources.The_dotnet_format_version_is_0,
+                    formatVersion
+                );
 
                 string? workspaceDirectory;
                 string workspacePath;
@@ -89,13 +100,22 @@ namespace Microsoft.CodeAnalysis.Tools
                 if (folder)
                 {
                     // If folder isn't populated, then use the current directory
-                    workspacePath = Path.GetFullPath(workspace ?? ".", Environment.CurrentDirectory);
+                    workspacePath = Path.GetFullPath(
+                        workspace ?? ".",
+                        Environment.CurrentDirectory
+                    );
                     workspaceDirectory = workspacePath;
                     workspaceType = WorkspaceType.Folder;
                 }
                 else
                 {
-                    var (isSolution, workspaceFilePath) = MSBuildWorkspaceFinder.FindWorkspace(currentDirectory, workspace);
+                    var (
+                        isSolution,
+                        workspaceFilePath
+                        ) = MSBuildWorkspaceFinder.FindWorkspace(
+                        currentDirectory,
+                        workspace
+                    );
 
                     workspacePath = workspaceFilePath;
                     workspaceType = isSolution
@@ -108,33 +128,48 @@ namespace Microsoft.CodeAnalysis.Tools
                     workspaceDirectory = Path.GetDirectoryName(workspacePath);
                     if (workspaceDirectory is null)
                     {
-                        throw new Exception($"Unable to find folder at '{workspacePath}'");
+                        throw new Exception(
+                            $"Unable to find folder at '{workspacePath}'"
+                        );
                     }
                 }
 
                 if (workspaceType != WorkspaceType.Folder)
                 {
                     var runtimeVersion = GetRuntimeVersion();
-                    logger.LogDebug(Resources.The_dotnet_runtime_version_is_0, runtimeVersion);
+                    logger.LogDebug(
+                        Resources.The_dotnet_runtime_version_is_0,
+                        runtimeVersion
+                    );
 
                     // Load MSBuild
                     Environment.CurrentDirectory = workspaceDirectory;
 
                     if (!TryGetDotNetCliVersion(out var dotnetVersion))
                     {
-                        logger.LogError(Resources.Unable_to_locate_dotnet_CLI_Ensure_that_it_is_on_the_PATH);
+                        logger.LogError(
+                            Resources.Unable_to_locate_dotnet_CLI_Ensure_that_it_is_on_the_PATH
+                        );
                         return UnableToLocateDotNetCliExitCode;
                     }
 
-                    logger.LogTrace(Resources.The_dotnet_CLI_version_is_0, dotnetVersion);
+                    logger.LogTrace(
+                        Resources.The_dotnet_CLI_version_is_0,
+                        dotnetVersion
+                    );
 
                     if (!TryLoadMSBuild(out var msBuildPath))
                     {
-                        logger.LogError(Resources.Unable_to_locate_MSBuild_Ensure_the_NET_SDK_was_installed_with_the_official_installer);
+                        logger.LogError(
+                            Resources.Unable_to_locate_MSBuild_Ensure_the_NET_SDK_was_installed_with_the_official_installer
+                        );
                         return UnableToLocateMSBuildExitCode;
                     }
 
-                    logger.LogTrace(Resources.Using_msbuildexe_located_in_0, msBuildPath);
+                    logger.LogTrace(
+                        Resources.Using_msbuildexe_located_in_0,
+                        msBuildPath
+                    );
                 }
 
                 var fixType = FixCategory.None;
@@ -155,26 +190,37 @@ namespace Microsoft.CodeAnalysis.Tools
 
                 HandleStandardInput(logger, ref include, ref exclude);
 
-                var fileMatcher = SourceFileMatcher.CreateMatcher(include, exclude);
+                var fileMatcher = SourceFileMatcher.CreateMatcher(
+                    include,
+                    exclude
+                );
 
                 var formatOptions = new FormatOptions(
                     workspacePath,
                     workspaceType,
                     logLevel,
                     fixType,
-                    codeStyleSeverity: GetSeverity(fixStyle ?? FixSeverity.Error),
-                    analyzerSeverity: GetSeverity(fixAnalyzers ?? FixSeverity.Error),
+                    codeStyleSeverity: GetSeverity(
+                        fixStyle ?? FixSeverity.Error
+                    ),
+                    analyzerSeverity: GetSeverity(
+                        fixAnalyzers ?? FixSeverity.Error
+                    ),
                     saveFormattedFiles: !check,
                     changesAreErrors: check,
                     fileMatcher,
                     reportPath: report,
-                    includeGenerated);
+                    includeGenerated
+                );
 
-                var formatResult = await CodeFormatter.FormatWorkspaceAsync(
-                    formatOptions,
-                    logger,
-                    cancellationTokenSource.Token,
-                    createBinaryLog: logLevel == LogLevel.Trace).ConfigureAwait(false);
+                var formatResult =
+                    await CodeFormatter.FormatWorkspaceAsync(
+                            formatOptions,
+                            logger,
+                            cancellationTokenSource.Token,
+                            createBinaryLog: logLevel == LogLevel.Trace
+                        )
+                        .ConfigureAwait(false);
 
                 return GetExitCode(formatResult, check);
             }
@@ -196,10 +242,16 @@ namespace Microsoft.CodeAnalysis.Tools
             }
         }
 
-        private static void HandleStandardInput(ILogger logger, ref string[] include, ref string[] exclude)
+        private static void HandleStandardInput(
+            ILogger logger,
+            ref string[] include,
+            ref string[] exclude)
         {
             var isStandardMarkerUsed = false;
-            if (include.Length == 1 && s_standardInputKeywords.Contains(include[0]))
+            if (
+                include.Length == 1
+                && s_standardInputKeywords.Contains(include[0])
+            )
             {
                 if (TryReadFromStandardInput(ref include))
                 {
@@ -207,11 +259,16 @@ namespace Microsoft.CodeAnalysis.Tools
                 }
             }
 
-            if (exclude.Length == 1 && s_standardInputKeywords.Contains(exclude[0]))
+            if (
+                exclude.Length == 1
+                && s_standardInputKeywords.Contains(exclude[0])
+            )
             {
                 if (isStandardMarkerUsed)
                 {
-                    logger.LogCritical(Resources.Standard_input_used_multiple_times);
+                    logger.LogCritical(
+                        Resources.Standard_input_used_multiple_times
+                    );
                     Environment.Exit(CheckFailedExitCode);
                 }
 
@@ -230,7 +287,9 @@ namespace Microsoft.CodeAnalysis.Tools
                 Array.Resize(ref subject, 0);
 
                 Console.InputEncoding = Encoding.UTF8;
-                using var reader = new StreamReader(Console.OpenStandardInput(8192));
+                using var reader = new StreamReader(
+                    Console.OpenStandardInput(8192)
+                );
                 Console.SetIn(reader);
 
                 for (var i = 0; Console.In.Peek() != -1; ++i)
@@ -243,7 +302,9 @@ namespace Microsoft.CodeAnalysis.Tools
             }
         }
 
-        internal static int GetExitCode(WorkspaceFormatResult formatResult, bool check)
+        internal static int GetExitCode(
+            WorkspaceFormatResult formatResult,
+            bool check)
         {
             if (!check)
             {
@@ -285,13 +346,23 @@ namespace Microsoft.CodeAnalysis.Tools
                 FixSeverity.Warn => DiagnosticSeverity.Warning,
                 FixSeverity.Info => DiagnosticSeverity.Info,
                 _ => throw new ArgumentOutOfRangeException(nameof(severity)),
+
             };
         }
 
-        private static ILogger<Program> SetupLogging(IConsole console, LogLevel minimalLogLevel, LogLevel minimalErrorLevel)
+        private static ILogger<Program> SetupLogging(
+            IConsole console,
+            LogLevel minimalLogLevel,
+            LogLevel minimalErrorLevel)
         {
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton(new LoggerFactory().AddSimpleConsole(console, minimalLogLevel, minimalErrorLevel));
+            serviceCollection.AddSingleton(
+                new LoggerFactory().AddSimpleConsole(
+                    console,
+                    minimalLogLevel,
+                    minimalErrorLevel
+                )
+            );
             serviceCollection.AddLogging();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -303,15 +374,20 @@ namespace Microsoft.CodeAnalysis.Tools
         private static string GetVersion()
         {
             return Assembly.GetExecutingAssembly()
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                .InformationalVersion;
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         }
 
-        private static bool TryGetDotNetCliVersion([NotNullWhen(returnValue: true)] out string? dotnetVersion)
+        private static bool TryGetDotNetCliVersion(
+            [NotNullWhen(returnValue: true)]out string? dotnetVersion)
         {
             try
             {
-                var processInfo = ProcessRunner.CreateProcess("dotnet", "--version", captureOutput: true, displayWindow: false);
+                var processInfo = ProcessRunner.CreateProcess(
+                    "dotnet",
+                    "--version",
+                    captureOutput: true,
+                    displayWindow: false
+                );
                 var versionResult = processInfo.Result.GetAwaiter().GetResult();
 
                 dotnetVersion = versionResult.OutputLines[0].Trim();
@@ -324,19 +400,23 @@ namespace Microsoft.CodeAnalysis.Tools
             }
         }
 
-        private static bool TryLoadMSBuild([NotNullWhen(returnValue: true)] out string? msBuildPath)
+        private static bool TryLoadMSBuild(
+            [NotNullWhen(returnValue: true)]out string? msBuildPath)
         {
             try
             {
                 // Since we are running as a dotnet tool we should be able to find an instance of
                 // MSBuild in a .NET Core SDK.
-                var msBuildInstance = Build.Locator.MSBuildLocator.QueryVisualStudioInstances().First();
+                var msBuildInstance = Build.Locator.MSBuildLocator.QueryVisualStudioInstances()
+                    .First();
 
                 // Since we do not inherit msbuild.deps.json when referencing the SDK copy
                 // of MSBuild and because the SDK no longer ships with version matched assemblies, we
                 // register an assembly loader that will load assemblies from the msbuild path with
                 // equal or higher version numbers than requested.
-                LooseVersionAssemblyLoader.Register(msBuildInstance.MSBuildPath);
+                LooseVersionAssemblyLoader.Register(
+                    msBuildInstance.MSBuildPath
+                );
                 Build.Locator.MSBuildLocator.RegisterInstance(msBuildInstance);
 
                 msBuildPath = msBuildInstance.MSBuildPath;
@@ -352,7 +432,10 @@ namespace Microsoft.CodeAnalysis.Tools
         internal static string GetRuntimeVersion()
         {
             var pathParts = typeof(string).Assembly.Location.Split('\\', '/');
-            var netCoreAppIndex = Array.IndexOf(pathParts, "Microsoft.NETCore.App");
+            var netCoreAppIndex = Array.IndexOf(
+                pathParts,
+                "Microsoft.NETCore.App"
+            );
             return pathParts[netCoreAppIndex + 1];
         }
     }

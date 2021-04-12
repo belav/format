@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +11,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 {
     internal sealed class FinalNewlineFormatter : DocumentFormatter
     {
-        protected override string FormatWarningDescription => Resources.Fix_final_newline;
+        protected override string FormatWarningDescription =>
+            Resources.Fix_final_newline;
 
         public override FixCategory Category => FixCategory.Whitespace;
 
@@ -25,13 +25,27 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             ILogger logger,
             CancellationToken cancellationToken)
         {
-            if (!analyzerConfigOptions.TryGetValue("insert_final_newline", out var insertFinalNewlineValue) ||
-                !bool.TryParse(insertFinalNewlineValue, out var insertFinalNewline))
+            if (
+                !analyzerConfigOptions.TryGetValue(
+                    "insert_final_newline",
+                    out var insertFinalNewlineValue
+                )
+                || !bool.TryParse(
+                    insertFinalNewlineValue,
+                    out var insertFinalNewline
+                )
+            )
             {
-                return await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
+                return await document.GetTextAsync(cancellationToken)
+                    .ConfigureAwait(false);
             }
 
-            if (!EndOfLineFormatter.TryGetEndOfLine(analyzerConfigOptions, out var endOfLine))
+            if (
+                !EndOfLineFormatter.TryGetEndOfLine(
+                    analyzerConfigOptions,
+                    out var endOfLine
+                )
+            )
             {
                 endOfLine = Environment.NewLine;
             }
@@ -42,7 +56,10 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             if (insertFinalNewline && !hasFinalNewline)
             {
                 var finalNewlineSpan = new TextSpan(lastLine.End, 0);
-                var addNewlineChange = new TextChange(finalNewlineSpan, endOfLine);
+                var addNewlineChange = new TextChange(
+                    finalNewlineSpan,
+                    endOfLine
+                );
                 sourceText = sourceText.WithChanges(addNewlineChange);
             }
             else if (!insertFinalNewline && hasFinalNewline)
@@ -51,8 +68,14 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 while (sourceText.Lines.Count > 1 && hasFinalNewline)
                 {
                     var lineBeforeLast = sourceText.Lines[^2];
-                    var finalNewlineSpan = new TextSpan(lineBeforeLast.End, lineBeforeLast.EndIncludingLineBreak - lineBeforeLast.End);
-                    var removeNewlineChange = new TextChange(finalNewlineSpan, string.Empty);
+                    var finalNewlineSpan = new TextSpan(
+                        lineBeforeLast.End,
+                        lineBeforeLast.EndIncludingLineBreak - lineBeforeLast.End
+                    );
+                    var removeNewlineChange = new TextChange(
+                        finalNewlineSpan,
+                        string.Empty
+                    );
                     sourceText = sourceText.WithChanges(removeNewlineChange);
 
                     lastLine = sourceText.Lines[^1];

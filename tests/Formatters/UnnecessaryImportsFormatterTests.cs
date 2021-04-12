@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -16,7 +15,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         private const string RemoveUnnecessaryImportCategoryKey =
             AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticPrefix + "." + AnalyzerOptionsExtensions.CategoryPrefix + "-" + UnnecessaryImportsFormatter.Style + "." + AnalyzerOptionsExtensions.SeveritySuffix;
 
-        private protected override ICodeFormatter Formatter => new UnnecessaryImportsFormatter();
+        private protected override ICodeFormatter Formatter =>
+            new UnnecessaryImportsFormatter();
 
         public UnnecessaryImportsFormatterTests(ITestOutputHelper output)
         {
@@ -26,8 +26,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         [Fact]
         public async Task WhenNotFixingCodeSyle_AndHasUnusedImports_NoChange()
         {
-            var code =
-@"using System;
+            var code = @"using System;
 
 class C
 {
@@ -35,14 +34,18 @@ class C
 
             var editorConfig = new Dictionary<string, string>();
 
-            await AssertCodeUnchangedAsync(code, editorConfig, fixCategory: FixCategory.Whitespace, codeStyleSeverity: DiagnosticSeverity.Info);
+            await AssertCodeUnchangedAsync(
+                code,
+                editorConfig,
+                fixCategory: FixCategory.Whitespace,
+                codeStyleSeverity: DiagnosticSeverity.Info
+            );
         }
 
         [Fact]
         public async Task WhenIDE0005NotConfigured_AndHasUnusedImports_NoChange()
         {
-            var code =
-@"using System;
+            var code = @"using System;
 
 class C
 {
@@ -50,7 +53,13 @@ class C
 
             var editorConfig = new Dictionary<string, string>();
 
-            await AssertCodeUnchangedAsync(code, editorConfig, fixCategory: FixCategory.Whitespace | FixCategory.CodeStyle, codeStyleSeverity: DiagnosticSeverity.Info);
+            await AssertCodeUnchangedAsync(
+                code,
+                editorConfig,
+                fixCategory: FixCategory.Whitespace
+                | FixCategory.CodeStyle,
+                codeStyleSeverity: DiagnosticSeverity.Info
+            );
         }
 
         [Theory]
@@ -58,12 +67,17 @@ class C
         [InlineData(RemoveUnnecessaryImportDiagnosticKey, Severity.Info)]
         [InlineData(RemoveUnnecessaryImportCategoryKey, Severity.Warning)]
         [InlineData(RemoveUnnecessaryImportCategoryKey, Severity.Info)]
-        [InlineData(AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey, Severity.Warning)]
-        [InlineData(AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey, Severity.Info)]
-        public async Task WhenIDE0005SeverityLowerThanFixSeverity_AndHasUnusedImports_NoChange(string key, string severity)
+        [InlineData(
+                AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
+                Severity.Warning)]
+        [InlineData(
+                AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
+                Severity.Info)]
+        public async Task WhenIDE0005SeverityLowerThanFixSeverity_AndHasUnusedImports_NoChange(
+            string key,
+            string severity)
         {
-            var code =
-@"using System;
+            var code = @"using System;
 
 class C
 {
@@ -74,7 +88,13 @@ class C
                 [key] = severity
             };
 
-            await AssertCodeUnchangedAsync(code, editorConfig, fixCategory: FixCategory.Whitespace | FixCategory.CodeStyle, codeStyleSeverity: DiagnosticSeverity.Error);
+            await AssertCodeUnchangedAsync(
+                code,
+                editorConfig,
+                fixCategory: FixCategory.Whitespace
+                | FixCategory.CodeStyle,
+                codeStyleSeverity: DiagnosticSeverity.Error
+            );
         }
 
         [Theory]
@@ -82,19 +102,23 @@ class C
         [InlineData(RemoveUnnecessaryImportDiagnosticKey, Severity.Error)]
         [InlineData(RemoveUnnecessaryImportCategoryKey, Severity.Warning)]
         [InlineData(RemoveUnnecessaryImportCategoryKey, Severity.Error)]
-        [InlineData(AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey, Severity.Warning)]
-        [InlineData(AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey, Severity.Error)]
-        public async Task WhenIDE0005SeverityEqualOrGreaterThanFixSeverity_AndHasUnusedImports_ImportRemoved(string key, string severity)
+        [InlineData(
+                AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
+                Severity.Warning)]
+        [InlineData(
+                AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
+                Severity.Error)]
+        public async Task WhenIDE0005SeverityEqualOrGreaterThanFixSeverity_AndHasUnusedImports_ImportRemoved(
+            string key,
+            string severity)
         {
-            var testCode =
-@"using System;
+            var testCode = @"using System;
 
 class C
 {
 }";
 
-            var expectedCode =
-@"class C
+            var expectedCode = @"class C
 {
 }";
 
@@ -103,7 +127,14 @@ class C
                 [key] = severity
             };
 
-            await AssertCodeChangedAsync(testCode, expectedCode, editorConfig, fixCategory: FixCategory.Whitespace | FixCategory.CodeStyle, codeStyleSeverity: DiagnosticSeverity.Warning);
+            await AssertCodeChangedAsync(
+                testCode,
+                expectedCode,
+                editorConfig,
+                fixCategory: FixCategory.Whitespace
+                | FixCategory.CodeStyle,
+                codeStyleSeverity: DiagnosticSeverity.Warning
+            );
         }
     }
 }

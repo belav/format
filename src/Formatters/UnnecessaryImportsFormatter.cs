@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,7 +17,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
         internal const string IDE0005 = nameof(IDE0005);
         internal const string Style = nameof(Style);
 
-        protected override string FormatWarningDescription => Resources.Remove_unnecessary_import;
+        protected override string FormatWarningDescription =>
+            Resources.Remove_unnecessary_import;
 
         public override FixCategory Category => FixCategory.CodeStyle;
 
@@ -33,7 +33,6 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
         {
             // If we are fixing CodeStyle and the 'IDE0005' diagnostic is configured, then
             // see if we can remove unused imports.
-
             // If we are not saving files, do not make changes in this formatter. They will be
             // reported by their diagnostic id when the analyzer formatter runs.
             if (!formatOptions.SaveFormattedFiles)
@@ -41,31 +40,51 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 return sourceText;
             }
 
-            var tree = await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
+            var tree =
+                await document.GetSyntaxTreeAsync(cancellationToken)
+                    .ConfigureAwait(false);
             if (tree is null)
             {
                 return sourceText;
             }
 
-            var severity = analyzerConfigOptions.GetDiagnosticSeverity(document.Project, tree, IDE0005, Style);
+            var severity = analyzerConfigOptions.GetDiagnosticSeverity(
+                document.Project,
+                tree,
+                IDE0005,
+                Style
+            );
             if (severity < formatOptions.CodeStyleSeverity)
             {
                 return sourceText;
             }
 
-            var formattedDocument = await RemoveUnnecessaryImportsHelper.RemoveUnnecessaryImportsAsync(document, cancellationToken).ConfigureAwait(false);
+            var formattedDocument =
+                await RemoveUnnecessaryImportsHelper.RemoveUnnecessaryImportsAsync(
+                        document,
+                        cancellationToken
+                    )
+                    .ConfigureAwait(false);
             if (formattedDocument is null)
             {
                 return sourceText;
             }
 
-            var isSameVersion = await IsSameDocumentAndVersionAsync(document, formattedDocument, cancellationToken).ConfigureAwait(false);
+            var isSameVersion =
+                await IsSameDocumentAndVersionAsync(
+                        document,
+                        formattedDocument,
+                        cancellationToken
+                    )
+                    .ConfigureAwait(false);
             if (isSameVersion)
             {
                 return sourceText;
             }
 
-            var formattedText = await formattedDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
+            var formattedText =
+                await formattedDocument.GetTextAsync(cancellationToken)
+                    .ConfigureAwait(false);
             return formattedText;
         }
     }

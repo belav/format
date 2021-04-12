@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +16,16 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 {
     public class FormattedFilesTests : CSharpFormatterTests
     {
-        private protected override ICodeFormatter Formatter => new FinalNewlineFormatter();
+        private protected override ICodeFormatter Formatter =>
+            new FinalNewlineFormatter();
 
-        private Dictionary<string, string> EditorConfig => new Dictionary<string, string>()
-        {
-            ["insert_final_newline"] = "true",
-            ["end_of_line"] = "lf",
-        };
+        private Dictionary<string, string> EditorConfig =>
+            new Dictionary<string, string>()
+            {
+                ["insert_final_newline"] = "true",
+                ["end_of_line"] = "lf",
+
+            };
 
         public FormattedFilesTests(ITestOutputHelper output)
         {
@@ -50,16 +52,26 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             Assert.Empty(result);
         }
 
-        private async Task<List<FormattedFile>> TestFormattedFiles(string testCode)
+        private async Task<List<FormattedFile>> TestFormattedFiles(
+            string testCode)
         {
             var text = SourceText.From(testCode, Encoding.UTF8);
             TestState.Sources.Add(text);
 
-            var solution = await GetSolutionAsync(TestState.Sources.ToArray(), TestState.AdditionalFiles.ToArray(), TestState.AdditionalReferences.ToArray(), EditorConfig);
+            var solution =
+                await GetSolutionAsync(
+                    TestState.Sources.ToArray(),
+                    TestState.AdditionalFiles.ToArray(),
+                    TestState.AdditionalReferences.ToArray(),
+                    EditorConfig
+                );
             var project = solution.Projects.Single();
             var document = project.Documents.Single();
 
-            var fileMatcher = SourceFileMatcher.CreateMatcher(new[] { document.FilePath }, exclude: Array.Empty<string>());
+            var fileMatcher = SourceFileMatcher.CreateMatcher(
+                new[] { document.FilePath },
+                exclude: Array.Empty<string>()
+            );
             var formatOptions = new FormatOptions(
                 workspaceFilePath: project.FilePath,
                 workspaceType: WorkspaceType.Folder,
@@ -71,12 +83,20 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
                 changesAreErrors: false,
                 fileMatcher,
                 reportPath: string.Empty,
-                includeGeneratedFiles: false);
+                includeGeneratedFiles: false
+            );
 
             var pathsToFormat = GetOnlyFileToFormat(solution);
 
             var formattedFiles = new List<FormattedFile>();
-            await Formatter.FormatAsync(solution, pathsToFormat, formatOptions, new TestLogger(), formattedFiles, default);
+            await Formatter.FormatAsync(
+                solution,
+                pathsToFormat,
+                formatOptions,
+                new TestLogger(),
+                formattedFiles,
+                default
+            );
 
             return formattedFiles;
         }

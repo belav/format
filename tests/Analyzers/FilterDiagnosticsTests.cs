@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -20,16 +19,21 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         public async Task TestFilterWarning()
         {
             var solution = await GetSolutionAsync();
-            var projectAnalyzersAndFixers = await GetProjectAnalyzersAndFixersAsync(solution);
+            var projectAnalyzersAndFixers =
+                await GetProjectAnalyzersAndFixersAsync(solution);
             var project = solution.Projects.First();
-            var formattablePaths = ImmutableHashSet.Create(project.Documents.First().FilePath);
+            var formattablePaths = ImmutableHashSet.Create(
+                project.Documents.First().FilePath
+            );
             var minimumSeverity = DiagnosticSeverity.Warning;
-            var result = await AnalyzerFormatter.FilterBySeverityAsync(
-                solution,
-                projectAnalyzersAndFixers,
-                formattablePaths,
-                minimumSeverity,
-                CancellationToken.None);
+            var result =
+                await AnalyzerFormatter.FilterBySeverityAsync(
+                    solution,
+                    projectAnalyzersAndFixers,
+                    formattablePaths,
+                    minimumSeverity,
+                    CancellationToken.None
+                );
             var (_, analyzers) = Assert.Single(result);
             Assert.Single(analyzers);
         }
@@ -38,28 +42,40 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         public async Task TestFilterError()
         {
             var solution = await GetSolutionAsync();
-            var projectAnalyzersAndFixers = await GetProjectAnalyzersAndFixersAsync(solution);
+            var projectAnalyzersAndFixers =
+                await GetProjectAnalyzersAndFixersAsync(solution);
             var project = solution.Projects.First();
-            var formattablePaths = ImmutableHashSet.Create(project.Documents.First().FilePath);
+            var formattablePaths = ImmutableHashSet.Create(
+                project.Documents.First().FilePath
+            );
             var minimumSeverity = DiagnosticSeverity.Error;
-            var result = await AnalyzerFormatter.FilterBySeverityAsync(
-                solution,
-                projectAnalyzersAndFixers,
-                formattablePaths,
-                minimumSeverity,
-                CancellationToken.None);
+            var result =
+                await AnalyzerFormatter.FilterBySeverityAsync(
+                    solution,
+                    projectAnalyzersAndFixers,
+                    formattablePaths,
+                    minimumSeverity,
+                    CancellationToken.None
+                );
             var (_, analyzers) = Assert.Single(result);
             Assert.Empty(analyzers);
         }
 
         private static async Task<AnalyzersAndFixers> GetAnalyzersAndFixersAsync()
         {
-            var assemblies = new[]
-            {
-                await GenerateAssemblyAsync(
-                    GenerateAnalyzerCode("DiagnosticAnalyzer1", "DiagnosticAnalyzerId"),
-                    GenerateCodeFix("CodeFixProvider1", "DiagnosticAnalyzerId"))
-            };
+            var assemblies =
+                new[] {
+                    await GenerateAssemblyAsync(
+                        GenerateAnalyzerCode(
+                            "DiagnosticAnalyzer1",
+                            "DiagnosticAnalyzerId"
+                        ),
+                        GenerateCodeFix(
+                            "CodeFixProvider1",
+                            "DiagnosticAnalyzerId"
+                        )
+                    )
+                };
 
             return AnalyzerFinderHelpers.LoadAnalyzersAndFixers(assemblies);
         }
@@ -73,15 +89,20 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
                 TestState.Sources.ToArray(),
                 TestState.AdditionalFiles.ToArray(),
                 TestState.AdditionalReferences.ToArray(),
-                "root = true");
+                "root = true"
+            );
         }
 
-        private async Task<ImmutableDictionary<ProjectId, AnalyzersAndFixers>> GetProjectAnalyzersAndFixersAsync(Solution solution)
+        private async Task<ImmutableDictionary<ProjectId,
+                AnalyzersAndFixers>> GetProjectAnalyzersAndFixersAsync(
+            Solution solution)
         {
             var analyzersAndFixers = await GetAnalyzersAndFixersAsync();
 
-            return solution.Projects
-                .ToImmutableDictionary(project => project.Id, project => analyzersAndFixers);
+            return solution.Projects.ToImmutableDictionary(
+                project => project.Id,
+                project => analyzersAndFixers
+            );
         }
 
         private protected override ICodeFormatter Formatter { get; }

@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +10,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 {
     public class CharsetFormatterTests : CSharpFormatterTests
     {
-        private protected override ICodeFormatter Formatter => new CharsetFormatter();
+        private protected override ICodeFormatter Formatter =>
+            new CharsetFormatter();
 
         public CharsetFormatterTests(ITestOutputHelper output)
         {
@@ -39,7 +39,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         [InlineData("utf-16le", "utf-8")]
         [InlineData("utf-16le", "utf-8-bom")]
         [InlineData("utf-16le", "utf-16be")]
-        public async Task TestCharsetWrong_CharsetFixed(string codeValue, string expectedValue)
+        public async Task TestCharsetWrong_CharsetFixed(
+            string codeValue,
+            string expectedValue)
         {
             var codeEncoding = CharsetFormatter.GetCharset(codeValue);
             var expectedEncoding = CharsetFormatter.GetCharset(expectedValue);
@@ -49,11 +51,16 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 
             var editorConfig = new Dictionary<string, string>()
             {
-
                 ["charset"] = expectedValue,
+
             };
 
-            var formattedText = await AssertCodeUnchangedAsync(testCode, editorConfig, codeEncoding);
+            var formattedText =
+                await AssertCodeUnchangedAsync(
+                    testCode,
+                    editorConfig,
+                    codeEncoding
+                );
 
             Assert.Equal(expectedEncoding, formattedText.Encoding);
         }
@@ -66,11 +73,14 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 
             var testCode = "class 🤵 { }";
 
-            var editorConfig = new Dictionary<string, string>()
-            {
-            };
+            var editorConfig = new Dictionary<string, string>() {  };
 
-            var formattedText = await AssertCodeUnchangedAsync(testCode, editorConfig, codeEncoding);
+            var formattedText =
+                await AssertCodeUnchangedAsync(
+                    testCode,
+                    editorConfig,
+                    codeEncoding
+                );
 
             Assert.Equal(codeEncoding, formattedText.Encoding);
         }

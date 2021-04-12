@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Tools.Analyzers;
@@ -12,7 +11,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
 {
     public class CodeStyleAnalyzerFormatterTests : CSharpFormatterTests
     {
-        private protected override ICodeFormatter Formatter => AnalyzerFormatter.CodeStyleFormatter;
+        private protected override ICodeFormatter Formatter =>
+            AnalyzerFormatter.CodeStyleFormatter;
 
         public CodeStyleAnalyzerFormatterTests(ITestOutputHelper output)
         {
@@ -22,7 +22,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         [Fact]
         public async Task TestUseVarCodeStyle_AppliesWhenNotUsingVar()
         {
-            var testCode = @"
+            var testCode =
+                @"
 using System.Collections.Generic;
 
 class C
@@ -35,7 +36,8 @@ class C
     }
 }";
 
-            var expectedCode = @"
+            var expectedCode =
+                @"
 using System.Collections.Generic;
 
 class C
@@ -55,15 +57,22 @@ class C
                 ["csharp_style_var_for_built_in_types"] = "true:error",
                 ["csharp_style_var_when_type_is_apparent"] = "true:error",
                 ["csharp_style_var_elsewhere"] = "true:error",
+
             };
 
-            await AssertCodeChangedAsync(testCode, expectedCode, editorConfig, fixCategory: FixCategory.CodeStyle);
+            await AssertCodeChangedAsync(
+                testCode,
+                expectedCode,
+                editorConfig,
+                fixCategory: FixCategory.CodeStyle
+            );
         }
 
         [Fact]
         public async Task TestNonFixableCompilerDiagnostics_AreNotReported()
         {
-            var testCode = @"
+            var testCode =
+                @"
 class C
 {
     public int M()
@@ -72,7 +81,12 @@ class C
     }
 }";
 
-            await AssertNoReportedFileChangesAsync(testCode, "root = true", fixCategory: FixCategory.CodeStyle, codeStyleSeverity: DiagnosticSeverity.Warning);
+            await AssertNoReportedFileChangesAsync(
+                testCode,
+                "root = true",
+                fixCategory: FixCategory.CodeStyle,
+                codeStyleSeverity: DiagnosticSeverity.Warning
+            );
         }
     }
 }

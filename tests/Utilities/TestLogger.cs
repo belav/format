@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.Text;
 using Microsoft.CodeAnalysis.Tools.Logging;
@@ -24,7 +23,12 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Utilities
             return true;
         }
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        public void Log<TState>(
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception exception,
+            Func<TState, Exception, string> formatter)
         {
             var message = formatter(state, exception);
             _builder.AppendLine(message);

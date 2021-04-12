@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 
 namespace Microsoft.CodeAnalysis.Tools.Logging
@@ -8,12 +7,8 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
     {
         public static NullScope Instance { get; } = new NullScope();
 
-        private NullScope()
-        {
-        }
+        private NullScope() { }
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() { }
     }
 }

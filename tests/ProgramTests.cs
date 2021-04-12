@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -15,7 +14,11 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         [Fact]
         public void ExitCodeIsOneWithCheckAndAnyFilesFormatted()
         {
-            var formatResult = new WorkspaceFormatResult(filesFormatted: 1, fileCount: 0, exitCode: 0);
+            var formatResult = new WorkspaceFormatResult(
+                filesFormatted: 1,
+                fileCount: 0,
+                exitCode: 0
+            );
             var exitCode = Program.GetExitCode(formatResult, check: true);
 
             Assert.Equal(Program.CheckFailedExitCode, exitCode);
@@ -24,7 +27,11 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         [Fact]
         public void ExitCodeIsZeroWithCheckAndNoFilesFormatted()
         {
-            var formatResult = new WorkspaceFormatResult(filesFormatted: 0, fileCount: 0, exitCode: 42);
+            var formatResult = new WorkspaceFormatResult(
+                filesFormatted: 0,
+                fileCount: 0,
+                exitCode: 42
+            );
             var exitCode = Program.GetExitCode(formatResult, check: true);
 
             Assert.Equal(0, exitCode);
@@ -33,7 +40,11 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         [Fact]
         public void ExitCodeIsSameWithoutCheck()
         {
-            var formatResult = new WorkspaceFormatResult(filesFormatted: 0, fileCount: 0, exitCode: 42);
+            var formatResult = new WorkspaceFormatResult(
+                filesFormatted: 0,
+                fileCount: 0,
+                exitCode: 42
+            );
             var exitCode = Program.GetExitCode(formatResult, check: false);
 
             Assert.Equal(formatResult.ExitCode, exitCode);
@@ -46,26 +57,39 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var sut = FormatCommand.CreateCommandLineOptions();
 
             // Act
-            var result = sut.Parse(new[] {
-                "--folder",
-                "--include", "include1", "include2",
-                "--exclude", "exclude1", "exclude2",
-                "--check",
-                "--report", "report",
-                "--verbosity", "detailed",
-                "--include-generated"});
+            var result = sut.Parse(
+                new[] {
+                    "--folder",
+                    "--include",
+                    "include1",
+                    "include2",
+                    "--exclude",
+                    "exclude1",
+                    "exclude2",
+                    "--check",
+                    "--report",
+                    "report",
+                    "--verbosity",
+                    "detailed",
+                    "--include-generated"
+                }
+            );
 
             // Assert
             Assert.Equal(0, result.Errors.Count);
             Assert.Equal(0, result.UnmatchedTokens.Count);
             Assert.Equal(0, result.UnparsedTokens.Count);
             Assert.True(result.ValueForOption<bool>("folder"));
-            Assert.Collection(result.ValueForOption<IEnumerable<string>>("include"),
+            Assert.Collection(
+                result.ValueForOption<IEnumerable<string>>("include"),
                 i0 => Assert.Equal("include1", i0),
-                i1 => Assert.Equal("include2", i1));
-            Assert.Collection(result.ValueForOption<IEnumerable<string>>("exclude"),
+                i1 => Assert.Equal("include2", i1)
+            );
+            Assert.Collection(
+                result.ValueForOption<IEnumerable<string>>("exclude"),
                 i0 => Assert.Equal("exclude1", i0),
-                i1 => Assert.Equal("exclude2", i1));
+                i1 => Assert.Equal("exclude2", i1)
+            );
             Assert.True(result.ValueForOption<bool>("check"));
             Assert.Equal("report", result.ValueForOption("report"));
             Assert.Equal("detailed", result.ValueForOption("verbosity"));
@@ -83,7 +107,10 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
 
             // Assert
             Assert.Equal(0, result.Errors.Count);
-            Assert.Equal("workspaceValue", result.CommandResult.GetArgumentValueOrDefault("workspace"));
+            Assert.Equal(
+                "workspaceValue",
+                result.CommandResult.GetArgumentValueOrDefault("workspace")
+            );
         }
 
         [Fact]
@@ -93,11 +120,16 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var sut = FormatCommand.CreateCommandLineOptions();
 
             // Act
-            var result = sut.Parse(new[] { "workspaceValue", "--verbosity", "detailed" });
+            var result = sut.Parse(
+                new[] { "workspaceValue", "--verbosity", "detailed" }
+            );
 
             // Assert
             Assert.Equal(0, result.Errors.Count);
-            Assert.Equal("workspaceValue", result.CommandResult.GetArgumentValueOrDefault("workspace"));
+            Assert.Equal(
+                "workspaceValue",
+                result.CommandResult.GetArgumentValueOrDefault("workspace")
+            );
             Assert.Equal("detailed", result.ValueForOption("verbosity"));
         }
 
@@ -108,11 +140,16 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var sut = FormatCommand.CreateCommandLineOptions();
 
             // Act
-            var result = sut.Parse(new[] { "--verbosity", "detailed", "workspaceValue" });
+            var result = sut.Parse(
+                new[] { "--verbosity", "detailed", "workspaceValue" }
+            );
 
             // Assert
             Assert.Equal(0, result.Errors.Count);
-            Assert.Equal("workspaceValue", result.CommandResult.GetArgumentValueOrDefault("workspace"));
+            Assert.Equal(
+                "workspaceValue",
+                result.CommandResult.GetArgumentValueOrDefault("workspace")
+            );
             Assert.Equal("detailed", result.ValueForOption("verbosity"));
         }
 
@@ -123,7 +160,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var sut = FormatCommand.CreateCommandLineOptions();
 
             // Act
-            var result = sut.Parse(new[] { "workspaceValue1", "workspaceValue2" });
+            var result = sut.Parse(
+                new[] { "workspaceValue1", "workspaceValue2" }
+            );
 
             // Assert
             Assert.Equal(1, result.Errors.Count);
@@ -176,7 +215,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var uniqueExitCode = 143;
 
             var sut = FormatCommand.CreateCommandLineOptions();
-            sut.Handler = CommandHandler.Create(new FormatCommand.Handler(TestRun));
+            sut.Handler = CommandHandler.Create(
+                new FormatCommand.Handler(TestRun)
+            );
 
             Task<int> TestRun(
                 string workspace,
@@ -205,7 +246,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 Assert.True(includeGenerated);
 
                 return Task.FromResult(uniqueExitCode);
-            };
+            }
+            ;
 
             var args = @"
 ./src
@@ -223,7 +265,10 @@ diag
 *.vb
 --report
 report.json
---include-generated".Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+--include-generated".Split(
+                Environment.NewLine,
+                StringSplitOptions.RemoveEmptyEntries
+            );
 
             // Act
             var parseResult = sut.Parse(args);

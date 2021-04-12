@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.Collections;
 using System.Collections.Immutable;
@@ -21,38 +20,59 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
         static Extensions()
         {
-            MicrosoftCodeAnalysisFeaturesAssembly = Assembly.Load(new AssemblyName("Microsoft.CodeAnalysis.Features"));
-            IDEDiagnosticIdToOptionMappingHelperType = MicrosoftCodeAnalysisFeaturesAssembly.GetType("Microsoft.CodeAnalysis.Diagnostics.IDEDiagnosticIdToOptionMappingHelper")!;
-            TryGetMappedOptionsMethod = IDEDiagnosticIdToOptionMappingHelperType.GetMethod("TryGetMappedOptions", BindingFlags.Static | BindingFlags.Public)!;
+            MicrosoftCodeAnalysisFeaturesAssembly = Assembly.Load(
+                new AssemblyName("Microsoft.CodeAnalysis.Features")
+            );
+            IDEDiagnosticIdToOptionMappingHelperType = MicrosoftCodeAnalysisFeaturesAssembly.GetType(
+                "Microsoft.CodeAnalysis.Diagnostics.IDEDiagnosticIdToOptionMappingHelper"
+            )!;
+            TryGetMappedOptionsMethod = IDEDiagnosticIdToOptionMappingHelperType.GetMethod(
+                "TryGetMappedOptions",
+                BindingFlags.Static
+                | BindingFlags.Public
+            )!;
         }
 
-        public static bool Any(this SolutionChanges solutionChanges)
-                => solutionChanges.GetProjectChanges().Any(x => x.GetChangedDocuments().Any());
+        public static bool Any(this SolutionChanges solutionChanges) =>
+            solutionChanges.GetProjectChanges()
+                .Any(x => x.GetChangedDocuments().Any());
 
-        public static bool TryCreateInstance<T>(this Type type, [NotNullWhen(returnValue: true)] out T? instance) where T : class
+        public static bool TryCreateInstance<T>(
+            this Type type,
+            [NotNullWhen(returnValue: true)]out T? instance)
+            where T : class
         {
             try
             {
                 var defaultCtor = type.GetConstructor(
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                    BindingFlags.Public
+                    | BindingFlags.NonPublic
+                    | BindingFlags.Instance,
                     binder: null,
                     Array.Empty<Type>(),
-                    modifiers: null);
+                    modifiers: null
+                );
 
                 instance = defaultCtor != null
                     ? (T)Activator.CreateInstance(
                         type,
-                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                        BindingFlags.Public
+                        | BindingFlags.NonPublic
+                        | BindingFlags.Instance,
                         binder: null,
                         args: null,
-                        culture: null)!
+                        culture: null
+                    )!
                     : null;
 
                 return instance != null;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Failed to create instrance of {type.FullName} in {type.AssemblyQualifiedName}.", ex);
+                throw new InvalidOperationException(
+                    $"Failed to create instrance of {type.FullName} in {type.AssemblyQualifiedName}.",
+                    ex
+                );
             }
         }
 
@@ -66,7 +86,9 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             CancellationToken cancellationToken)
         {
             var severity = DiagnosticSeverity.Hidden;
-            var compilation = await project.GetCompilationAsync(cancellationToken).ConfigureAwait(false);
+            var compilation =
+                await project.GetCompilationAsync(cancellationToken)
+                    .ConfigureAwait(false);
             if (compilation is null)
             {
                 return severity;
@@ -75,14 +97,24 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             foreach (var document in project.Documents)
             {
                 // Is the document formattable?
-                if (document.FilePath is null || !formattablePaths.Contains(document.FilePath))
+                if (
+                    document.FilePath is null
+                    || !formattablePaths.Contains(document.FilePath)
+                )
                 {
                     continue;
                 }
 
-                var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
+                var options =
+                    await document.GetOptionsAsync(cancellationToken)
+                        .ConfigureAwait(false);
 
-                var documentSeverity = analyzer.GetSeverity(document, project.AnalyzerOptions, options, compilation);
+                var documentSeverity = analyzer.GetSeverity(
+                    document,
+                    project.AnalyzerOptions,
+                    options,
+                    compilation
+                );
                 if (documentSeverity > severity)
                 {
                     severity = documentSeverity;
@@ -92,7 +124,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             return severity;
         }
 
-        public static DiagnosticSeverity ToSeverity(this ReportDiagnostic reportDiagnostic)
+        public static DiagnosticSeverity ToSeverity(
+            this ReportDiagnostic reportDiagnostic)
         {
             return reportDiagnostic switch
             {
@@ -124,7 +157,14 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     break;
                 }
 
-                if (analyzerOptions.TryGetSeverityFromConfiguration(tree, compilation, descriptor, out var reportDiagnostic))
+                if (
+                    analyzerOptions.TryGetSeverityFromConfiguration(
+                        tree,
+                        compilation,
+                        descriptor,
+                        out var reportDiagnostic
+                    )
+                )
                 {
                     var configuredSeverity = reportDiagnostic.ToSeverity();
                     if (configuredSeverity > severity)
@@ -134,7 +174,14 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     continue;
                 }
 
-                if (TryGetSeverityFromCodeStyleOption(descriptor, compilation, options, out var codeStyleSeverity))
+                if (
+                    TryGetSeverityFromCodeStyleOption(
+                        descriptor,
+                        compilation,
+                        options,
+                        out var codeStyleSeverity
+                    )
+                )
                 {
                     if (codeStyleSeverity > severity)
                     {
@@ -159,8 +206,13 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             {
                 severity = DiagnosticSeverity.Hidden;
 
-                var parameters = new object?[] { descriptor.Id, compilation.Language, null };
-                var result = (bool)(TryGetMappedOptionsMethod.Invoke(null, parameters) ?? false);
+                var parameters =
+                    new object?[] { descriptor.Id, compilation.Language, null };
+                var result =
+                    (bool)(TryGetMappedOptionsMethod.Invoke(
+                        null,
+                        parameters
+                    ) ?? false);
 
                 if (!result)
                 {
@@ -171,26 +223,38 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 foreach (var codeStyleOptionObj in codeStyleOptions)
                 {
                     var codeStyleOption = (IOption)codeStyleOptionObj!;
-                    var option = options.GetOption(new OptionKey(codeStyleOption, codeStyleOption.IsPerLanguage ? compilation.Language : null));
+                    var option = options.GetOption(
+                        new OptionKey(
+                            codeStyleOption,
+                            codeStyleOption.IsPerLanguage
+                                ? compilation.Language
+                                : null
+                        )
+                    );
                     if (option is null)
                     {
                         continue;
                     }
 
-                    var notificationProperty = option.GetType().GetProperty("Notification");
+                    var notificationProperty = option.GetType()
+                        .GetProperty("Notification");
                     if (notificationProperty is null)
                     {
                         continue;
                     }
 
                     var notification = notificationProperty.GetValue(option);
-                    var reportDiagnosticValue = notification?.GetType().GetProperty("Severity")?.GetValue(notification);
+                    var reportDiagnosticValue =
+                        notification?.GetType()
+                            .GetProperty("Severity")?.GetValue(notification);
                     if (reportDiagnosticValue is null)
                     {
                         continue;
                     }
 
-                    var codeStyleSeverity = ToSeverity((ReportDiagnostic)reportDiagnosticValue);
+                    var codeStyleSeverity = ToSeverity(
+                        (ReportDiagnostic)reportDiagnosticValue
+                    );
                     if (codeStyleSeverity > severity)
                     {
                         severity = codeStyleSeverity;

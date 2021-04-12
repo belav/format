@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -15,9 +14,11 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 {
     internal sealed class CharsetFormatter : DocumentFormatter
     {
-        protected override string FormatWarningDescription => Resources.Fix_file_encoding;
+        protected override string FormatWarningDescription =>
+            Resources.Fix_file_encoding;
 
-        private static Encoding Utf8 => new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+        private static Encoding Utf8 =>
+            new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
         private static Encoding Latin1 => Encoding.GetEncoding("iso-8859-1");
 
         public override FixCategory Category => FixCategory.Whitespace;
@@ -31,24 +32,36 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             ILogger logger,
             CancellationToken cancellationToken)
         {
-            return Task.Run(() =>
-            {
-                if (!TryGetCharset(analyzerConfigOptions, out var encoding)
-                    || sourceText.Encoding?.Equals(encoding) == true
-                    || IsEncodingEquivalent(sourceText, encoding))
+            return Task.Run(
+                () =>
                 {
-                    return sourceText;
-                }
+                    if (
+                        !TryGetCharset(analyzerConfigOptions, out var encoding)
+                        || sourceText.Encoding?.Equals(encoding) == true
+                        || IsEncodingEquivalent(sourceText, encoding)
+                    )
+                    {
+                        return sourceText;
+                    }
 
-                return SourceText.From(sourceText.ToString(), encoding, sourceText.ChecksumAlgorithm);
-            });
+                    return SourceText.From(
+                        sourceText.ToString(),
+                        encoding,
+                        sourceText.ChecksumAlgorithm
+                    );
+                }
+            );
         }
 
-        private static bool IsEncodingEquivalent(SourceText sourceText, Encoding encoding)
+        private static bool IsEncodingEquivalent(
+            SourceText sourceText,
+            Encoding encoding)
         {
             if (sourceText.Encoding is null)
             {
-                throw new System.Exception($"source text did not have an identifiable encoding");
+                throw new System.Exception(
+                    $"source text did not have an identifiable encoding"
+                );
             }
 
             var text = sourceText.ToString();
@@ -56,7 +69,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             var encodedBytes = GetEncodedBytes(text, encoding);
 
             return originalBytes.Length == encodedBytes.Length
-                && originalBytes.SequenceEqual(encodedBytes);
+            && originalBytes.SequenceEqual(encodedBytes);
         }
 
         private static byte[] GetEncodedBytes(string text, Encoding encoding)
@@ -69,10 +82,17 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             return stream.ToArray();
         }
 
-        private static bool TryGetCharset(AnalyzerConfigOptions analyzerConfigOptions, [NotNullWhen(true)] out Encoding? encoding)
+        private static bool TryGetCharset(
+            AnalyzerConfigOptions analyzerConfigOptions,
+            [NotNullWhen(true)]out Encoding? encoding)
         {
-            if (analyzerConfigOptions != null &&
-                analyzerConfigOptions.TryGetValue("charset", out var charsetOption))
+            if (
+                analyzerConfigOptions != null
+                && analyzerConfigOptions.TryGetValue(
+                    "charset",
+                    out var charsetOption
+                )
+            )
             {
                 encoding = GetCharset(charsetOption);
                 return true;
@@ -87,10 +107,11 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             return charsetOption switch
             {
                 "latin1" => Latin1,
-                "utf-8-bom" => Encoding.UTF8,// UTF-8 with BOM Marker
-                "utf-16be" => Encoding.BigEndianUnicode,// Big Endian with BOM Marker
-                "utf-16le" => Encoding.Unicode,// Little Endian with BOM Marker
+                "utf-8-bom" => Encoding.UTF8, // UTF-8 with BOM Marker
+                "utf-16be" => Encoding.BigEndianUnicode, // Big Endian with BOM Marker
+                "utf-16le" => Encoding.Unicode, // Little Endian with BOM Marker
                 _ => Utf8,
+
             };
         }
     }

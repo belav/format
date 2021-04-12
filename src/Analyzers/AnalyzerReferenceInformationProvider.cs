@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
@@ -10,28 +9,40 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.CodeAnalysis.Tools.Analyzers
 {
-    internal class AnalyzerReferenceInformationProvider : IAnalyzerInformationProvider
+    internal class AnalyzerReferenceInformationProvider
+        : IAnalyzerInformationProvider
     {
-        public ImmutableDictionary<ProjectId, AnalyzersAndFixers> GetAnalyzersAndFixers(
+        public ImmutableDictionary<ProjectId,
+            AnalyzersAndFixers> GetAnalyzersAndFixers(
             Solution solution,
             FormatOptions formatOptions,
             ILogger logger)
         {
-            return solution.Projects
-                .ToImmutableDictionary(project => project.Id, GetAnalyzersAndFixers);
+            return solution.Projects.ToImmutableDictionary(
+                project => project.Id,
+                GetAnalyzersAndFixers
+            );
         }
 
         private AnalyzersAndFixers GetAnalyzersAndFixers(Project project)
         {
-            var analyzerAssemblies = project.AnalyzerReferences
-                .Select(reference => TryLoadAssemblyFrom(reference.FullPath, new AnalyzerLoadContext()))
+            var analyzerAssemblies = project.AnalyzerReferences.Select(
+                    reference => TryLoadAssemblyFrom(
+                        reference.FullPath,
+                        new AnalyzerLoadContext()
+                    )
+                )
                 .OfType<Assembly>()
                 .ToImmutableArray();
 
-            return AnalyzerFinderHelpers.LoadAnalyzersAndFixers(analyzerAssemblies);
+            return AnalyzerFinderHelpers.LoadAnalyzersAndFixers(
+                analyzerAssemblies
+            );
         }
 
-        private Assembly? TryLoadAssemblyFrom(string? path, AnalyzerLoadContext context)
+        private Assembly? TryLoadAssemblyFrom(
+            string? path,
+            AnalyzerLoadContext context)
         {
             // Since we are not deploying these assemblies we need to ensure the files exist.
             if (path is null || !File.Exists(path))
@@ -52,7 +63,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             return null;
         }
 
-        public DiagnosticSeverity GetSeverity(FormatOptions formatOptions) => formatOptions.AnalyzerSeverity;
+        public DiagnosticSeverity GetSeverity(FormatOptions formatOptions) =>
+            formatOptions.AnalyzerSeverity;
 
         internal sealed class AnalyzerLoadContext : AssemblyLoadContext
         {
@@ -63,11 +75,14 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 // Since we build against .NET Core 2.1 we do not have access to the
                 // AssemblyDependencyResolver which resolves depenendency assembly paths
                 // from AssemblyName by using the .deps.json.
-
                 try
                 {
                     // Search for assembly based on assembly name and culture within the analyzer folder.
-                    var assembly = AssemblyResolver.TryResolveAssemblyFromPaths(this, assemblyName, AssemblyFolderPath);
+                    var assembly = AssemblyResolver.TryResolveAssemblyFromPaths(
+                        this,
+                        assemblyName,
+                        AssemblyFolderPath
+                    );
 
                     if (assembly != null)
                     {
@@ -77,7 +92,9 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 catch { }
 
                 // Try to load the requested assembly from the default load context.
-                return AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);
+                return AssemblyLoadContext.Default.LoadFromAssemblyName(
+                    assemblyName
+                );
             }
         }
     }

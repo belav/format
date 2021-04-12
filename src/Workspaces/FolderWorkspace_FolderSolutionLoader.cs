@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Immutable;
 using System.IO;
 using Microsoft.CodeAnalysis.Tools.Utilities;
@@ -10,22 +9,41 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
     {
         private static class FolderSolutionLoader
         {
-            private static ImmutableArray<ProjectLoader> ProjectLoaders
-                => ImmutableArray.Create<ProjectLoader>(new CSharpProjectLoader(), new VisualBasicProjectLoader());
+            private static ImmutableArray<ProjectLoader> ProjectLoaders =>
+                ImmutableArray.Create<ProjectLoader>(
+                    new CSharpProjectLoader(),
+                    new VisualBasicProjectLoader()
+                );
 
-            public static SolutionInfo LoadSolutionInfo(string folderPath, SourceFileMatcher fileMatcher)
+            public static SolutionInfo LoadSolutionInfo(
+                string folderPath,
+                SourceFileMatcher fileMatcher)
             {
-                var absoluteFolderPath = Path.GetFullPath(folderPath, Directory.GetCurrentDirectory());
+                var absoluteFolderPath = Path.GetFullPath(
+                    folderPath,
+                    Directory.GetCurrentDirectory()
+                );
 
-                var filePaths = GetMatchingFilePaths(absoluteFolderPath, fileMatcher);
-                var editorConfigPaths = EditorConfigFinder.GetEditorConfigPaths(folderPath);
+                var filePaths = GetMatchingFilePaths(
+                    absoluteFolderPath,
+                    fileMatcher
+                );
+                var editorConfigPaths = EditorConfigFinder.GetEditorConfigPaths(
+                    folderPath
+                );
 
-                var projectInfos = ImmutableArray.CreateBuilder<ProjectInfo>(ProjectLoaders.Length);
+                var projectInfos = ImmutableArray.CreateBuilder<ProjectInfo>(
+                    ProjectLoaders.Length
+                );
 
                 // Create projects for each of the supported languages.
                 foreach (var loader in ProjectLoaders)
                 {
-                    var projectInfo = loader.LoadProjectInfo(folderPath, filePaths, editorConfigPaths);
+                    var projectInfo = loader.LoadProjectInfo(
+                        folderPath,
+                        filePaths,
+                        editorConfigPaths
+                    );
                     if (projectInfo is null)
                     {
                         continue;
@@ -39,19 +57,26 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                     SolutionId.CreateNewId(debugName: absoluteFolderPath),
                     version: default,
                     absoluteFolderPath,
-                    projectInfos);
+                    projectInfos
+                );
             }
 
-            private static ImmutableArray<string> GetMatchingFilePaths(string folderPath, SourceFileMatcher fileMatcher)
+            private static ImmutableArray<string> GetMatchingFilePaths(
+                string folderPath,
+                SourceFileMatcher fileMatcher)
             {
                 // If only file paths were given to be included, then avoid matching against all
                 // the files beneath the folderPath and instead check if the specified files exist.
-                if (fileMatcher.Exclude.IsDefaultOrEmpty && AreAllFilePaths(fileMatcher.Include))
+                if (
+                    fileMatcher.Exclude.IsDefaultOrEmpty
+                    && AreAllFilePaths(fileMatcher.Include)
+                )
                 {
                     return ValidateFilePaths(folderPath, fileMatcher.Include);
                 }
 
-                return fileMatcher.GetResultsInFullPath(folderPath).ToImmutableArray();
+                return fileMatcher.GetResultsInFullPath(folderPath)
+                    .ToImmutableArray();
 
                 static bool AreAllFilePaths(ImmutableArray<string> globs)
                 {
@@ -59,9 +84,11 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                     {
                         // The FileSystemGlobbing.Matcher only supports the '*' wildcard and paths
                         // ending in a directory separator are treated as folder paths.
-                        if (globs[index].Contains('*') ||
-                            globs[index].EndsWith('\\') ||
-                            globs[index].EndsWith('/'))
+                        if (
+                            globs[index].Contains('*')
+                            || globs[index].EndsWith('\\')
+                            || globs[index].EndsWith('/')
+                        )
                         {
                             return false;
                         }
@@ -70,12 +97,19 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                     return true;
                 }
 
-                static ImmutableArray<string> ValidateFilePaths(string folderPath, ImmutableArray<string> paths)
+                static ImmutableArray<string> ValidateFilePaths(
+                    string folderPath,
+                    ImmutableArray<string> paths)
                 {
-                    var filePaths = ImmutableArray.CreateBuilder<string>(paths.Length);
+                    var filePaths = ImmutableArray.CreateBuilder<string>(
+                        paths.Length
+                    );
                     for (var index = 0; index < paths.Length; index++)
                     {
-                        var filePath = Path.GetFullPath(paths[index], folderPath);
+                        var filePath = Path.GetFullPath(
+                            paths[index],
+                            folderPath
+                        );
                         if (File.Exists(filePath))
                         {
                             filePaths.Add(filePath);

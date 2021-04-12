@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Generic;
 
 namespace Microsoft.CodeAnalysis.Tools
@@ -14,7 +13,9 @@ namespace Microsoft.CodeAnalysis.Tools
 
         public IEnumerable<FileChange> FileChanges { get; }
 
-        public FormattedFile(Document document, IEnumerable<FileChange> fileChanges)
+        public FormattedFile(
+            Document document,
+            IEnumerable<FileChange> fileChanges)
         {
             DocumentId = document.Id;
             FileName = document.Name;

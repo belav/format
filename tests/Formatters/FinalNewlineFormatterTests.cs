@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Tools.Formatters;
@@ -10,7 +9,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 {
     public class FinalNewlineFormatterTests : CSharpFormatterTests
     {
-        private protected override ICodeFormatter Formatter => new FinalNewlineFormatter();
+        private protected override ICodeFormatter Formatter =>
+            new FinalNewlineFormatter();
 
         public FinalNewlineFormatterTests(ITestOutputHelper output)
         {
@@ -28,6 +28,7 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 ["end_of_line"] = "crlf",
+
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);
@@ -45,6 +46,7 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 ["end_of_line"] = "crlf",
+
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);
@@ -61,6 +63,7 @@ class C
             {
                 ["insert_final_newline"] = "true",
                 ["end_of_line"] = "lf",
+
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
@@ -77,6 +80,7 @@ class C
             {
                 ["insert_final_newline"] = "true",
                 ["end_of_line"] = "crlf",
+
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
@@ -93,6 +97,7 @@ class C
             {
                 ["insert_final_newline"] = "true",
                 ["end_of_line"] = "cr",
+
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
@@ -110,6 +115,7 @@ class C
             {
                 ["insert_final_newline"] = "true",
                 ["end_of_line"] = "crlf",
+
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);
@@ -126,6 +132,7 @@ class C
             {
                 ["insert_final_newline"] = "false",
                 ["end_of_line"] = "crlf",
+
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
@@ -142,6 +149,7 @@ class C
             {
                 ["insert_final_newline"] = "false",
                 ["end_of_line"] = "crlf",
+
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
@@ -158,6 +166,7 @@ class C
             {
                 ["insert_final_newline"] = "false",
                 ["end_of_line"] = "crlf",
+
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
@@ -175,6 +184,7 @@ class C
             {
                 ["insert_final_newline"] = "false",
                 ["end_of_line"] = "crlf",
+
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);
@@ -189,6 +199,7 @@ class C
             {
                 ["insert_final_newline"] = "false",
                 ["end_of_line"] = "crlf",
+
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);

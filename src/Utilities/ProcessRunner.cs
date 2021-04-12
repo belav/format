@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +16,11 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
         public ReadOnlyCollection<string> OutputLines { get; }
         public ReadOnlyCollection<string> ErrorLines { get; }
 
-        public ProcessResult(Process process, int exitCode, ReadOnlyCollection<string> outputLines, ReadOnlyCollection<string> errorLines)
+        public ProcessResult(
+            Process process,
+            int exitCode,
+            ReadOnlyCollection<string> outputLines,
+            ReadOnlyCollection<string> errorLines)
         {
             Process = process;
             ExitCode = exitCode;
@@ -34,7 +37,10 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
 
         public int Id => Process.Id;
 
-        public ProcessInfo(Process process, ProcessStartInfo startInfo, Task<ProcessResult> result)
+        public ProcessInfo(
+            Process process,
+            ProcessStartInfo startInfo,
+            Task<ProcessResult> result)
         {
             Process = process;
             StartInfo = startInfo;
@@ -63,10 +69,18 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             Action<Process>? onProcessStartHandler = null,
             CancellationToken cancellationToken = default) =>
             CreateProcess(
-                CreateProcessStartInfo(executable, arguments, workingDirectory, captureOutput, displayWindow, environmentVariables),
+                CreateProcessStartInfo(
+                    executable,
+                    arguments,
+                    workingDirectory,
+                    captureOutput,
+                    displayWindow,
+                    environmentVariables
+                ),
                 lowPriority: lowPriority,
                 onProcessStartHandler: onProcessStartHandler,
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken
+            );
 
         public static ProcessInfo CreateProcess(
             ProcessStartInfo processStartInfo,
@@ -83,39 +97,43 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             process.StartInfo = processStartInfo;
 
             process.OutputDataReceived += (s, e) =>
+            {
+                if (e.Data != null)
                 {
-                    if (e.Data != null)
-                    {
-                        outputLines.Add(e.Data);
-                    }
-                };
+                    outputLines.Add(e.Data);
+                }
+            };
 
             process.ErrorDataReceived += (s, e) =>
+            {
+                if (e.Data != null)
                 {
-                    if (e.Data != null)
-                    {
-                        errorLines.Add(e.Data);
-                    }
-                };
+                    errorLines.Add(e.Data);
+                }
+            };
 
             process.Exited += (s, e) =>
-                {
-                    // We must call WaitForExit to make sure we've received all OutputDataReceived/ErrorDataReceived calls
-                    // or else we'll be returning a list we're still modifying. For paranoia, we'll start a task here rather
-                    // than enter right back into the Process type and start a wait which isn't guaranteed to be safe.
-                    Task.Run(() =>
+            {
+                // We must call WaitForExit to make sure we've received all OutputDataReceived/ErrorDataReceived calls
+                // or else we'll be returning a list we're still modifying. For paranoia, we'll start a task here rather
+                // than enter right back into the Process type and start a wait which isn't guaranteed to be safe.
+                Task.Run(
+                    () =>
                     {
                         process.WaitForExit();
                         var result = new ProcessResult(
                             process,
                             process.ExitCode,
                             new ReadOnlyCollection<string>(outputLines),
-                            new ReadOnlyCollection<string>(errorLines));
+                            new ReadOnlyCollection<string>(errorLines)
+                        );
                         tcs.TrySetResult(result);
-                    });
-                };
+                    }
+                );
+            };
 
-            var registration = cancellationToken.Register(() =>
+            var registration = cancellationToken.Register(
+                () =>
                 {
                     if (tcs.TrySetCanceled())
                     {
@@ -128,11 +146,12 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
                             }
                             catch (InvalidOperationException)
                             {
-                                // Ignore, since the process is already dead
+                            // Ignore, since the process is already dead
                             }
                         }
                     }
-                });
+                }
+            );
 
             process.Start();
             onProcessStartHandler?.Invoke(process);
@@ -174,7 +193,9 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             {
                 foreach (var pair in environmentVariables)
                 {
-                    processStartInfo.EnvironmentVariables[pair.Key] = pair.Value;
+                    processStartInfo.EnvironmentVariables[
+                        pair.Key
+                    ] = pair.Value;
                 }
             }
 

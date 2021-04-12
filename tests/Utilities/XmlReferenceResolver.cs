@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -32,7 +31,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Utilities
             return new MemoryStream(Encoding.UTF8.GetBytes(content));
         }
 
-        public override string ResolveReference(string path, string baseFilePath)
+        public override string ResolveReference(
+            string path,
+            string baseFilePath)
         {
             return path;
         }

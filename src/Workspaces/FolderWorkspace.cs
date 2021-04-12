@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.IO;
 using System.Text;
@@ -12,12 +11,11 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
 {
     internal sealed partial class FolderWorkspace : Workspace
     {
-        private static Encoding DefaultEncoding => new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+        private static Encoding DefaultEncoding =>
+            new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
 
         private FolderWorkspace(HostServices hostServices)
-            : base(hostServices, "Folder")
-        {
-        }
+            : base(hostServices, "Folder") { }
 
         public static FolderWorkspace Create()
         {
@@ -29,16 +27,27 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             return new FolderWorkspace(hostServices);
         }
 
-        public Solution OpenFolder(string folderPath, SourceFileMatcher fileMatcher)
+        public Solution OpenFolder(
+            string folderPath,
+            SourceFileMatcher fileMatcher)
         {
-            if (string.IsNullOrEmpty(folderPath) || !Directory.Exists(folderPath))
+            if (
+                string.IsNullOrEmpty(folderPath)
+                || !Directory.Exists(folderPath)
+            )
             {
-                throw new ArgumentException($"Folder '{folderPath}' does not exist.", nameof(folderPath));
+                throw new ArgumentException(
+                    $"Folder '{folderPath}' does not exist.",
+                    nameof(folderPath)
+                );
             }
 
             ClearSolution();
 
-            var solutionInfo = FolderSolutionLoader.LoadSolutionInfo(folderPath, fileMatcher);
+            var solutionInfo = FolderSolutionLoader.LoadSolutionInfo(
+                folderPath,
+                fileMatcher
+            );
 
             OnSolutionAdded(solutionInfo);
 
@@ -51,26 +60,51 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             return feature == ApplyChangesKind.ChangeDocument;
         }
 
-        protected override void ApplyDocumentTextChanged(DocumentId documentId, SourceText text)
+        protected override void ApplyDocumentTextChanged(
+            DocumentId documentId,
+            SourceText text)
         {
             var document = CurrentSolution.GetDocument(documentId);
             if (document?.FilePath != null && text.Encoding != null)
             {
-                SaveDocumentText(documentId, document.FilePath, text, text.Encoding);
-                OnDocumentTextChanged(documentId, text, PreservationMode.PreserveValue);
+                SaveDocumentText(
+                    documentId,
+                    document.FilePath,
+                    text,
+                    text.Encoding
+                );
+                OnDocumentTextChanged(
+                    documentId,
+                    text,
+                    PreservationMode.PreserveValue
+                );
             }
         }
 
-        private void SaveDocumentText(DocumentId id, string fullPath, SourceText newText, Encoding encoding)
+        private void SaveDocumentText(
+            DocumentId id,
+            string fullPath,
+            SourceText newText,
+            Encoding encoding)
         {
             try
             {
-                using var writer = new StreamWriter(fullPath, append: false, encoding);
+                using var writer = new StreamWriter(
+                    fullPath,
+                    append: false,
+                    encoding
+                );
                 newText.Write(writer);
             }
             catch (IOException exception)
             {
-                OnWorkspaceFailed(new DocumentDiagnostic(WorkspaceDiagnosticKind.Failure, exception.Message, id));
+                OnWorkspaceFailed(
+                    new DocumentDiagnostic(
+                        WorkspaceDiagnosticKind.Failure,
+                        exception.Message,
+                        id
+                    )
+                );
             }
         }
     }

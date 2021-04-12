@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -11,8 +10,12 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
 {
     internal static class LooseVersionAssemblyLoader
     {
-        private static readonly Dictionary<string, Assembly> s_pathsToAssemblies = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
-        private static readonly Dictionary<string, Assembly> s_namesToAssemblies = new Dictionary<string, Assembly>();
+        private static readonly Dictionary<string,
+            Assembly> s_pathsToAssemblies = new Dictionary<string, Assembly>(
+            StringComparer.OrdinalIgnoreCase
+        );
+        private static readonly Dictionary<string,
+            Assembly> s_namesToAssemblies = new Dictionary<string, Assembly>();
 
         private static readonly object s_guard = new object();
 
@@ -21,16 +24,29 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
         /// </summary>
         public static void Register(string searchPath, ILogger? logger = null)
         {
-            AssemblyLoadContext.Default.Resolving += (AssemblyLoadContext context, AssemblyName assemblyName) =>
+            AssemblyLoadContext.Default.Resolving += (
+                AssemblyLoadContext context,
+                AssemblyName assemblyName) =>
             {
                 lock (s_guard)
                 {
-                    if (s_namesToAssemblies.TryGetValue(assemblyName.FullName, out var cachedAssembly))
+                    if (
+                        s_namesToAssemblies.TryGetValue(
+                            assemblyName.FullName,
+                            out var cachedAssembly
+                        )
+                    )
                     {
                         return cachedAssembly;
                     }
 
-                    var assembly = AssemblyResolver.TryResolveAssemblyFromPaths(context, assemblyName, searchPath, s_pathsToAssemblies, logger: logger);
+                    var assembly = AssemblyResolver.TryResolveAssemblyFromPaths(
+                        context,
+                        assemblyName,
+                        searchPath,
+                        s_pathsToAssemblies,
+                        logger: logger
+                    );
 
                     // Cache assembly
                     if (assembly != null)
@@ -38,7 +54,9 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
                         var name = assembly.FullName;
                         if (name is null)
                         {
-                            throw new Exception($"Could not get name for assembly '{assembly}'");
+                            throw new Exception(
+                                $"Could not get name for assembly '{assembly}'"
+                            );
                         }
 
                         s_pathsToAssemblies[assembly.Location] = assembly;

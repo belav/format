@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Immutable;
 using System.IO;
 
@@ -25,7 +24,10 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             var directory = new DirectoryInfo(path);
 
             // Find .editorconfig files contained unders the folder path.
-            var files = directory.GetFiles(".editorconfig", SearchOption.AllDirectories);
+            var files = directory.GetFiles(
+                ".editorconfig",
+                SearchOption.AllDirectories
+            );
             for (var index = 0; index < files.Length; index++)
             {
                 editorConfigPaths.Add(files[index].FullName);
@@ -36,7 +38,10 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             {
                 directory = directory.Parent;
 
-                files = directory.GetFiles(".editorconfig", SearchOption.TopDirectoryOnly);
+                files = directory.GetFiles(
+                    ".editorconfig",
+                    SearchOption.TopDirectoryOnly
+                );
                 if (files.Length == 1)
                 {
                     editorConfigPaths.Add(files[0].FullName);

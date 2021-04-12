@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,8 +11,11 @@ using Xunit.Sdk;
 
 namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
 {
-    [DebuggerDisplay(@"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}")]
-    public sealed class MSBuildTestCase : LongLivedMarshalByRefObject, IXunitTestCase
+    [DebuggerDisplay(
+            @"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}")]
+    public sealed class MSBuildTestCase
+        : LongLivedMarshalByRefObject,
+            IXunitTestCase
     {
         private IXunitTestCase _testCase;
 
@@ -31,13 +33,16 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
             set => _testCase.SourceInformation = value;
         }
 
-        public Exception InitializationException => _testCase.InitializationException;
+        public Exception InitializationException =>
+            _testCase.InitializationException;
 
         public int Timeout => _testCase.Timeout;
 
         public MSBuildTestCase(IXunitTestCase testCase)
         {
-            _testCase = testCase ?? throw new ArgumentNullException(nameof(testCase));
+            _testCase = testCase ?? throw new ArgumentNullException(
+                nameof(testCase)
+            );
         }
 
         [Obsolete("Called by the deserializer", error: true)]
@@ -53,9 +58,19 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
             await MSBuildWorkspaceLoader.Guard.WaitAsync();
             try
             {
-                var runner = new XunitTestCaseRunner(this, DisplayName, SkipReason, constructorArguments, TestMethodArguments, messageBus, aggregator, cancellationTokenSource);
+                var runner = new XunitTestCaseRunner(
+                    this,
+                    DisplayName,
+                    SkipReason,
+                    constructorArguments,
+                    TestMethodArguments,
+                    messageBus,
+                    aggregator,
+                    cancellationTokenSource
+                );
                 return await runner.RunAsync();
             }
+
             finally
             {
                 MSBuildWorkspaceLoader.Guard.Release();

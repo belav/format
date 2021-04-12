@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -19,8 +18,17 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             DiagnosticSeverity severity,
             ImmutableHashSet<string> fixableCompilerDiagnostics,
             ILogger logger,
-            CancellationToken cancellationToken)
-            => RunCodeAnalysisAsync(result, ImmutableArray.Create(analyzers), project, formattableDocumentPaths, severity, fixableCompilerDiagnostics, logger, cancellationToken);
+            CancellationToken cancellationToken) =>
+            RunCodeAnalysisAsync(
+                result,
+                ImmutableArray.Create(analyzers),
+                project,
+                formattableDocumentPaths,
+                severity,
+                fixableCompilerDiagnostics,
+                logger,
+                cancellationToken
+            );
 
         public async Task RunCodeAnalysisAsync(
             CodeAnalysisResult result,
@@ -43,11 +51,16 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             // This file is generated during a `dotnet restore`.
             if (!AllReferencedProjectsLoaded(project))
             {
-                logger.LogWarning(Resources.Required_references_did_not_load_for_0_or_referenced_project_Run_dotnet_restore_prior_to_formatting, project.Name);
+                logger.LogWarning(
+                    Resources.Required_references_did_not_load_for_0_or_referenced_project_Run_dotnet_restore_prior_to_formatting,
+                    project.Name
+                );
                 return;
             }
 
-            var compilation = await project.GetCompilationAsync(cancellationToken).ConfigureAwait(false);
+            var compilation =
+                await project.GetCompilationAsync(cancellationToken)
+                    .ConfigureAwait(false);
             if (compilation is null)
             {
                 return;
@@ -55,7 +68,11 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
             var compilerDiagnostics = !fixableCompilerDiagnostics.IsEmpty
                 ? compilation.GetDiagnostics(cancellationToken)
-                    .Where(diagnostic => fixableCompilerDiagnostics.Contains(diagnostic.Id))
+                    .Where(
+                        diagnostic => fixableCompilerDiagnostics.Contains(
+                            diagnostic.Id
+                        )
+                    )
                     .ToImmutableArray()
                 : ImmutableArray<Diagnostic>.Empty;
 
@@ -66,28 +83,43 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             }
             else
             {
-                logger.LogDebug(Resources.Running_0_analyzers_on_1, analyzers.Length, project.Name);
+                logger.LogDebug(
+                    Resources.Running_0_analyzers_on_1,
+                    analyzers.Length,
+                    project.Name
+                );
 
                 var analyzerOptions = new CompilationWithAnalyzersOptions(
                     project.AnalyzerOptions,
                     onAnalyzerException: null,
                     concurrentAnalysis: true,
                     logAnalyzerExecutionTime: false,
-                    reportSuppressedDiagnostics: false);
-                var analyzerCompilation = compilation.WithAnalyzers(analyzers, analyzerOptions);
+                    reportSuppressedDiagnostics: false
+                );
+                var analyzerCompilation = compilation.WithAnalyzers(
+                    analyzers,
+                    analyzerOptions
+                );
 
-                diagnostics = await analyzerCompilation.GetAnalyzerDiagnosticsAsync(cancellationToken).ConfigureAwait(false);
+                diagnostics = await analyzerCompilation.GetAnalyzerDiagnosticsAsync(
+                        cancellationToken
+                    )
+                    .ConfigureAwait(false);
                 diagnostics = diagnostics.AddRange(compilerDiagnostics);
             }
 
             // filter diagnostics
             foreach (var diagnostic in diagnostics)
             {
-                if (!diagnostic.IsSuppressed &&
-                    diagnostic.Severity >= severity &&
-                    diagnostic.Location.IsInSource &&
-                    diagnostic.Location.SourceTree != null &&
-                    formattableDocumentPaths.Contains(diagnostic.Location.SourceTree.FilePath))
+                if (
+                    !diagnostic.IsSuppressed
+                    && diagnostic.Severity >= severity
+                    && diagnostic.Location.IsInSource
+                    && diagnostic.Location.SourceTree != null
+                    && formattableDocumentPaths.Contains(
+                        diagnostic.Location.SourceTree.FilePath
+                    )
+                )
                 {
                     result.AddDiagnostic(project, diagnostic);
                 }
@@ -98,14 +130,26 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             static bool AllReferencedProjectsLoaded(Project project)
             {
                 // Use mscorlib to represent Runtime references being loaded.
-                if (!project.MetadataReferences.Any(reference => reference.Display?.EndsWith("mscorlib.dll") == true))
+                if (
+                    !project.MetadataReferences.Any(
+                        reference => reference.Display?.EndsWith(
+                            "mscorlib.dll"
+                        ) == true
+                    )
+                )
                 {
                     return false;
                 }
 
-                return project.ProjectReferences
-                    .Select(projectReference => project.Solution.GetProject(projectReference.ProjectId))
-                    .All(referencedProject => referencedProject != null && AllReferencedProjectsLoaded(referencedProject));
+                return project.ProjectReferences.Select(
+                        projectReference => project.Solution.GetProject(
+                            projectReference.ProjectId
+                        )
+                    )
+                    .All(
+                        referencedProject => referencedProject != null
+                        && AllReferencedProjectsLoaded(referencedProject)
+                    );
             }
         }
     }

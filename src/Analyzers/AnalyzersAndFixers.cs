@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -11,7 +10,9 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         public ImmutableArray<DiagnosticAnalyzer> Analyzers { get; }
         public ImmutableArray<CodeFixProvider> Fixers { get; }
 
-        public AnalyzersAndFixers(ImmutableArray<DiagnosticAnalyzer> analyzers, ImmutableArray<CodeFixProvider> fixers)
+        public AnalyzersAndFixers(
+            ImmutableArray<DiagnosticAnalyzer> analyzers,
+            ImmutableArray<CodeFixProvider> fixers)
         {
             Analyzers = analyzers;
             Fixers = fixers;

@@ -1,5 +1,4 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
-
 using System;
 using System.IO;
 using System.Threading;
@@ -10,7 +9,10 @@ namespace Microsoft.CodeAnalysis.Tools.Perf
     {
         private static int s_registered;
         private static string s_currentDirectory;
-        public static string RepositoryRootDirectory => Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.Parent.Parent.Parent.Parent.Parent.FullName;
+        public static string RepositoryRootDirectory =>
+            Directory.GetParent(
+                Environment.CurrentDirectory
+            ).Parent.Parent.Parent.Parent.Parent.Parent.Parent.Parent.FullName;
 
         public static void SetCurrentDirectory()
         {
