@@ -169,8 +169,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [Fact]
-        public void CommandLine_FolderValidation_FailsIfFixAnalyzersSpecified()
-        {
+        public void CommandLine_FolderValidation_FailsIfFixAnalyzersSpecified() {
             // Arrange
             var sut = FormatCommand.CreateCommandLineOptions();
 
@@ -231,8 +230,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 string[] exclude,
                 string report,
                 bool includeGenerated,
-                IConsole console = null)
-            {
+                IConsole console = null
+            ) {
                 Assert.Equal("./src", workspace);
                 Assert.False(folder);
                 Assert.True(fixWhitespace);

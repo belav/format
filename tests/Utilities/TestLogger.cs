@@ -28,8 +28,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Utilities
             EventId eventId,
             TState state,
             Exception exception,
-            Func<TState, Exception, string> formatter)
-        {
+            Func<TState, Exception, string> formatter
+        ) {
             var message = formatter(state, exception);
             _builder.AppendLine(message);
         }

@@ -24,7 +24,6 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             {
                 ["insert_final_newline"] = "true",
                 ["end_of_line"] = "lf",
-
             };
 
         public FormattedFilesTests(ITestOutputHelper output)
@@ -53,8 +52,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         }
 
         private async Task<List<FormattedFile>> TestFormattedFiles(
-            string testCode)
-        {
+            string testCode
+        ) {
             var text = SourceText.From(testCode, Encoding.UTF8);
             TestState.Sources.Add(text);
 

@@ -30,8 +30,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             AnalyzerConfigOptions analyzerConfigOptions,
             FormatOptions formatOptions,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             return Task.Run(
                 () =>
                 {
@@ -39,8 +39,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                         !TryGetCharset(analyzerConfigOptions, out var encoding)
                         || sourceText.Encoding?.Equals(encoding) == true
                         || IsEncodingEquivalent(sourceText, encoding)
-                    )
-                    {
+                    ) {
                         return sourceText;
                     }
 
@@ -55,8 +54,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 
         private static bool IsEncodingEquivalent(
             SourceText sourceText,
-            Encoding encoding)
-        {
+            Encoding encoding
+        ) {
             if (sourceText.Encoding is null)
             {
                 throw new System.Exception(
@@ -84,16 +83,15 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 
         private static bool TryGetCharset(
             AnalyzerConfigOptions analyzerConfigOptions,
-            [NotNullWhen(true)]out Encoding? encoding)
-        {
+            [NotNullWhen(true)]out Encoding? encoding
+        ) {
             if (
                 analyzerConfigOptions != null
                 && analyzerConfigOptions.TryGetValue(
                     "charset",
                     out var charsetOption
                 )
-            )
-            {
+            ) {
                 encoding = GetCharset(charsetOption);
                 return true;
             }
@@ -111,7 +109,6 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 "utf-16be" => Encoding.BigEndianUnicode, // Big Endian with BOM Marker
                 "utf-16le" => Encoding.Unicode, // Little Endian with BOM Marker
                 _ => Utf8,
-
             };
         }
     }

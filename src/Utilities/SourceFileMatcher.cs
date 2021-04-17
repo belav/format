@@ -12,7 +12,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
 
         public static SourceFileMatcher CreateMatcher(
             string[] include,
-            string[] exclude) => new SourceFileMatcher(include, exclude);
+            string[] exclude
+        ) => new SourceFileMatcher(include, exclude);
 
         private readonly Matcher _matcher = new Matcher(
             StringComparison.OrdinalIgnoreCase
@@ -37,8 +38,7 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
         }
 
         public bool HasMatches(string filePath) =>
-            _shouldMatchAll
-            || _matcher.Match(filePath).HasMatches;
+            _shouldMatchAll || _matcher.Match(filePath).HasMatches;
 
         public IEnumerable<string> GetResultsInFullPath(string directoryPath) =>
             _matcher.GetResultsInFullPath(directoryPath);

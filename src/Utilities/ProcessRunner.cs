@@ -20,8 +20,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             Process process,
             int exitCode,
             ReadOnlyCollection<string> outputLines,
-            ReadOnlyCollection<string> errorLines)
-        {
+            ReadOnlyCollection<string> errorLines
+        ) {
             Process = process;
             ExitCode = exitCode;
             OutputLines = outputLines;
@@ -40,8 +40,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
         public ProcessInfo(
             Process process,
             ProcessStartInfo startInfo,
-            Task<ProcessResult> result)
-        {
+            Task<ProcessResult> result
+        ) {
             Process = process;
             StartInfo = startInfo;
             Result = result;
@@ -67,7 +67,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             bool displayWindow = true,
             Dictionary<string, string>? environmentVariables = null,
             Action<Process>? onProcessStartHandler = null,
-            CancellationToken cancellationToken = default) =>
+            CancellationToken cancellationToken = default
+        ) =>
             CreateProcess(
                 CreateProcessStartInfo(
                     executable,
@@ -86,8 +87,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             ProcessStartInfo processStartInfo,
             bool lowPriority = false,
             Action<Process>? onProcessStartHandler = null,
-            CancellationToken cancellationToken = default)
-        {
+            CancellationToken cancellationToken = default
+        ) {
             var errorLines = new List<string>();
             var outputLines = new List<string>();
             var process = new Process();
@@ -146,7 +147,7 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
                             }
                             catch (InvalidOperationException)
                             {
-                            // Ignore, since the process is already dead
+                                // Ignore, since the process is already dead
                             }
                         }
                     }
@@ -180,8 +181,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             string? workingDirectory = null,
             bool captureOutput = false,
             bool displayWindow = true,
-            Dictionary<string, string>? environmentVariables = null)
-        {
+            Dictionary<string, string>? environmentVariables = null
+        ) {
             var processStartInfo = new ProcessStartInfo(executable, arguments);
 
             if (!string.IsNullOrEmpty(workingDirectory))

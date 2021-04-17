@@ -12,16 +12,15 @@ namespace Microsoft.CodeAnalysis.Tools
         public static void Write(
             string reportPath,
             IEnumerable<FormattedFile> formattedFiles,
-            ILogger logger)
-        {
+            ILogger logger
+        ) {
             var reportFilePath = GetReportFilePath(reportPath);
             var reportFolderPath = Path.GetDirectoryName(reportFilePath);
 
             if (
                 !string.IsNullOrEmpty(reportFolderPath)
                 && !Directory.Exists(reportFolderPath)
-            )
-            {
+            ) {
                 Directory.CreateDirectory(reportFolderPath);
             }
 

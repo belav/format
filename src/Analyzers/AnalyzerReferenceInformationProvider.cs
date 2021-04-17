@@ -16,8 +16,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             AnalyzersAndFixers> GetAnalyzersAndFixers(
             Solution solution,
             FormatOptions formatOptions,
-            ILogger logger)
-        {
+            ILogger logger
+        ) {
             return solution.Projects.ToImmutableDictionary(
                 project => project.Id,
                 GetAnalyzersAndFixers
@@ -27,10 +27,11 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         private AnalyzersAndFixers GetAnalyzersAndFixers(Project project)
         {
             var analyzerAssemblies = project.AnalyzerReferences.Select(
-                    reference => TryLoadAssemblyFrom(
-                        reference.FullPath,
-                        new AnalyzerLoadContext()
-                    )
+                    reference =>
+                        TryLoadAssemblyFrom(
+                            reference.FullPath,
+                            new AnalyzerLoadContext()
+                        )
                 )
                 .OfType<Assembly>()
                 .ToImmutableArray();
@@ -42,8 +43,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
         private Assembly? TryLoadAssemblyFrom(
             string? path,
-            AnalyzerLoadContext context)
-        {
+            AnalyzerLoadContext context
+        ) {
             // Since we are not deploying these assemblies we need to ensure the files exist.
             if (path is null || !File.Exists(path))
             {

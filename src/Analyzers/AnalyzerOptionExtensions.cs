@@ -18,10 +18,11 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             DotnetAnalyzerDiagnosticPrefix + "." + SeveritySuffix;
 
         internal static string GetDiagnosticIdBasedDotnetAnalyzerDiagnosticSeverityKey(
-            string diagnosticId) =>
-            $"{DotnetDiagnosticPrefix}.{diagnosticId}.{SeveritySuffix}";
+            string diagnosticId
+        ) => $"{DotnetDiagnosticPrefix}.{diagnosticId}.{SeveritySuffix}";
         internal static string GetCategoryBasedDotnetAnalyzerDiagnosticSeverityKey(
-            string category) =>
+            string category
+        ) =>
             $"{DotnetAnalyzerDiagnosticPrefix}.{CategoryPrefix}-{category}.{SeveritySuffix}";
 
         /// <summary>
@@ -37,16 +38,15 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             SyntaxTree tree,
             Compilation compilation,
             DiagnosticDescriptor descriptor,
-            out ReportDiagnostic severity)
-        {
+            out ReportDiagnostic severity
+        ) {
             // If user has explicitly configured severity for this diagnostic ID, that should be respected.
             if (
                 compilation.Options.SpecificDiagnosticOptions.TryGetValue(
                     descriptor.Id,
                     out severity
                 )
-            )
-            {
+            ) {
                 return true;
             }
 
@@ -58,9 +58,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     descriptor.Id,
                     CancellationToken.None,
                     out severity
-                ) == true
-            )
-            {
+                )
+                == true
+            ) {
                 return true;
             }
 
@@ -72,11 +72,11 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 analyzerOptions == null
                 || !descriptor.IsEnabledByDefault
                 || descriptor.CustomTags.Any(
-                    tag => tag == WellKnownDiagnosticTags.Compiler
-                    || tag == WellKnownDiagnosticTags.NotConfigurable
+                    tag =>
+                        tag == WellKnownDiagnosticTags.Compiler
+                        || tag == WellKnownDiagnosticTags.NotConfigurable
                 )
-            )
-            {
+            ) {
                 severity = default;
                 return false;
             }
@@ -96,8 +96,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     out var value
                 )
                 && TryParseSeverity(value, out severity)
-            )
-            {
+            ) {
                 return true;
             }
 
@@ -109,8 +108,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     out value
                 )
                 && TryParseSeverity(value, out severity)
-            )
-            {
+            ) {
                 return true;
             }
 
@@ -126,8 +124,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             Project project,
             SyntaxTree tree,
             string diagnosticId,
-            string? diagnosticCategory)
-        {
+            string? diagnosticCategory
+        ) {
             var optionsProvider =
                 project.CompilationOptions?.SyntaxTreeOptionsProvider;
             return (optionsProvider != null
@@ -158,8 +156,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             Project project,
             SyntaxTree tree,
             string diagnosticId,
-            string? diagnosticCategory)
-        {
+            string? diagnosticCategory
+        ) {
             return analyzerConfigOptions.TryGetSeverityFromConfiguration(
                     project,
                     tree,
@@ -185,8 +183,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             SyntaxTree tree,
             string diagnosticId,
             string? diagnosticCategory,
-            out ReportDiagnostic severity)
-        {
+            out ReportDiagnostic severity
+        ) {
             if (analyzerConfigOptions is null)
             {
                 severity = default;
@@ -205,8 +203,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     CancellationToken.None,
                     out severity
                 )
-            )
-            {
+            ) {
                 return true;
             }
 
@@ -224,8 +221,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         out value
                     )
                     && TryParseSeverity(value, out severity)
-                )
-                {
+                ) {
                     return true;
                 }
             }
@@ -238,8 +234,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     out value
                 )
                 && TryParseSeverity(value, out severity)
-            )
-            {
+            ) {
                 return true;
             }
 
@@ -249,8 +244,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         internal static bool TryParseSeverity(
             string value,
-            out ReportDiagnostic severity)
-        {
+            out ReportDiagnostic severity
+        ) {
             var comparer = StringComparer.OrdinalIgnoreCase;
             if (comparer.Equals(value, "default"))
             {
@@ -275,8 +270,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             else if (
                 comparer.Equals(value, "silent")
                 || comparer.Equals(value, "refactoring")
-            )
-            {
+            ) {
                 severity = ReportDiagnostic.Hidden;
                 return true;
             }

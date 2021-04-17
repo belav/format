@@ -26,8 +26,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             AnalyzerConfigOptions analyzerConfigOptions,
             FormatOptions formatOptions,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             if (formatOptions.SaveFormattedFiles)
             {
                 return await GetFormattedDocument(
@@ -55,8 +55,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
         private static async Task<SourceText> GetFormattedDocument(
             Document document,
             OptionSet optionSet,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var formattedDocument =
                 await Formatter.FormatAsync(
                         document,
@@ -75,8 +75,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             Document document,
             SourceText sourceText,
             OptionSet optionSet,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var root =
                 await document.GetSyntaxRootAsync(cancellationToken)
                     .ConfigureAwait(false);

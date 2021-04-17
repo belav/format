@@ -21,8 +21,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             bool createBinaryLog,
             bool logWorkspaceWarnings,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var properties = new Dictionary<string, string>(
                 StringComparer.Ordinal
             )
@@ -35,7 +35,6 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                     "AlwaysCompileMarkupFilesInSeparateDomain",
                     bool.FalseString
                 },
-
             };
 
             var workspace = MSBuildWorkspace.Create(properties);
@@ -50,7 +49,6 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                         "formatDiagnosticLog.binlog"
                     ),
                     Verbosity = Build.Framework.LoggerVerbosity.Diagnostic,
-
                 };
             }
 
@@ -96,8 +94,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             static void LogWorkspaceDiagnostics(
                 ILogger logger,
                 bool logWorkspaceWarnings,
-                ImmutableList<WorkspaceDiagnostic> diagnostics)
-            {
+                ImmutableList<WorkspaceDiagnostic> diagnostics
+            ) {
                 if (!logWorkspaceWarnings)
                 {
                     if (!diagnostics.IsEmpty)
@@ -133,8 +131,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             bool createBinaryLog,
             bool logWorkspaceWarnings,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             await Guard.WaitAsync();
             try
             {

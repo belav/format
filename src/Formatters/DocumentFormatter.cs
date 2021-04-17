@@ -33,8 +33,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             FormatOptions formatOptions,
             ILogger logger,
             List<FormattedFile> formattedFiles,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var formattedDocuments = FormatFiles(
                 solution,
                 formattableDocuments,
@@ -63,7 +63,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             AnalyzerConfigOptions analyzerConfigOptions,
             FormatOptions formatOptions,
             ILogger logger,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken
+        );
 
         /// <summary>
         /// Applies formatting and returns the changed <see cref="SourceText"/> for each <see cref="Document"/>.
@@ -73,8 +74,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             ImmutableArray<DocumentId> formattableDocuments,
             FormatOptions formatOptions,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var formattedDocuments = ImmutableArray.CreateBuilder<(Document, Task<(SourceText originalText, SourceText? formattedText)>)>(
                 formattableDocuments.Length
             );
@@ -135,8 +136,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             AnalyzerConfigOptions analyzerConfigOptions,
             FormatOptions formatOptions,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var originalSourceText =
                 await document.GetTextAsync(cancellationToken)
                     .ConfigureAwait(false);
@@ -155,7 +156,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             return !formattedSourceText.ContentEquals(originalSourceText)
                 || !formattedSourceText.Encoding?.Equals(
                     originalSourceText.Encoding
-                ) == true
+                )
+                == true
                 ? (originalSourceText, formattedSourceText)
                 : (originalSourceText, null);
         }
@@ -169,8 +171,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             FormatOptions formatOptions,
             ILogger logger,
             List<FormattedFile> formattedFiles,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var formattedSolution = solution;
 
             for (var index = 0; index < formattedDocuments.Length; index++)
@@ -223,8 +225,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             SourceText originalText,
             SourceText formattedText,
             bool changesAreErrors,
-            ILogger logger)
-        {
+            ILogger logger
+        ) {
             var workspaceFolder = Path.GetDirectoryName(workspacePath);
             if (workspaceFolder is null)
             {
@@ -252,8 +254,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 if (
                     !formatOptions.SaveFormattedFiles
                     || formatOptions.LogLevel == LogLevel.Trace
-                )
-                {
+                ) {
                     LogFormattingChanges(
                         filePath,
                         changesAreErrors,
@@ -272,8 +273,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             bool changesAreErrors,
             ILogger logger,
             string workspaceFolder,
-            FileChange fileChange)
-        {
+            FileChange fileChange
+        ) {
             var formatMessage =
                 $"{Path.GetRelativePath(workspaceFolder, filePath)}({fileChange.LineNumber},{fileChange.CharNumber}): {fileChange.FormatDescription}";
             if (changesAreErrors)
@@ -289,8 +290,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
         protected static async Task<bool> IsSameDocumentAndVersionAsync(
             Document a,
             Document b,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             if (a == b)
             {
                 return true;

@@ -12,8 +12,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
     internal static class ExportProviderExtensions
     {
         public static CompositionContext AsCompositionContext(
-            this ExportProvider exportProvider)
-        {
+            this ExportProvider exportProvider
+        ) {
             return new CompositionContextShim(exportProvider);
         }
 
@@ -28,8 +28,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
 
             public override bool TryGetExport(
                 CompositionContract contract,
-                out object export)
-            {
+                out object export
+            ) {
                 var importMany = contract.MetadataConstraints.Contains(
                     new KeyValuePair<string, object>("IsImportMany", true)
                 );
@@ -40,16 +40,18 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
 
                 if (metadataType != null)
                 {
-                    var methodInfo = (from method in _exportProvider.GetType()
-                        .GetTypeInfo()
-                        .GetMethods()
+                    var methodInfo = (
+                        from method in _exportProvider.GetType()
+                            .GetTypeInfo()
+                            .GetMethods()
                         where method.Name == nameof(ExportProvider.GetExports)
-                        where method.IsGenericMethod
-                        && method.GetGenericArguments().Length == 2
-                        where method.GetParameters().Length == 1
-                        && method.GetParameters()[
-                            0
-                        ].ParameterType == typeof(string)
+                        where
+                            method.IsGenericMethod
+                            && method.GetGenericArguments().Length == 2
+                        where
+                            method.GetParameters().Length == 1
+                            && method.GetParameters()[0].ParameterType
+                            == typeof(string)
                         select method).Single();
                     var parameterizedMethod = methodInfo.MakeGenericMethod(
                         contractType,
@@ -62,16 +64,18 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 }
                 else if (!isArray)
                 {
-                    var methodInfo = (from method in _exportProvider.GetType()
-                        .GetTypeInfo()
-                        .GetMethods()
+                    var methodInfo = (
+                        from method in _exportProvider.GetType()
+                            .GetTypeInfo()
+                            .GetMethods()
                         where method.Name == nameof(ExportProvider.GetExports)
-                        where method.IsGenericMethod
-                        && method.GetGenericArguments().Length == 1
-                        where method.GetParameters().Length == 1
-                        && method.GetParameters()[
-                            0
-                        ].ParameterType == typeof(string)
+                        where
+                            method.IsGenericMethod
+                            && method.GetGenericArguments().Length == 1
+                        where
+                            method.GetParameters().Length == 1
+                            && method.GetParameters()[0].ParameterType
+                            == typeof(string)
                         select method).Single();
                     var parameterizedMethod = methodInfo.MakeGenericMethod(
                         contractType
@@ -83,14 +87,16 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 }
                 else
                 {
-                    var methodInfo = (from method in _exportProvider.GetType()
-                        .GetTypeInfo()
-                        .GetMethods()
-                        where method.Name == nameof(
-                            ExportProvider.GetExportedValues
-                        )
-                        where method.IsGenericMethod
-                        && method.GetGenericArguments().Length == 1
+                    var methodInfo = (
+                        from method in _exportProvider.GetType()
+                            .GetTypeInfo()
+                            .GetMethods()
+                        where
+                            method.Name
+                            == nameof(ExportProvider.GetExportedValues)
+                        where
+                            method.IsGenericMethod
+                            && method.GetGenericArguments().Length == 1
                         where method.GetParameters().Length == 0
                         select method).Single();
                     var parameterizedMethod = methodInfo.MakeGenericMethod(
@@ -104,8 +110,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
 
             private (Type exportType, Type metadataType, bool isArray) GetContractType(
                 Type contractType,
-                bool importMany)
-            {
+                bool importMany
+            ) {
                 if (importMany && contractType.BaseType == typeof(Array))
                 {
                     return (contractType.GetElementType(), null, true);
@@ -114,11 +120,13 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 if (importMany && contractType.IsConstructedGenericType)
                 {
                     if (
-                        contractType.GetGenericTypeDefinition() == typeof(IList<>)
-                        || contractType.GetGenericTypeDefinition() == typeof(ICollection<>)
-                        || contractType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-                    )
-                    {
+                        contractType.GetGenericTypeDefinition()
+                        == typeof(IList<>)
+                        || contractType.GetGenericTypeDefinition()
+                        == typeof(ICollection<>)
+                        || contractType.GetGenericTypeDefinition()
+                        == typeof(IEnumerable<>)
+                    ) {
                         contractType = contractType.GenericTypeArguments[0];
                     }
                 }
@@ -126,21 +134,24 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 if (contractType.IsConstructedGenericType)
                 {
                     if (
-                        contractType.GetGenericTypeDefinition() == typeof(Lazy<>)
-                    )
-                    {
-                        return (contractType.GenericTypeArguments[
-                            0
-                        ], null, false);
+                        contractType.GetGenericTypeDefinition()
+                        == typeof(Lazy<>)
+                    ) {
+                        return (
+                            contractType.GenericTypeArguments[0],
+                            null,
+                            false
+                        );
                     }
                     else if (
-                        contractType.GetGenericTypeDefinition() == typeof(Lazy<,
-                            >)
-                    )
-                    {
-                        return (contractType.GenericTypeArguments[
-                            0
-                        ], contractType.GenericTypeArguments[1], false);
+                        contractType.GetGenericTypeDefinition()
+                        == typeof(Lazy<, >)
+                    ) {
+                        return (
+                            contractType.GenericTypeArguments[0],
+                            contractType.GenericTypeArguments[1],
+                            false
+                        );
                     }
                     else
                     {

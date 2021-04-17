@@ -53,11 +53,12 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 /// Prefer "var" everywhere
-                ["dotnet_diagnostic.IDE0007.severity"] = "error",
+                [
+                    "dotnet_diagnostic.IDE0007.severity"
+                ] = "error",
                 ["csharp_style_var_for_built_in_types"] = "true:error",
                 ["csharp_style_var_when_type_is_apparent"] = "true:error",
                 ["csharp_style_var_elsewhere"] = "true:error",
-
             };
 
             await AssertCodeChangedAsync(

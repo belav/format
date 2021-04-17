@@ -22,8 +22,8 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
         /// </summary>
         public static (bool isSolution, string workspacePath) FindWorkspace(
             string searchDirectory,
-            string? workspacePath = null)
-        {
+            string? workspacePath = null
+        ) {
             if (!string.IsNullOrEmpty(workspacePath))
             {
                 if (!Path.IsPathRooted(workspacePath))
@@ -53,8 +53,7 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
             if (
                 !string.IsNullOrEmpty(foundSolution)
                 && !string.IsNullOrEmpty(foundProject)
-            )
-            {
+            ) {
                 throw new FileNotFoundException(
                     string.Format(
                         Resources.Both_a_MSBuild_project_file_and_solution_file_found_in_0_Specify_which_to_use_with_the_workspace_argument,
@@ -82,8 +81,8 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
         }
 
         private static (bool isSolution, string workspacePath) FindFile(
-            string workspacePath)
-        {
+            string workspacePath
+        ) {
             var workspaceExtension = Path.GetExtension(workspacePath);
             var isSolution = workspaceExtension.Equals(
                 ".sln",
@@ -137,17 +136,18 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
                     SearchOption.TopDirectoryOnly
                 )
                 .Where(
-                    f => !DnxProjectExtension.Equals(
-                        Path.GetExtension(f),
-                        StringComparison.OrdinalIgnoreCase
-                    )
+                    f =>
+                        !DnxProjectExtension.Equals(
+                            Path.GetExtension(f),
+                            StringComparison.OrdinalIgnoreCase
+                        )
                 );
 
         private static string? FindMatchingFile(
             string searchBase,
             Func<string, IEnumerable<string>> fileSelector,
-            string multipleFilesFoundError)
-        {
+            string multipleFilesFoundError
+        ) {
             if (!Directory.Exists(searchBase))
             {
                 return null;

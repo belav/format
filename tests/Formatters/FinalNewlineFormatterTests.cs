@@ -18,8 +18,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         }
 
         [Fact]
-        public async Task WhenFinalNewlineUnspecified_AndFinalNewlineMissing_NoChange()
-        {
+        public async Task WhenFinalNewlineUnspecified_AndFinalNewlineMissing_NoChange() {
             var code = @"
 class C
 {
@@ -28,15 +27,13 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 ["end_of_line"] = "crlf",
-
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);
         }
 
         [Fact]
-        public async Task WhenFinalNewlineUnspecified_AndFinalNewlineExits_NoChange()
-        {
+        public async Task WhenFinalNewlineUnspecified_AndFinalNewlineExits_NoChange() {
             var code = @"
 class C
 {
@@ -46,15 +43,13 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 ["end_of_line"] = "crlf",
-
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);
         }
 
         [Fact]
-        public async Task WhenFinalNewlineRequired_AndEndOfLineIsLineFeed_LineFeedAdded()
-        {
+        public async Task WhenFinalNewlineRequired_AndEndOfLineIsLineFeed_LineFeedAdded() {
             var testCode = "class C\n{\n}";
 
             var expectedCode = "class C\n{\n}\n";
@@ -63,15 +58,13 @@ class C
             {
                 ["insert_final_newline"] = "true",
                 ["end_of_line"] = "lf",
-
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
         }
 
         [Fact]
-        public async Task WhenFinalNewlineRequired_AndEndOfLineIsCarriageReturnLineFeed_CarriageReturnLineFeedAdded()
-        {
+        public async Task WhenFinalNewlineRequired_AndEndOfLineIsCarriageReturnLineFeed_CarriageReturnLineFeedAdded() {
             var testCode = "class C\r\n{\r\n}";
 
             var expectedCode = "class C\r\n{\r\n}\r\n";
@@ -80,15 +73,13 @@ class C
             {
                 ["insert_final_newline"] = "true",
                 ["end_of_line"] = "crlf",
-
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
         }
 
         [Fact]
-        public async Task WhenFinalNewlineRequired_AndEndOfLineIsCarriageReturn_CarriageReturnAdded()
-        {
+        public async Task WhenFinalNewlineRequired_AndEndOfLineIsCarriageReturn_CarriageReturnAdded() {
             var testCode = "class C\r{\r}";
 
             var expectedCode = "class C\r{\r}\r";
@@ -97,14 +88,12 @@ class C
             {
                 ["insert_final_newline"] = "true",
                 ["end_of_line"] = "cr",
-
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
         }
         [Fact]
-        public async Task WhenFinalNewlineRequired_AndFinalNewlineExits_NoChange()
-        {
+        public async Task WhenFinalNewlineRequired_AndFinalNewlineExits_NoChange() {
             var code = @"
 class C
 {
@@ -115,15 +104,13 @@ class C
             {
                 ["insert_final_newline"] = "true",
                 ["end_of_line"] = "crlf",
-
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);
         }
 
         [Fact]
-        public async Task WhenFinalNewlineUnwanted_AndFinalNewlineExists_CarriageReturnLineFeedRemoved()
-        {
+        public async Task WhenFinalNewlineUnwanted_AndFinalNewlineExists_CarriageReturnLineFeedRemoved() {
             var testCode = "class C\r\n{\r\n}\r\n\r\n\r\n";
 
             var expectedCode = "class C\r\n{\r\n}";
@@ -132,15 +119,13 @@ class C
             {
                 ["insert_final_newline"] = "false",
                 ["end_of_line"] = "crlf",
-
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
         }
 
         [Fact]
-        public async Task WhenFinalNewlineUnwanted_AndFinalNewlineExists_LineFeedRemoved()
-        {
+        public async Task WhenFinalNewlineUnwanted_AndFinalNewlineExists_LineFeedRemoved() {
             var testCode = "class C\n{\n}\n\n\n";
 
             var expectedCode = "class C\n{\n}";
@@ -149,15 +134,13 @@ class C
             {
                 ["insert_final_newline"] = "false",
                 ["end_of_line"] = "crlf",
-
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
         }
 
         [Fact]
-        public async Task WhenFinalNewlineUnwanted_AndFinalNewlineExists_CarriageReturnRemoved()
-        {
+        public async Task WhenFinalNewlineUnwanted_AndFinalNewlineExists_CarriageReturnRemoved() {
             var testCode = "class C\r{\r}\r\r\r";
 
             var expectedCode = "class C\r{\r}";
@@ -166,15 +149,13 @@ class C
             {
                 ["insert_final_newline"] = "false",
                 ["end_of_line"] = "crlf",
-
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
         }
 
         [Fact]
-        public async Task WhenFinalNewlineUnwanted_AndFinalNewlineMissing_NoChange()
-        {
+        public async Task WhenFinalNewlineUnwanted_AndFinalNewlineMissing_NoChange() {
             var code = @"
 class C
 {
@@ -184,7 +165,6 @@ class C
             {
                 ["insert_final_newline"] = "false",
                 ["end_of_line"] = "crlf",
-
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);
@@ -199,7 +179,6 @@ class C
             {
                 ["insert_final_newline"] = "false",
                 ["end_of_line"] = "crlf",
-
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);

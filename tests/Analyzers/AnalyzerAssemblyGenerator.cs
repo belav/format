@@ -20,8 +20,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
     {
         public static SyntaxTree GenerateCodeFix(
             string typeName,
-            string diagnosticId)
-        {
+            string diagnosticId
+        ) {
             var codefix =
                 $@"
 using System;
@@ -54,8 +54,8 @@ public class {typeName} : CodeFixProvider
 
         public static SyntaxTree GenerateAnalyzerCode(
             string typeName,
-            string diagnosticId)
-        {
+            string diagnosticId
+        ) {
             var analyzer =
                 $@"
 using System.Collections.Immutable;
@@ -78,8 +78,8 @@ public class {typeName} : DiagnosticAnalyzer
         }
 
         public static async Task<Assembly> GenerateAssemblyAsync(
-            params SyntaxTree[] trees)
-        {
+            params SyntaxTree[] trees
+        ) {
             var assemblyName = Guid.NewGuid().ToString();
             var references = new List<MetadataReference>()
             {
@@ -98,7 +98,6 @@ public class {typeName} : DiagnosticAnalyzer
                 MetadataReference.CreateFromFile(
                     typeof(CodeFixProvider).Assembly.Location
                 ),
-
             };
 
             var netstandardMetaDataReferences =
@@ -121,11 +120,13 @@ public class {typeName} : DiagnosticAnalyzer
             if (!result.Success)
             {
                 var failures = result.Diagnostics.Where(
-                        diagnostic => diagnostic.IsWarningAsError
-                        || diagnostic.Severity == DiagnosticSeverity.Error
+                        diagnostic =>
+                            diagnostic.IsWarningAsError
+                            || diagnostic.Severity == DiagnosticSeverity.Error
                     )
                     .Select(
-                        diagnostic => $"{diagnostic.Id}: {diagnostic.GetMessage()}"
+                        diagnostic =>
+                            $"{diagnostic.Id}: {diagnostic.GetMessage()}"
                     );
 
                 throw new Exception(string.Join(Environment.NewLine, failures));

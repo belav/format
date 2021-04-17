@@ -11,9 +11,19 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
     public class UnnecessaryImportsFormatterTests : CSharpFormatterTests
     {
         private const string RemoveUnnecessaryImportDiagnosticKey =
-            AnalyzerOptionsExtensions.DotnetDiagnosticPrefix + "." + UnnecessaryImportsFormatter.IDE0005 + "." + AnalyzerOptionsExtensions.SeveritySuffix;
+            AnalyzerOptionsExtensions.DotnetDiagnosticPrefix
+            + "."
+            + UnnecessaryImportsFormatter.IDE0005
+            + "."
+            + AnalyzerOptionsExtensions.SeveritySuffix;
         private const string RemoveUnnecessaryImportCategoryKey =
-            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticPrefix + "." + AnalyzerOptionsExtensions.CategoryPrefix + "-" + UnnecessaryImportsFormatter.Style + "." + AnalyzerOptionsExtensions.SeveritySuffix;
+            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticPrefix
+            + "."
+            + AnalyzerOptionsExtensions.CategoryPrefix
+            + "-"
+            + UnnecessaryImportsFormatter.Style
+            + "."
+            + AnalyzerOptionsExtensions.SeveritySuffix;
 
         private protected override ICodeFormatter Formatter =>
             new UnnecessaryImportsFormatter();
@@ -43,8 +53,7 @@ class C
         }
 
         [Fact]
-        public async Task WhenIDE0005NotConfigured_AndHasUnusedImports_NoChange()
-        {
+        public async Task WhenIDE0005NotConfigured_AndHasUnusedImports_NoChange() {
             var code = @"using System;
 
 class C
@@ -56,8 +65,7 @@ class C
             await AssertCodeUnchangedAsync(
                 code,
                 editorConfig,
-                fixCategory: FixCategory.Whitespace
-                | FixCategory.CodeStyle,
+                fixCategory: FixCategory.Whitespace | FixCategory.CodeStyle,
                 codeStyleSeverity: DiagnosticSeverity.Info
             );
         }
@@ -68,15 +76,15 @@ class C
         [InlineData(RemoveUnnecessaryImportCategoryKey, Severity.Warning)]
         [InlineData(RemoveUnnecessaryImportCategoryKey, Severity.Info)]
         [InlineData(
-                AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
-                Severity.Warning)]
+            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
+            Severity.Warning)]
         [InlineData(
-                AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
-                Severity.Info)]
+            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
+            Severity.Info)]
         public async Task WhenIDE0005SeverityLowerThanFixSeverity_AndHasUnusedImports_NoChange(
             string key,
-            string severity)
-        {
+            string severity
+        ) {
             var code = @"using System;
 
 class C
@@ -91,8 +99,7 @@ class C
             await AssertCodeUnchangedAsync(
                 code,
                 editorConfig,
-                fixCategory: FixCategory.Whitespace
-                | FixCategory.CodeStyle,
+                fixCategory: FixCategory.Whitespace | FixCategory.CodeStyle,
                 codeStyleSeverity: DiagnosticSeverity.Error
             );
         }
@@ -103,15 +110,15 @@ class C
         [InlineData(RemoveUnnecessaryImportCategoryKey, Severity.Warning)]
         [InlineData(RemoveUnnecessaryImportCategoryKey, Severity.Error)]
         [InlineData(
-                AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
-                Severity.Warning)]
+            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
+            Severity.Warning)]
         [InlineData(
-                AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
-                Severity.Error)]
+            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
+            Severity.Error)]
         public async Task WhenIDE0005SeverityEqualOrGreaterThanFixSeverity_AndHasUnusedImports_ImportRemoved(
             string key,
-            string severity)
-        {
+            string severity
+        ) {
             var testCode = @"using System;
 
 class C
@@ -131,8 +138,7 @@ class C
                 testCode,
                 expectedCode,
                 editorConfig,
-                fixCategory: FixCategory.Whitespace
-                | FixCategory.CodeStyle,
+                fixCategory: FixCategory.Whitespace | FixCategory.CodeStyle,
                 codeStyleSeverity: DiagnosticSeverity.Warning
             );
         }

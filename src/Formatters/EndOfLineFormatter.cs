@@ -24,8 +24,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             AnalyzerConfigOptions analyzerConfigOptions,
             FormatOptions formatOptions,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             return Task.Run(
                 () =>
                 {
@@ -34,8 +34,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                             analyzerConfigOptions,
                             out var endOfLine
                         )
-                    )
-                    {
+                    ) {
                         return sourceText;
                     }
 
@@ -43,8 +42,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                     for (
                         var lineIndex = 0;
                         lineIndex < newSourceText.Lines.Count;
-                        lineIndex++)
-                    {
+                        lineIndex++
+                    ) {
                         var line = newSourceText.Lines[lineIndex];
                         var lineEndingSpan = new TextSpan(
                             line.End,
@@ -80,16 +79,15 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 
         public static bool TryGetEndOfLine(
             AnalyzerConfigOptions analyzerConfigOptions,
-            [NotNullWhen(true)]out string? endOfLine)
-        {
+            [NotNullWhen(true)]out string? endOfLine
+        ) {
             if (
                 analyzerConfigOptions != null
                 && analyzerConfigOptions.TryGetValue(
                     "end_of_line",
                     out var endOfLineOption
                 )
-            )
-            {
+            ) {
                 endOfLine = GetEndOfLine(endOfLineOption);
                 return true;
             }
@@ -106,7 +104,6 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 "cr" => "\r",
                 "crlf" => "\r\n",
                 _ => Environment.NewLine,
-
             };
         }
 
@@ -118,7 +115,6 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 "\r" => "cr",
                 "\r\n" => "crlf",
                 _ => GetEndOfLineOption(Environment.NewLine),
-
             };
         }
     }

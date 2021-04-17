@@ -9,14 +9,15 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
     {
         private readonly IReadOnlyDictionary<string, string> _backing;
 
-        public EditorConfigOptions(IReadOnlyDictionary<string, string> backing)
-        {
+        public EditorConfigOptions(
+            IReadOnlyDictionary<string, string> backing
+        ) {
             _backing = backing;
         }
 
         public override bool TryGetValue(
             string key,
-            [NotNullWhen(true)]out string? value) =>
-            _backing.TryGetValue(key, out value);
+            [NotNullWhen(true)]out string? value
+        ) => _backing.TryGetValue(key, out value);
     }
 }

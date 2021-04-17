@@ -23,7 +23,8 @@ namespace Microsoft.CodeAnalysis.Tools
             string[] exclude,
             string? report,
             bool includeGenerated,
-            IConsole console);
+            IConsole console
+        );
 
         internal static string[] VerbosityLevels =>
             new[] {
@@ -136,7 +137,6 @@ namespace Microsoft.CodeAnalysis.Tools
                 {
                     IsHidden = true
                 },
-
             };
 
             rootCommand.Description = "dotnet-format";
@@ -149,31 +149,29 @@ namespace Microsoft.CodeAnalysis.Tools
         }
 
         internal static string? EnsureFolderNotSpecifiedWhenFixingAnalyzers(
-            CommandResult symbolResult)
-        {
+            CommandResult symbolResult
+        ) {
             var folder = symbolResult.ValueForOption<bool>("--folder");
             var fixAnalyzers = symbolResult.OptionResult("--fix-analyzers");
-            return folder
-                && fixAnalyzers != null
+            return folder && fixAnalyzers != null
                 ? "Cannot specify the '--folder' option when running analyzers."
                 : null;
         }
 
         internal static string? EnsureFolderNotSpecifiedWhenFixingStyle(
-            CommandResult symbolResult)
-        {
+            CommandResult symbolResult
+        ) {
             var folder = symbolResult.ValueForOption<bool>("--folder");
             var fixStyle = symbolResult.OptionResult("--fix-style");
-            return folder
-                && fixStyle != null
+            return folder && fixStyle != null
                 ? "Cannot specify the '--folder' option when fixing style."
                 : null;
         }
 
         internal static bool WasOptionUsed(
             this ParseResult result,
-            params string[] aliases)
-        {
+            params string[] aliases
+        ) {
             return result.Tokens.Where(token => token.Type == TokenType.Option)
                 .Any(token => aliases.Contains(token.Value));
         }

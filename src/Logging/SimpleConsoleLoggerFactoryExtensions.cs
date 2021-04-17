@@ -10,8 +10,8 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
             this ILoggerFactory factory,
             IConsole console,
             LogLevel minimalLogLevel,
-            LogLevel minimalErrorLevel)
-        {
+            LogLevel minimalErrorLevel
+        ) {
             factory.AddProvider(
                 new SimpleConsoleLoggerProvider(
                     console,

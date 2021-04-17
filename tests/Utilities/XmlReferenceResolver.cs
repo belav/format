@@ -33,8 +33,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Utilities
 
         public override string ResolveReference(
             string path,
-            string baseFilePath)
-        {
+            string baseFilePath
+        ) {
             return path;
         }
     }

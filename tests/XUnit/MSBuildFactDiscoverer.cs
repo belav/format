@@ -7,7 +7,6 @@ using Xunit.Sdk;
 #nullable enable
 namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
 {
-
     public sealed class MSBuildFactDiscoverer : IXunitTestCaseDiscoverer
     {
         private readonly FactDiscoverer _factDiscoverer;
@@ -20,8 +19,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
         public IEnumerable<IXunitTestCase> Discover(
             ITestFrameworkDiscoveryOptions discoveryOptions,
             ITestMethod testMethod,
-            IAttributeInfo factAttribute)
-        {
+            IAttributeInfo factAttribute
+        ) {
             return _factDiscoverer.Discover(
                     discoveryOptions,
                     testMethod,

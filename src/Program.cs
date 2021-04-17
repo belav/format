@@ -57,8 +57,8 @@ namespace Microsoft.CodeAnalysis.Tools
             string[] exclude,
             string? report,
             bool includeGenerated,
-            IConsole console = null!)
-        {
+            IConsole console = null!
+        ) {
             if (s_parseResult == null)
             {
                 return 1;
@@ -245,14 +245,13 @@ namespace Microsoft.CodeAnalysis.Tools
         private static void HandleStandardInput(
             ILogger logger,
             ref string[] include,
-            ref string[] exclude)
-        {
+            ref string[] exclude
+        ) {
             var isStandardMarkerUsed = false;
             if (
                 include.Length == 1
                 && s_standardInputKeywords.Contains(include[0])
-            )
-            {
+            ) {
                 if (TryReadFromStandardInput(ref include))
                 {
                     isStandardMarkerUsed = true;
@@ -262,8 +261,7 @@ namespace Microsoft.CodeAnalysis.Tools
             if (
                 exclude.Length == 1
                 && s_standardInputKeywords.Contains(exclude[0])
-            )
-            {
+            ) {
                 if (isStandardMarkerUsed)
                 {
                     logger.LogCritical(
@@ -304,8 +302,8 @@ namespace Microsoft.CodeAnalysis.Tools
 
         internal static int GetExitCode(
             WorkspaceFormatResult formatResult,
-            bool check)
-        {
+            bool check
+        ) {
             if (!check)
             {
                 return formatResult.ExitCode;
@@ -346,15 +344,14 @@ namespace Microsoft.CodeAnalysis.Tools
                 FixSeverity.Warn => DiagnosticSeverity.Warning,
                 FixSeverity.Info => DiagnosticSeverity.Info,
                 _ => throw new ArgumentOutOfRangeException(nameof(severity)),
-
             };
         }
 
         private static ILogger<Program> SetupLogging(
             IConsole console,
             LogLevel minimalLogLevel,
-            LogLevel minimalErrorLevel)
-        {
+            LogLevel minimalErrorLevel
+        ) {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(
                 new LoggerFactory().AddSimpleConsole(
@@ -378,8 +375,8 @@ namespace Microsoft.CodeAnalysis.Tools
         }
 
         private static bool TryGetDotNetCliVersion(
-            [NotNullWhen(returnValue: true)]out string? dotnetVersion)
-        {
+            [NotNullWhen(returnValue: true)]out string? dotnetVersion
+        ) {
             try
             {
                 var processInfo = ProcessRunner.CreateProcess(
@@ -401,8 +398,8 @@ namespace Microsoft.CodeAnalysis.Tools
         }
 
         private static bool TryLoadMSBuild(
-            [NotNullWhen(returnValue: true)]out string? msBuildPath)
-        {
+            [NotNullWhen(returnValue: true)]out string? msBuildPath
+        ) {
             try
             {
                 // Since we are running as a dotnet tool we should be able to find an instance of

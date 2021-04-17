@@ -28,14 +28,13 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
                 [LogLevel.Debug] = ConsoleColor.Gray,
                 [LogLevel.Trace] = ConsoleColor.Gray,
                 [LogLevel.None] = ConsoleColor.White,
-
             }.ToImmutableDictionary();
 
         public SimpleConsoleLogger(
             IConsole console,
             LogLevel minimalLogLevel,
-            LogLevel minimalErrorLevel)
-        {
+            LogLevel minimalErrorLevel
+        ) {
             _terminal = console.GetTerminal();
             _console = console;
             _minimalLogLevel = minimalLogLevel;
@@ -47,8 +46,8 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
             EventId eventId,
             TState state,
             Exception exception,
-            Func<TState, Exception, string> formatter)
-        {
+            Func<TState, Exception, string> formatter
+        ) {
             if (!IsEnabled(logLevel))
             {
                 return;
@@ -81,8 +80,8 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
         private void LogToTerminal(
             string message,
             LogLevel logLevel,
-            bool logToErrorStream)
-        {
+            bool logToErrorStream
+        ) {
             var messageColor = LogLevelColorMap[logLevel];
             _terminal.ForegroundColor = messageColor;
 
@@ -94,8 +93,8 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
         private void LogToConsole(
             IConsole console,
             string message,
-            bool logToErrorStream)
-        {
+            bool logToErrorStream
+        ) {
             if (logToErrorStream)
             {
                 console.Error.Write($"  {message}{Environment.NewLine}");

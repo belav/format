@@ -23,8 +23,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             AnalyzerConfigOptions analyzerConfigOptions,
             FormatOptions formatOptions,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             if (
                 !analyzerConfigOptions.TryGetValue(
                     "insert_final_newline",
@@ -34,8 +34,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                     insertFinalNewlineValue,
                     out var insertFinalNewline
                 )
-            )
-            {
+            ) {
                 return await document.GetTextAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
@@ -45,8 +44,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                     analyzerConfigOptions,
                     out var endOfLine
                 )
-            )
-            {
+            ) {
                 endOfLine = Environment.NewLine;
             }
 
@@ -70,7 +68,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                     var lineBeforeLast = sourceText.Lines[^2];
                     var finalNewlineSpan = new TextSpan(
                         lineBeforeLast.End,
-                        lineBeforeLast.EndIncludingLineBreak - lineBeforeLast.End
+                        lineBeforeLast.EndIncludingLineBreak
+                        - lineBeforeLast.End
                     );
                     var removeNewlineChange = new TextChange(
                         finalNewlineSpan,

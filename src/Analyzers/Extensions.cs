@@ -28,8 +28,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             )!;
             TryGetMappedOptionsMethod = IDEDiagnosticIdToOptionMappingHelperType.GetMethod(
                 "TryGetMappedOptions",
-                BindingFlags.Static
-                | BindingFlags.Public
+                BindingFlags.Static | BindingFlags.Public
             )!;
         }
 
@@ -39,9 +38,9 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
         public static bool TryCreateInstance<T>(
             this Type type,
-            [NotNullWhen(returnValue: true)]out T? instance)
-            where T : class
-        {
+            [NotNullWhen(returnValue: true)]out T? instance
+        )
+            where T : class {
             try
             {
                 var defaultCtor = type.GetConstructor(
@@ -55,14 +54,14 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
                 instance = defaultCtor != null
                     ? (T)Activator.CreateInstance(
-                        type,
-                        BindingFlags.Public
-                        | BindingFlags.NonPublic
-                        | BindingFlags.Instance,
-                        binder: null,
-                        args: null,
-                        culture: null
-                    )!
+                            type,
+                            BindingFlags.Public
+                            | BindingFlags.NonPublic
+                            | BindingFlags.Instance,
+                            binder: null,
+                            args: null,
+                            culture: null
+                        )!
                     : null;
 
                 return instance != null;
@@ -83,8 +82,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             this DiagnosticAnalyzer analyzer,
             Project project,
             ImmutableHashSet<string> formattablePaths,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var severity = DiagnosticSeverity.Hidden;
             var compilation =
                 await project.GetCompilationAsync(cancellationToken)
@@ -100,8 +99,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 if (
                     document.FilePath is null
                     || !formattablePaths.Contains(document.FilePath)
-                )
-                {
+                ) {
                     continue;
                 }
 
@@ -125,8 +123,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         }
 
         public static DiagnosticSeverity ToSeverity(
-            this ReportDiagnostic reportDiagnostic)
-        {
+            this ReportDiagnostic reportDiagnostic
+        ) {
             return reportDiagnostic switch
             {
                 ReportDiagnostic.Error => DiagnosticSeverity.Error,
@@ -141,8 +139,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             Document document,
             AnalyzerOptions? analyzerOptions,
             OptionSet options,
-            Compilation compilation)
-        {
+            Compilation compilation
+        ) {
             var severity = DiagnosticSeverity.Hidden;
 
             if (!document.TryGetSyntaxTree(out var tree))
@@ -164,8 +162,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                         descriptor,
                         out var reportDiagnostic
                     )
-                )
-                {
+                ) {
                     var configuredSeverity = reportDiagnostic.ToSeverity();
                     if (configuredSeverity > severity)
                     {
@@ -181,8 +178,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                         options,
                         out var codeStyleSeverity
                     )
-                )
-                {
+                ) {
                     if (codeStyleSeverity > severity)
                     {
                         severity = codeStyleSeverity;
@@ -202,17 +198,15 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 DiagnosticDescriptor descriptor,
                 Compilation compilation,
                 OptionSet options,
-                out DiagnosticSeverity severity)
-            {
+                out DiagnosticSeverity severity
+            ) {
                 severity = DiagnosticSeverity.Hidden;
 
                 var parameters =
                     new object?[] { descriptor.Id, compilation.Language, null };
                 var result =
-                    (bool)(TryGetMappedOptionsMethod.Invoke(
-                        null,
-                        parameters
-                    ) ?? false);
+                    (bool)(TryGetMappedOptionsMethod.Invoke(null, parameters)
+                    ?? false);
 
                 if (!result)
                 {

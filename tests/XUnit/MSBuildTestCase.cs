@@ -12,7 +12,7 @@ using Xunit.Sdk;
 namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
 {
     [DebuggerDisplay(
-            @"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}")]
+        @"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}")]
     public sealed class MSBuildTestCase
         : LongLivedMarshalByRefObject,
             IXunitTestCase
@@ -40,9 +40,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
 
         public MSBuildTestCase(IXunitTestCase testCase)
         {
-            _testCase = testCase ?? throw new ArgumentNullException(
-                nameof(testCase)
-            );
+            _testCase = testCase
+            ?? throw new ArgumentNullException(nameof(testCase));
         }
 
         [Obsolete("Called by the deserializer", error: true)]
@@ -53,8 +52,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
             IMessageBus messageBus,
             object[] constructorArguments,
             ExceptionAggregator aggregator,
-            CancellationTokenSource cancellationTokenSource)
-        {
+            CancellationTokenSource cancellationTokenSource
+        ) {
             await MSBuildWorkspaceLoader.Guard.WaitAsync();
             try
             {

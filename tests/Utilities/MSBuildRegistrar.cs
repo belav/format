@@ -16,7 +16,6 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Utilities
 
         private static string? s_msBuildPath;
 
-
         public static string RegisterInstance(ILogger? logger = null)
         {
             if (Interlocked.Exchange(ref s_registered, 1) == 0)

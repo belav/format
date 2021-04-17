@@ -10,9 +10,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
     internal class CodeStyleInformationProvider : IAnalyzerInformationProvider
     {
         private static readonly string s_executingPath =
-            Path.GetDirectoryName(
-                Assembly.GetExecutingAssembly().Location
-            ) ?? string.Empty;
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+            ?? string.Empty;
 
         private readonly string _featuresPath = Path.Combine(
             s_executingPath,
@@ -31,8 +30,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             AnalyzersAndFixers> GetAnalyzersAndFixers(
             Solution solution,
             FormatOptions formatOptions,
-            ILogger logger)
-        {
+            ILogger logger
+        ) {
             var assemblies = new[] {
                 _featuresPath,
                 _featuresCSharpPath,

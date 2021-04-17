@@ -74,8 +74,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         }
 
         [Fact]
-        public static async Task TestMultipleAnalyzersAndFixersFromTwoAssembliesAsync()
-        {
+        public static async Task TestMultipleAnalyzersAndFixersFromTwoAssembliesAsync() {
             var assemblies =
                 new[] {
                     await GenerateAssemblyAsync(
@@ -98,7 +97,6 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
                             "DiagnosticAnalyzerId2"
                         )
                     ),
-
                 };
             var (
                 analyzers,

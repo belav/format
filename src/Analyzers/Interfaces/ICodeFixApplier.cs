@@ -14,6 +14,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             CodeFixProvider codefixes,
             string diagnosticId,
             ILogger logger,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken
+        );
     }
 }

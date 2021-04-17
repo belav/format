@@ -61,8 +61,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             Assert.Empty(analyzers);
         }
 
-        private static async Task<AnalyzersAndFixers> GetAnalyzersAndFixersAsync()
-        {
+        private static async Task<AnalyzersAndFixers> GetAnalyzersAndFixersAsync() {
             var assemblies =
                 new[] {
                     await GenerateAssemblyAsync(
@@ -95,8 +94,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
 
         private async Task<ImmutableDictionary<ProjectId,
                 AnalyzersAndFixers>> GetProjectAnalyzersAndFixersAsync(
-            Solution solution)
-        {
+            Solution solution
+        ) {
             var analyzersAndFixers = await GetAnalyzersAndFixersAsync();
 
             return solution.Projects.ToImmutableDictionary(

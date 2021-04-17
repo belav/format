@@ -32,8 +32,8 @@ namespace Microsoft.CodeAnalysis.Tools
             FormatOptions formatOptions,
             ILogger logger,
             CancellationToken cancellationToken,
-            bool createBinaryLog = false)
-        {
+            bool createBinaryLog = false
+        ) {
             var logWorkspaceWarnings = formatOptions.LogLevel == LogLevel.Trace;
 
             logger.LogInformation(
@@ -47,20 +47,21 @@ namespace Microsoft.CodeAnalysis.Tools
 
             var workspaceStopwatch = Stopwatch.StartNew();
 
-            using var workspace = formatOptions.WorkspaceType == WorkspaceType.Folder
+            using var workspace = formatOptions.WorkspaceType
+                == WorkspaceType.Folder
                 ? OpenFolderWorkspace(
-                    formatOptions.WorkspaceFilePath,
-                    formatOptions.FileMatcher
-                )
-                : await OpenMSBuildWorkspaceAsync(
                         formatOptions.WorkspaceFilePath,
-                        formatOptions.WorkspaceType,
-                        createBinaryLog,
-                        logWorkspaceWarnings,
-                        logger,
-                        cancellationToken
+                        formatOptions.FileMatcher
                     )
-                    .ConfigureAwait(false);
+                : await OpenMSBuildWorkspaceAsync(
+                            formatOptions.WorkspaceFilePath,
+                            formatOptions.WorkspaceType,
+                            createBinaryLog,
+                            logWorkspaceWarnings,
+                            logger,
+                            cancellationToken
+                        )
+                        .ConfigureAwait(false);
 
             if (workspace is null)
             {
@@ -74,7 +75,8 @@ namespace Microsoft.CodeAnalysis.Tools
             var loadWorkspaceMS = workspaceStopwatch.ElapsedMilliseconds;
             logger.LogTrace(Resources.Complete_in_0_ms, loadWorkspaceMS);
 
-            var projectPath = formatOptions.WorkspaceType == WorkspaceType.Project
+            var projectPath = formatOptions.WorkspaceType
+                == WorkspaceType.Project
                 ? formatOptions.WorkspaceFilePath
                 : string.Empty;
             var solution = workspace.CurrentSolution;
@@ -112,7 +114,9 @@ namespace Microsoft.CodeAnalysis.Tools
                     .ConfigureAwait(false);
 
             var formatterRanMS =
-                workspaceStopwatch.ElapsedMilliseconds - loadWorkspaceMS - determineFilesMS;
+                workspaceStopwatch.ElapsedMilliseconds
+                - loadWorkspaceMS
+                - determineFilesMS;
             logger.LogTrace(Resources.Complete_in_0_ms, formatterRanMS);
 
             var documentIdsWithErrors = formattedFiles.Select(
@@ -135,8 +139,7 @@ namespace Microsoft.CodeAnalysis.Tools
             if (
                 formatOptions.SaveFormattedFiles
                 && !workspace.TryApplyChanges(formattedSolution)
-            )
-            {
+            ) {
                 logger.LogError(Resources.Failed_to_save_formatting_changes);
                 exitCode = 1;
             }
@@ -144,8 +147,7 @@ namespace Microsoft.CodeAnalysis.Tools
             if (
                 exitCode == 0
                 && !string.IsNullOrWhiteSpace(formatOptions.ReportPath)
-            )
-            {
+            ) {
                 ReportWriter.Write(
                     formatOptions.ReportPath!,
                     formattedFiles,
@@ -173,8 +175,8 @@ namespace Microsoft.CodeAnalysis.Tools
 
         private static Workspace OpenFolderWorkspace(
             string workspacePath,
-            SourceFileMatcher fileMatcher)
-        {
+            SourceFileMatcher fileMatcher
+        ) {
             var folderWorkspace = FolderWorkspace.Create();
             folderWorkspace.OpenFolder(workspacePath, fileMatcher);
             return folderWorkspace;
@@ -186,8 +188,8 @@ namespace Microsoft.CodeAnalysis.Tools
             bool createBinaryLog,
             bool logWorkspaceWarnings,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             return MSBuildWorkspaceLoader.LoadAsync(
                 solutionOrProjectPath,
                 workspaceType,
@@ -204,8 +206,8 @@ namespace Microsoft.CodeAnalysis.Tools
             FormatOptions formatOptions,
             ILogger logger,
             List<FormattedFile> formattedFiles,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var formattedSolution = solution;
 
             for (var index = 0; index < s_codeFormatters.Length; index++)
@@ -215,8 +217,7 @@ namespace Microsoft.CodeAnalysis.Tools
                     !formatOptions.FixCategory.HasFlag(
                         s_codeFormatters[index].Category
                     )
-                )
-                {
+                ) {
                     continue;
                 }
 
@@ -239,8 +240,8 @@ namespace Microsoft.CodeAnalysis.Tools
             string projectPath,
             FormatOptions formatOptions,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var totalFileCount = solution.Projects.Sum(
                 project => project.DocumentIds.Count
             );
@@ -269,8 +270,7 @@ namespace Microsoft.CodeAnalysis.Tools
                         projectPath,
                         StringComparison.OrdinalIgnoreCase
                     )
-                )
-                {
+                ) {
                     logger.LogDebug(
                         Resources.Skipping_referenced_project_0,
                         project.Name
@@ -282,8 +282,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 if (
                     project.Language != LanguageNames.CSharp
                     && project.Language != LanguageNames.VisualBasic
-                )
-                {
+                ) {
                     logger.LogWarning(
                         Resources.Could_not_format_0_Format_currently_supports_only_CSharp_and_Visual_Basic_projects,
                         project.FilePath
@@ -299,8 +298,7 @@ namespace Microsoft.CodeAnalysis.Tools
                     if (
                         document?.FilePath is null
                         || addedFilePaths.Contains(document.FilePath)
-                    )
-                    {
+                    ) {
                         continue;
                     }
 
@@ -334,8 +332,7 @@ namespace Microsoft.CodeAnalysis.Tools
                                 cancellationToken
                             )
                             .ConfigureAwait(false)
-                    )
-                    {
+                    ) {
                         continue;
                     }
 
@@ -349,9 +346,9 @@ namespace Microsoft.CodeAnalysis.Tools
                             formatOptions.IncludeGeneratedFiles
                             || GeneratedCodeUtilities.GetIsGeneratedCodeFromOptions(
                                 analyzerConfigOptions
-                            ) != true
-                        )
-                        {
+                            )
+                            != true
+                        ) {
                             documentsCoveredByEditorConfig.Add(document.Id);
                         }
                     }
@@ -370,8 +367,14 @@ namespace Microsoft.CodeAnalysis.Tools
             // If no files are covered by an editorconfig, then return them all. Otherwise only return
             // files that are covered by an editorconfig.
             return documentsCoveredByEditorConfig.Count == 0
-                ? (projectFileCount, documentsNotCoveredByEditorConfig.ToImmutable())
-                : (projectFileCount, documentsCoveredByEditorConfig.ToImmutable());
+                ? (
+                        projectFileCount,
+                        documentsNotCoveredByEditorConfig.ToImmutable()
+                    )
+                : (
+                        projectFileCount,
+                        documentsCoveredByEditorConfig.ToImmutable()
+                    );
         }
     }
 }

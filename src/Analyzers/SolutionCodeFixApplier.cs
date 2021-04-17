@@ -19,15 +19,15 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             CodeFixProvider codeFix,
             string diagnosticId,
             ILogger logger,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var fixAllProvider = codeFix.GetFixAllProvider();
             if (
                 fixAllProvider?.GetSupportedFixAllScopes()?.Contains(
                     FixAllScope.Solution
-                ) != true
-            )
-            {
+                )
+                != true
+            ) {
                 logger.LogWarning(
                     Resources.Unable_to_fix_0_Code_fix_1_doesnt_support_Fix_All_in_Solution,
                     diagnosticId,
@@ -136,34 +136,36 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
             public override Task<IEnumerable<Diagnostic>> GetAllDiagnosticsAsync(
                 Project project,
-                CancellationToken cancellationToken)
-            {
+                CancellationToken cancellationToken
+            ) {
                 return GetProjectDiagnosticsAsync(project, cancellationToken);
             }
 
             public override async Task<IEnumerable<Diagnostic>> GetDocumentDiagnosticsAsync(
                 Document document,
-                CancellationToken cancellationToken)
-            {
+                CancellationToken cancellationToken
+            ) {
                 var projectDiagnostics =
                     await GetProjectDiagnosticsAsync(
                         document.Project,
                         cancellationToken
                     );
                 return projectDiagnostics.Where(
-                        diagnostic => diagnostic.Location.SourceTree?.FilePath == document.FilePath
+                        diagnostic =>
+                            diagnostic.Location.SourceTree?.FilePath
+                            == document.FilePath
                     )
                     .ToImmutableArray();
             }
 
             public override Task<IEnumerable<Diagnostic>> GetProjectDiagnosticsAsync(
                 Project project,
-                CancellationToken cancellationToken)
-            {
+                CancellationToken cancellationToken
+            ) {
                 return _diagnosticsByProject.ContainsKey(project)
                     ? Task.FromResult<IEnumerable<Diagnostic>>(
-                        _diagnosticsByProject[project]
-                    )
+                            _diagnosticsByProject[project]
+                        )
                     : EmptyDignosticResult;
             }
         }

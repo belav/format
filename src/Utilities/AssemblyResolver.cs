@@ -17,8 +17,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             AssemblyName assemblyName,
             string searchPath,
             Dictionary<string, Assembly>? knownAssemblyPaths = null,
-            ILogger? logger = null)
-        {
+            ILogger? logger = null
+        ) {
             logger?.LogTrace(
                 $"Trying to resolve assembly {assemblyName.FullName}."
             );
@@ -32,8 +32,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
                 // Search for satellite assemblies in culture subdirectories
                 // of the assembly search directories, but fall back to the
                 // bare search directory if that fails.
-                : new[] { assemblyName.CultureName, string.Empty })
-            {
+                : new[] { assemblyName.CultureName, string.Empty }
+            ) {
                 foreach (var extension in s_extensions)
                 {
                     var candidatePath = Path.Combine(

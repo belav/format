@@ -139,8 +139,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task NoFilesFormattedInUnformattedProjectWhenFixingCodeStyle()
-        {
+        public async Task NoFilesFormattedInUnformattedProjectWhenFixingCodeStyle() {
             await TestFormatWorkspaceAsync(
                 s_unformattedProjectFilePath,
                 include: EmptyFilesList,
@@ -178,9 +177,10 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             );
             Assert.Contains(
                 logLines,
-                line => line.Contains(
-                    "NETCoreApp,Version=v3.0.AssemblyAttributes.cs"
-                )
+                line =>
+                    line.Contains(
+                        "NETCoreApp,Version=v3.0.AssemblyAttributes.cs"
+                    )
             );
         }
 
@@ -371,7 +371,6 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 @"Program.cs(11,3): Fix whitespace formatting.",
                 @"other_items\OtherClass.cs(12,2): Add final newline.",
                 @"Program.cs(12,2): Add final newline.",
-
             }.Select(path => path.Replace('\\', Path.DirectorySeparatorChar))
                 .ToArray();
 
@@ -381,8 +380,11 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 expectedFormatLocations.Length,
                 formatLocations.Length
             );
-            for (var index = 0; index < expectedFormatLocations.Length; index++)
-            {
+            for (
+                var index = 0;
+                index < expectedFormatLocations.Length;
+                index++
+            ) {
                 var expectedParts = FindFormattingLogLine.Match(
                     expectedFormatLocations[index]
                 );
@@ -503,8 +505,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task NoFilesFormattedInGeneratedProject_WhenNotIncludingGeneratedCode()
-        {
+        public async Task NoFilesFormattedInGeneratedProject_WhenNotIncludingGeneratedCode() {
             await TestFormatWorkspaceAsync(
                 s_generatedProjectFilePath,
                 include: EmptyFilesList,
@@ -517,8 +518,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task FilesFormattedInGeneratedProject_WhenIncludingGeneratedCode()
-        {
+        public async Task FilesFormattedInGeneratedProject_WhenIncludingGeneratedCode() {
             await TestFormatWorkspaceAsync(
                 s_generatedProjectFilePath,
                 include: EmptyFilesList,
@@ -531,8 +531,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task NoFilesFormattedInCodeStyleSolution_WhenNotFixingCodeStyle()
-        {
+        public async Task NoFilesFormattedInCodeStyleSolution_WhenNotFixingCodeStyle() {
             var restoreExitCode =
                 await NuGetHelper.PerformRestore(
                     s_codeStyleSolutionFilePath,
@@ -548,14 +547,12 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 expectedExitCode: 0,
                 expectedFilesFormatted: 0,
                 expectedFileCount: 6,
-                fixCategory: FixCategory.Whitespace
-                | FixCategory.CodeStyle
+                fixCategory: FixCategory.Whitespace | FixCategory.CodeStyle
             );
         }
 
         [MSBuildFact]
-        public async Task NoFilesFormattedInCodeStyleSolution_WhenFixingCodeStyleErrors()
-        {
+        public async Task NoFilesFormattedInCodeStyleSolution_WhenFixingCodeStyleErrors() {
             var restoreExitCode =
                 await NuGetHelper.PerformRestore(
                     s_codeStyleSolutionFilePath,
@@ -571,15 +568,13 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 expectedExitCode: 0,
                 expectedFilesFormatted: 0,
                 expectedFileCount: 6,
-                fixCategory: FixCategory.Whitespace
-                | FixCategory.CodeStyle,
+                fixCategory: FixCategory.Whitespace | FixCategory.CodeStyle,
                 codeStyleSeverity: DiagnosticSeverity.Error
             );
         }
 
         [MSBuildFact]
-        public async Task FilesFormattedInCodeStyleSolution_WhenFixingCodeStyleWarnings()
-        {
+        public async Task FilesFormattedInCodeStyleSolution_WhenFixingCodeStyleWarnings() {
             var restoreExitCode =
                 await NuGetHelper.PerformRestore(
                     s_codeStyleSolutionFilePath,
@@ -595,15 +590,13 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 expectedExitCode: 0,
                 expectedFilesFormatted: 2,
                 expectedFileCount: 6,
-                fixCategory: FixCategory.Whitespace
-                | FixCategory.CodeStyle,
+                fixCategory: FixCategory.Whitespace | FixCategory.CodeStyle,
                 codeStyleSeverity: DiagnosticSeverity.Warning
             );
         }
 
         [MSBuildFact]
-        public async Task NoFilesFormattedInAnalyzersSolution_WhenNotFixingAnalyzers()
-        {
+        public async Task NoFilesFormattedInAnalyzersSolution_WhenNotFixingAnalyzers() {
             var restoreExitCode =
                 await NuGetHelper.PerformRestore(
                     s_analyzersSolutionFilePath,
@@ -624,8 +617,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task FilesFormattedInAnalyzersSolution_WhenFixingAnalyzerErrors()
-        {
+        public async Task FilesFormattedInAnalyzersSolution_WhenFixingAnalyzerErrors() {
             var restoreExitCode =
                 await NuGetHelper.PerformRestore(
                     s_analyzersSolutionFilePath,
@@ -641,8 +633,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 expectedExitCode: 0,
                 expectedFilesFormatted: 1,
                 expectedFileCount: 7,
-                fixCategory: FixCategory.Whitespace
-                | FixCategory.Analyzers,
+                fixCategory: FixCategory.Whitespace | FixCategory.Analyzers,
                 analyzerSeverity: DiagnosticSeverity.Error
             );
         }
@@ -657,8 +648,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             int expectedFileCount,
             FixCategory fixCategory = FixCategory.Whitespace,
             DiagnosticSeverity codeStyleSeverity = DiagnosticSeverity.Error,
-            DiagnosticSeverity analyzerSeverity = DiagnosticSeverity.Error)
-        {
+            DiagnosticSeverity analyzerSeverity = DiagnosticSeverity.Error
+        ) {
             var currentDirectory = Environment.CurrentDirectory;
             Environment.CurrentDirectory = TestProjectsPathHelper.GetProjectsDirectory();
 

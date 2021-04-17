@@ -84,14 +84,14 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         }
 
         private IEnumerable<AnalyzerReference> GetAnalyzerReferences(
-            string prefix) =>
+            string prefix
+        ) =>
             _analyzerReferencesProject.AnalyzerReferences.Where(
                 reference => reference.Display.StartsWith(prefix)
             );
 
         [Fact]
-        public async Task TestStyleCopBlankLineFixer_RemovesUnnecessaryBlankLines()
-        {
+        public async Task TestStyleCopBlankLineFixer_RemovesUnnecessaryBlankLines() {
             var analyzerReferences = GetAnalyzerReferences("StyleCop");
 
             var testCode =
@@ -129,15 +129,22 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 // Turn off all diagnostics analyzers
-                ["dotnet_analyzer_diagnostic.severity"] = "none",
+                [
+                    "dotnet_analyzer_diagnostic.severity"
+                ] = "none",
                 // Two or more consecutive blank lines: Remove down to one blank line. SA1507
-                ["dotnet_diagnostic.SA1507.severity"] = "error",
+                [
+                    "dotnet_diagnostic.SA1507.severity"
+                ] = "error",
                 // Blank line immediately before or after a { line: remove it. SA1505, SA1509
-                ["dotnet_diagnostic.SA1505.severity"] = "error",
+                [
+                    "dotnet_diagnostic.SA1505.severity"
+                ] = "error",
                 ["dotnet_diagnostic.SA1509.severity"] = "error",
                 // Blank line immediately before a } line: remove it. SA1508
-                ["dotnet_diagnostic.SA1508.severity"] = "error",
-
+                [
+                    "dotnet_diagnostic.SA1508.severity"
+                ] = "error",
             };
 
             await AssertCodeChangedAsync(
@@ -188,10 +195,13 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 // Turn off all diagnostics analyzers
-                ["dotnet_analyzer_diagnostic.severity"] = "none",
+                [
+                    "dotnet_analyzer_diagnostic.severity"
+                ] = "none",
                 // Prefer using. IDISP017
-                ["dotnet_diagnostic.IDISP017.severity"] = "error",
-
+                [
+                    "dotnet_diagnostic.IDISP017.severity"
+                ] = "error",
             };
 
             await AssertCodeChangedAsync(
@@ -204,8 +214,7 @@ class C
         }
 
         [Fact]
-        public async Task TestLoadingAllAnalyzers_LoadsDependenciesFromAllSearchPaths()
-        {
+        public async Task TestLoadingAllAnalyzers_LoadsDependenciesFromAllSearchPaths() {
             // Loads all analyzer references.
             var analyzerReferences =
                 _analyzerReferencesProject.AnalyzerReferences;
@@ -244,10 +253,13 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 // Turn off all diagnostics analyzers
-                ["dotnet_analyzer_diagnostic.severity"] = "none",
+                [
+                    "dotnet_analyzer_diagnostic.severity"
+                ] = "none",
                 // Prefer using. IDISP017
-                ["dotnet_diagnostic.IDISP017.severity"] = "error",
-
+                [
+                    "dotnet_diagnostic.IDISP017.severity"
+                ] = "error",
             };
 
             await AssertCodeChangedAsync(

@@ -13,8 +13,8 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
         public SimpleConsoleLoggerProvider(
             IConsole console,
             LogLevel minimalLogLevel,
-            LogLevel minimalErrorLevel)
-        {
+            LogLevel minimalErrorLevel
+        ) {
             _console = console;
             _minimalLogLevel = minimalLogLevel;
             _minimalErrorLevel = minimalErrorLevel;

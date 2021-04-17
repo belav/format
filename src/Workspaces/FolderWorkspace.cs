@@ -29,13 +29,12 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
 
         public Solution OpenFolder(
             string folderPath,
-            SourceFileMatcher fileMatcher)
-        {
+            SourceFileMatcher fileMatcher
+        ) {
             if (
                 string.IsNullOrEmpty(folderPath)
                 || !Directory.Exists(folderPath)
-            )
-            {
+            ) {
                 throw new ArgumentException(
                     $"Folder '{folderPath}' does not exist.",
                     nameof(folderPath)
@@ -62,8 +61,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
 
         protected override void ApplyDocumentTextChanged(
             DocumentId documentId,
-            SourceText text)
-        {
+            SourceText text
+        ) {
             var document = CurrentSolution.GetDocument(documentId);
             if (document?.FilePath != null && text.Encoding != null)
             {
@@ -85,8 +84,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             DocumentId id,
             string fullPath,
             SourceText newText,
-            Encoding encoding)
-        {
+            Encoding encoding
+        ) {
             try
             {
                 using var writer = new StreamWriter(

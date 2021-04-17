@@ -19,8 +19,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         }
 
         [Fact]
-        public async Task WhenOptionsDisabled_AndImportsNotSorted_ImportsSorted()
-        {
+        public async Task WhenOptionsDisabled_AndImportsNotSorted_ImportsSorted() {
             var testCode =
                 @"
 using Microsoft.CodeAnalysis;
@@ -54,8 +53,7 @@ class C
         }
 
         [Fact]
-        public async Task WhenSystemDirectivesFirst_AndImportsNotSorted_ImportsSorted()
-        {
+        public async Task WhenSystemDirectivesFirst_AndImportsNotSorted_ImportsSorted() {
             var testCode =
                 @"
 using Microsoft.CodeAnalysis;
@@ -89,8 +87,7 @@ class C
         }
 
         [Fact]
-        public async Task WhenImportGroupsSeparated_AndImportsNotSeparated_ImportsSeparated()
-        {
+        public async Task WhenImportGroupsSeparated_AndImportsNotSeparated_ImportsSeparated() {
             var testCode =
                 @"
 using Microsoft.CodeAnalysis;
@@ -125,8 +122,7 @@ class C
         }
 
         [Fact]
-        public async Task WhenBothOptionsEnabled_AndImportsNotSortedOrSeparated_ImportsSortedAndSeparated()
-        {
+        public async Task WhenBothOptionsEnabled_AndImportsNotSortedOrSeparated_ImportsSortedAndSeparated() {
             var testCode =
                 @"
 using Microsoft.CodeAnalysis;
@@ -161,8 +157,7 @@ class C
         }
 
         [Fact]
-        public async Task WhenNeitherOptionIsConfigured_AndImportsNotSortedOrSeparated_NoChange()
-        {
+        public async Task WhenNeitherOptionIsConfigured_AndImportsNotSortedOrSeparated_NoChange() {
             var code =
                 @"
 using Microsoft.CodeAnalysis;

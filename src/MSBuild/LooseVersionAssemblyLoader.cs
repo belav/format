@@ -26,7 +26,8 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
         {
             AssemblyLoadContext.Default.Resolving += (
                 AssemblyLoadContext context,
-                AssemblyName assemblyName) =>
+                AssemblyName assemblyName
+            ) =>
             {
                 lock (s_guard)
                 {
@@ -35,8 +36,7 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
                             assemblyName.FullName,
                             out var cachedAssembly
                         )
-                    )
-                    {
+                    ) {
                         return cachedAssembly;
                     }
 

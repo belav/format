@@ -41,8 +41,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         [InlineData("utf-16le", "utf-16be")]
         public async Task TestCharsetWrong_CharsetFixed(
             string codeValue,
-            string expectedValue)
-        {
+            string expectedValue
+        ) {
             var codeEncoding = CharsetFormatter.GetCharset(codeValue);
             var expectedEncoding = CharsetFormatter.GetCharset(expectedValue);
 
@@ -52,7 +52,6 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var editorConfig = new Dictionary<string, string>()
             {
                 ["charset"] = expectedValue,
-
             };
 
             var formattedText =

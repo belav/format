@@ -10,8 +10,8 @@ namespace Microsoft.CodeAnalysis.Tools
         public WorkspaceFormatResult(
             int filesFormatted,
             int fileCount,
-            int exitCode)
-        {
+            int exitCode
+        ) {
             FilesFormatted = filesFormatted;
             FileCount = fileCount;
             ExitCode = exitCode;

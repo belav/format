@@ -17,8 +17,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
 
             public static SolutionInfo LoadSolutionInfo(
                 string folderPath,
-                SourceFileMatcher fileMatcher)
-            {
+                SourceFileMatcher fileMatcher
+            ) {
                 var absoluteFolderPath = Path.GetFullPath(
                     folderPath,
                     Directory.GetCurrentDirectory()
@@ -63,15 +63,14 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
 
             private static ImmutableArray<string> GetMatchingFilePaths(
                 string folderPath,
-                SourceFileMatcher fileMatcher)
-            {
+                SourceFileMatcher fileMatcher
+            ) {
                 // If only file paths were given to be included, then avoid matching against all
                 // the files beneath the folderPath and instead check if the specified files exist.
                 if (
                     fileMatcher.Exclude.IsDefaultOrEmpty
                     && AreAllFilePaths(fileMatcher.Include)
-                )
-                {
+                ) {
                     return ValidateFilePaths(folderPath, fileMatcher.Include);
                 }
 
@@ -88,8 +87,7 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                             globs[index].Contains('*')
                             || globs[index].EndsWith('\\')
                             || globs[index].EndsWith('/')
-                        )
-                        {
+                        ) {
                             return false;
                         }
                     }
@@ -99,8 +97,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
 
                 static ImmutableArray<string> ValidateFilePaths(
                     string folderPath,
-                    ImmutableArray<string> paths)
-                {
+                    ImmutableArray<string> paths
+                ) {
                     var filePaths = ImmutableArray.CreateBuilder<string>(
                         paths.Length
                     );

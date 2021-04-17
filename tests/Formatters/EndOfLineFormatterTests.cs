@@ -30,8 +30,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         public async Task TestEndOfLine_NoFinalNewline(
             string codeNewline,
             string expectedNewline,
-            string endOfLine)
-        {
+            string endOfLine
+        ) {
             var testCode = $"class C{codeNewline}{{{codeNewline}}}";
 
             var expectedCode = $"class C{expectedNewline}{{{expectedNewline}}}";
@@ -39,7 +39,6 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var editorConfig = new Dictionary<string, string>()
             {
                 ["end_of_line"] = endOfLine,
-
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
@@ -58,8 +57,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         public async Task TestEndOfLine_WithFinalNewline(
             string codeNewline,
             string expectedNewline,
-            string endOfLine)
-        {
+            string endOfLine
+        ) {
             var testCode =
                 $"class C{codeNewline}{{{codeNewline}}}{codeNewline}";
 
@@ -69,7 +68,6 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var editorConfig = new Dictionary<string, string>()
             {
                 ["end_of_line"] = endOfLine,
-
             };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
@@ -80,8 +78,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         [InlineData("\r\n")]
         [InlineData("\r")]
         public async Task TestEndOfLine_AndNoSetting_NoChanges(
-            string codeNewline)
-        {
+            string codeNewline
+        ) {
             var testCode =
                 $"class C{codeNewline}{{{codeNewline}}}{codeNewline}";
 

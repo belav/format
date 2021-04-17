@@ -17,8 +17,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             public virtual ProjectInfo? LoadProjectInfo(
                 string folderPath,
                 ImmutableArray<string> filePaths,
-                ImmutableArray<string> editorConfigPaths)
-            {
+                ImmutableArray<string> editorConfigPaths
+            ) {
                 var projectFilePaths = ImmutableArray.CreateBuilder<string>(
                     filePaths.Length
                 );
@@ -29,8 +29,7 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                             FileExtension,
                             StringComparison.InvariantCulture
                         )
-                    )
-                    {
+                    ) {
                         projectFilePaths.Add(filePaths[index]);
                     }
                 }
@@ -60,8 +59,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
 
                 static IEnumerable<DocumentInfo> LoadDocuments(
                     ProjectId projectId,
-                    ImmutableArray<string> filePaths)
-                {
+                    ImmutableArray<string> filePaths
+                ) {
                     var documents = new DocumentInfo[filePaths.Length];
                     for (var index = 0; index < filePaths.Length; index++)
                     {

@@ -15,8 +15,8 @@ namespace Microsoft.CodeAnalysis.Tools
 
         public FormattedFile(
             Document document,
-            IEnumerable<FileChange> fileChanges)
-        {
+            IEnumerable<FileChange> fileChanges
+        ) {
             DocumentId = document.Id;
             FileName = document.Name;
             FilePath = document.FilePath;

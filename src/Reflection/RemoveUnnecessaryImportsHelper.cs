@@ -18,14 +18,13 @@ namespace Microsoft.CodeAnalysis.Tools.Reflection
         private static readonly MethodInfo? s_removeUnnecessaryImportsAsyncMethod =
             s_abstractRemoveUnnecessaryImportsCodeFixProviderType?.GetMethod(
                 "RemoveUnnecessaryImportsAsync",
-                BindingFlags.Static
-                | BindingFlags.NonPublic
+                BindingFlags.Static | BindingFlags.NonPublic
             );
 
         public static async Task<Document?> RemoveUnnecessaryImportsAsync(
             Document document,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             if (s_removeUnnecessaryImportsAsyncMethod is null)
             {
                 return document;
