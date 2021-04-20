@@ -46,12 +46,12 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                             .GetMethods()
                         where method.Name == nameof(ExportProvider.GetExports)
                         where
-                            method.IsGenericMethod
-                            && method.GetGenericArguments().Length == 2
+                            method.IsGenericMethod &&
+                            method.GetGenericArguments().Length == 2
                         where
-                            method.GetParameters().Length == 1
-                            && method.GetParameters()[0].ParameterType
-                            == typeof(string)
+                            method.GetParameters().Length == 1 &&
+                            method.GetParameters()[0].ParameterType ==
+                            typeof(string)
                         select method).Single();
                     var parameterizedMethod = methodInfo.MakeGenericMethod(
                         contractType,
@@ -70,12 +70,12 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                             .GetMethods()
                         where method.Name == nameof(ExportProvider.GetExports)
                         where
-                            method.IsGenericMethod
-                            && method.GetGenericArguments().Length == 1
+                            method.IsGenericMethod &&
+                            method.GetGenericArguments().Length == 1
                         where
-                            method.GetParameters().Length == 1
-                            && method.GetParameters()[0].ParameterType
-                            == typeof(string)
+                            method.GetParameters().Length == 1 &&
+                            method.GetParameters()[0].ParameterType ==
+                            typeof(string)
                         select method).Single();
                     var parameterizedMethod = methodInfo.MakeGenericMethod(
                         contractType
@@ -92,11 +92,11 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                             .GetTypeInfo()
                             .GetMethods()
                         where
-                            method.Name
-                            == nameof(ExportProvider.GetExportedValues)
+                            method.Name ==
+                            nameof(ExportProvider.GetExportedValues)
                         where
-                            method.IsGenericMethod
-                            && method.GetGenericArguments().Length == 1
+                            method.IsGenericMethod &&
+                            method.GetGenericArguments().Length == 1
                         where method.GetParameters().Length == 0
                         select method).Single();
                     var parameterizedMethod = methodInfo.MakeGenericMethod(
@@ -120,12 +120,12 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 if (importMany && contractType.IsConstructedGenericType)
                 {
                     if (
-                        contractType.GetGenericTypeDefinition()
-                        == typeof(IList<>)
-                        || contractType.GetGenericTypeDefinition()
-                        == typeof(ICollection<>)
-                        || contractType.GetGenericTypeDefinition()
-                        == typeof(IEnumerable<>)
+                        contractType.GetGenericTypeDefinition() ==
+                        typeof(IList<>) ||
+                        contractType.GetGenericTypeDefinition() ==
+                        typeof(ICollection<>) ||
+                        contractType.GetGenericTypeDefinition() ==
+                        typeof(IEnumerable<>)
                     ) {
                         contractType = contractType.GenericTypeArguments[0];
                     }
@@ -134,8 +134,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 if (contractType.IsConstructedGenericType)
                 {
                     if (
-                        contractType.GetGenericTypeDefinition()
-                        == typeof(Lazy<>)
+                        contractType.GetGenericTypeDefinition() ==
+                        typeof(Lazy<>)
                     ) {
                         return (
                             contractType.GenericTypeArguments[0],
@@ -144,8 +144,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                         );
                     }
                     else if (
-                        contractType.GetGenericTypeDefinition()
-                        == typeof(Lazy<, >)
+                        contractType.GetGenericTypeDefinition() ==
+                        typeof(Lazy<, >)
                     ) {
                         return (
                             contractType.GenericTypeArguments[0],

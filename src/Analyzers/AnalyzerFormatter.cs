@@ -148,8 +148,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     .ConfigureAwait(false);
 
                 var fixDiagnosticsMS =
-                    analysisStopwatch.ElapsedMilliseconds
-                    - projectDiagnosticsMS;
+                    analysisStopwatch.ElapsedMilliseconds -
+                    projectDiagnosticsMS;
                 logger.LogTrace(Resources.Complete_in_0_ms, fixDiagnosticsMS);
             }
 
@@ -316,8 +316,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                         !projectDiagnostics.TryGetValue(
                             project.Id,
                             out var diagnosticIds
-                        )
-                        || !diagnosticIds.Contains(diagnosticId)
+                        ) ||
+                        !diagnosticIds.Contains(diagnosticId)
                     ) {
                         continue;
                     }
@@ -422,8 +422,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     if (
                         analyzer.GetType().FullName?.EndsWith(
                             "NamingStyleDiagnosticAnalyzer"
-                        )
-                        == true
+                        ) ==
+                        true
                     ) {
                         analyzers.Add(analyzer);
                         continue;

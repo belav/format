@@ -169,7 +169,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [Fact]
-        public void CommandLine_FolderValidation_FailsIfFixAnalyzersSpecified() {
+        public void CommandLine_FolderValidation_FailsIfFixAnalyzersSpecified()
+        {
             // Arrange
             var sut = FormatCommand.CreateCommandLineOptions();
 

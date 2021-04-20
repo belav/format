@@ -139,7 +139,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task NoFilesFormattedInUnformattedProjectWhenFixingCodeStyle() {
+        public async Task NoFilesFormattedInUnformattedProjectWhenFixingCodeStyle()
+        {
             await TestFormatWorkspaceAsync(
                 s_unformattedProjectFilePath,
                 include: EmptyFilesList,
@@ -505,7 +506,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task NoFilesFormattedInGeneratedProject_WhenNotIncludingGeneratedCode() {
+        public async Task NoFilesFormattedInGeneratedProject_WhenNotIncludingGeneratedCode()
+        {
             await TestFormatWorkspaceAsync(
                 s_generatedProjectFilePath,
                 include: EmptyFilesList,
@@ -518,7 +520,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task FilesFormattedInGeneratedProject_WhenIncludingGeneratedCode() {
+        public async Task FilesFormattedInGeneratedProject_WhenIncludingGeneratedCode()
+        {
             await TestFormatWorkspaceAsync(
                 s_generatedProjectFilePath,
                 include: EmptyFilesList,
@@ -531,7 +534,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task NoFilesFormattedInCodeStyleSolution_WhenNotFixingCodeStyle() {
+        public async Task NoFilesFormattedInCodeStyleSolution_WhenNotFixingCodeStyle()
+        {
             var restoreExitCode =
                 await NuGetHelper.PerformRestore(
                     s_codeStyleSolutionFilePath,
@@ -552,7 +556,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task NoFilesFormattedInCodeStyleSolution_WhenFixingCodeStyleErrors() {
+        public async Task NoFilesFormattedInCodeStyleSolution_WhenFixingCodeStyleErrors()
+        {
             var restoreExitCode =
                 await NuGetHelper.PerformRestore(
                     s_codeStyleSolutionFilePath,
@@ -574,7 +579,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task FilesFormattedInCodeStyleSolution_WhenFixingCodeStyleWarnings() {
+        public async Task FilesFormattedInCodeStyleSolution_WhenFixingCodeStyleWarnings()
+        {
             var restoreExitCode =
                 await NuGetHelper.PerformRestore(
                     s_codeStyleSolutionFilePath,
@@ -596,7 +602,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task NoFilesFormattedInAnalyzersSolution_WhenNotFixingAnalyzers() {
+        public async Task NoFilesFormattedInAnalyzersSolution_WhenNotFixingAnalyzers()
+        {
             var restoreExitCode =
                 await NuGetHelper.PerformRestore(
                     s_analyzersSolutionFilePath,
@@ -617,7 +624,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         }
 
         [MSBuildFact]
-        public async Task FilesFormattedInAnalyzersSolution_WhenFixingAnalyzerErrors() {
+        public async Task FilesFormattedInAnalyzersSolution_WhenFixingAnalyzerErrors()
+        {
             var restoreExitCode =
                 await NuGetHelper.PerformRestore(
                     s_analyzersSolutionFilePath,

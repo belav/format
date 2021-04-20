@@ -18,8 +18,8 @@ namespace Microsoft.CodeAnalysis.Tools
             var reportFolderPath = Path.GetDirectoryName(reportFilePath);
 
             if (
-                !string.IsNullOrEmpty(reportFolderPath)
-                && !Directory.Exists(reportFolderPath)
+                !string.IsNullOrEmpty(reportFolderPath) &&
+                !Directory.Exists(reportFolderPath)
             ) {
                 Directory.CreateDirectory(reportFolderPath);
             }

@@ -38,8 +38,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                     !analyzerConfigOptions.TryGetValue(
                         "dotnet_sort_system_directives_first",
                         out _
-                    )
-                    && !analyzerConfigOptions.TryGetValue(
+                    ) &&
+                    !analyzerConfigOptions.TryGetValue(
                         "dotnet_separate_import_directive_groups",
                         out _
                     )

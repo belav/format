@@ -82,8 +82,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             [NotNullWhen(true)]out string? endOfLine
         ) {
             if (
-                analyzerConfigOptions != null
-                && analyzerConfigOptions.TryGetValue(
+                analyzerConfigOptions != null &&
+                analyzerConfigOptions.TryGetValue(
                     "end_of_line",
                     out var endOfLineOption
                 )

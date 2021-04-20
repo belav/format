@@ -47,8 +47,8 @@ namespace Microsoft.CodeAnalysis.Tools
 
             var workspaceStopwatch = Stopwatch.StartNew();
 
-            using var workspace = formatOptions.WorkspaceType
-                == WorkspaceType.Folder
+            using var workspace = formatOptions.WorkspaceType ==
+                WorkspaceType.Folder
                 ? OpenFolderWorkspace(
                         formatOptions.WorkspaceFilePath,
                         formatOptions.FileMatcher
@@ -75,8 +75,8 @@ namespace Microsoft.CodeAnalysis.Tools
             var loadWorkspaceMS = workspaceStopwatch.ElapsedMilliseconds;
             logger.LogTrace(Resources.Complete_in_0_ms, loadWorkspaceMS);
 
-            var projectPath = formatOptions.WorkspaceType
-                == WorkspaceType.Project
+            var projectPath = formatOptions.WorkspaceType ==
+                WorkspaceType.Project
                 ? formatOptions.WorkspaceFilePath
                 : string.Empty;
             var solution = workspace.CurrentSolution;
@@ -114,9 +114,9 @@ namespace Microsoft.CodeAnalysis.Tools
                     .ConfigureAwait(false);
 
             var formatterRanMS =
-                workspaceStopwatch.ElapsedMilliseconds
-                - loadWorkspaceMS
-                - determineFilesMS;
+                workspaceStopwatch.ElapsedMilliseconds -
+                loadWorkspaceMS -
+                determineFilesMS;
             logger.LogTrace(Resources.Complete_in_0_ms, formatterRanMS);
 
             var documentIdsWithErrors = formattedFiles.Select(
@@ -137,16 +137,16 @@ namespace Microsoft.CodeAnalysis.Tools
             var exitCode = 0;
 
             if (
-                formatOptions.SaveFormattedFiles
-                && !workspace.TryApplyChanges(formattedSolution)
+                formatOptions.SaveFormattedFiles &&
+                !workspace.TryApplyChanges(formattedSolution)
             ) {
                 logger.LogError(Resources.Failed_to_save_formatting_changes);
                 exitCode = 1;
             }
 
             if (
-                exitCode == 0
-                && !string.IsNullOrWhiteSpace(formatOptions.ReportPath)
+                exitCode == 0 &&
+                !string.IsNullOrWhiteSpace(formatOptions.ReportPath)
             ) {
                 ReportWriter.Write(
                     formatOptions.ReportPath!,
@@ -265,8 +265,8 @@ namespace Microsoft.CodeAnalysis.Tools
 
                 // If a project is used as a workspace, then ignore other referenced projects.
                 if (
-                    !string.IsNullOrEmpty(projectPath)
-                    && !project.FilePath.Equals(
+                    !string.IsNullOrEmpty(projectPath) &&
+                    !project.FilePath.Equals(
                         projectPath,
                         StringComparison.OrdinalIgnoreCase
                     )
@@ -280,8 +280,8 @@ namespace Microsoft.CodeAnalysis.Tools
 
                 // Ignore unsupported project types.
                 if (
-                    project.Language != LanguageNames.CSharp
-                    && project.Language != LanguageNames.VisualBasic
+                    project.Language != LanguageNames.CSharp &&
+                    project.Language != LanguageNames.VisualBasic
                 ) {
                     logger.LogWarning(
                         Resources.Could_not_format_0_Format_currently_supports_only_CSharp_and_Visual_Basic_projects,
@@ -296,8 +296,8 @@ namespace Microsoft.CodeAnalysis.Tools
                 {
                     // If we've already added this document, either via a link or multi-targeted framework, then ignore.
                     if (
-                        document?.FilePath is null
-                        || addedFilePaths.Contains(document.FilePath)
+                        document?.FilePath is null ||
+                        addedFilePaths.Contains(document.FilePath)
                     ) {
                         continue;
                     }
@@ -305,11 +305,11 @@ namespace Microsoft.CodeAnalysis.Tools
                     addedFilePaths.Add(document.FilePath);
 
                     var isFileIncluded =
-                        formatOptions.WorkspaceType == WorkspaceType.Folder
-                        || (formatOptions.FileMatcher.HasMatches(
+                        formatOptions.WorkspaceType == WorkspaceType.Folder ||
+                        (formatOptions.FileMatcher.HasMatches(
                             document.FilePath
-                        )
-                        && File.Exists(document.FilePath));
+                        ) &&
+                        File.Exists(document.FilePath));
                     if (!isFileIncluded || !document.SupportsSyntaxTree)
                     {
                         continue;
@@ -326,8 +326,8 @@ namespace Microsoft.CodeAnalysis.Tools
                     }
 
                     if (
-                        !formatOptions.IncludeGeneratedFiles
-                        && await GeneratedCodeUtilities.IsGeneratedCodeAsync(
+                        !formatOptions.IncludeGeneratedFiles &&
+                        await GeneratedCodeUtilities.IsGeneratedCodeAsync(
                                 syntaxTree,
                                 cancellationToken
                             )
@@ -343,11 +343,11 @@ namespace Microsoft.CodeAnalysis.Tools
                     if (analyzerConfigOptions != null)
                     {
                         if (
-                            formatOptions.IncludeGeneratedFiles
-                            || GeneratedCodeUtilities.GetIsGeneratedCodeFromOptions(
+                            formatOptions.IncludeGeneratedFiles ||
+                            GeneratedCodeUtilities.GetIsGeneratedCodeFromOptions(
                                 analyzerConfigOptions
-                            )
-                            != true
+                            ) !=
+                            true
                         ) {
                             documentsCoveredByEditorConfig.Add(document.Id);
                         }

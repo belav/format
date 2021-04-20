@@ -121,8 +121,8 @@ public class {typeName} : DiagnosticAnalyzer
             {
                 var failures = result.Diagnostics.Where(
                         diagnostic =>
-                            diagnostic.IsWarningAsError
-                            || diagnostic.Severity == DiagnosticSeverity.Error
+                            diagnostic.IsWarningAsError ||
+                            diagnostic.Severity == DiagnosticSeverity.Error
                     )
                     .Select(
                         diagnostic =>

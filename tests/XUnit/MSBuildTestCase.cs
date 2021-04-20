@@ -40,8 +40,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
 
         public MSBuildTestCase(IXunitTestCase testCase)
         {
-            _testCase = testCase
-            ?? throw new ArgumentNullException(nameof(testCase));
+            _testCase = testCase ??
+            throw new ArgumentNullException(nameof(testCase));
         }
 
         [Obsolete("Called by the deserializer", error: true)]

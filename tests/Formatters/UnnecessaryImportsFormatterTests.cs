@@ -11,19 +11,19 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
     public class UnnecessaryImportsFormatterTests : CSharpFormatterTests
     {
         private const string RemoveUnnecessaryImportDiagnosticKey =
-            AnalyzerOptionsExtensions.DotnetDiagnosticPrefix
-            + "."
-            + UnnecessaryImportsFormatter.IDE0005
-            + "."
-            + AnalyzerOptionsExtensions.SeveritySuffix;
+            AnalyzerOptionsExtensions.DotnetDiagnosticPrefix +
+            "." +
+            UnnecessaryImportsFormatter.IDE0005 +
+            "." +
+            AnalyzerOptionsExtensions.SeveritySuffix;
         private const string RemoveUnnecessaryImportCategoryKey =
-            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticPrefix
-            + "."
-            + AnalyzerOptionsExtensions.CategoryPrefix
-            + "-"
-            + UnnecessaryImportsFormatter.Style
-            + "."
-            + AnalyzerOptionsExtensions.SeveritySuffix;
+            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticPrefix +
+            "." +
+            AnalyzerOptionsExtensions.CategoryPrefix +
+            "-" +
+            UnnecessaryImportsFormatter.Style +
+            "." +
+            AnalyzerOptionsExtensions.SeveritySuffix;
 
         private protected override ICodeFormatter Formatter =>
             new UnnecessaryImportsFormatter();
@@ -53,7 +53,8 @@ class C
         }
 
         [Fact]
-        public async Task WhenIDE0005NotConfigured_AndHasUnusedImports_NoChange() {
+        public async Task WhenIDE0005NotConfigured_AndHasUnusedImports_NoChange()
+        {
             var code = @"using System;
 
 class C

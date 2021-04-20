@@ -15,22 +15,20 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
         private static readonly Func<SyntaxTrivia,
             bool> s_isCSharpCommentTrivia = (
             syntaxTrivia
-        ) => syntaxTrivia.IsKind(CSharp.SyntaxKind.SingleLineCommentTrivia)
-        || syntaxTrivia.IsKind(CSharp.SyntaxKind.MultiLineCommentTrivia)
-        || syntaxTrivia.IsKind(
+        ) => syntaxTrivia.IsKind(CSharp.SyntaxKind.SingleLineCommentTrivia) ||
+        syntaxTrivia.IsKind(CSharp.SyntaxKind.MultiLineCommentTrivia) ||
+        syntaxTrivia.IsKind(
             CSharp.SyntaxKind.SingleLineDocumentationCommentTrivia
-        )
-        || syntaxTrivia.IsKind(
+        ) ||
+        syntaxTrivia.IsKind(
             CSharp.SyntaxKind.MultiLineDocumentationCommentTrivia
         );
 
         private static readonly Func<SyntaxTrivia,
             bool> s_isVisualBasicCommentTrivia = (
             syntaxTrivia
-        ) => syntaxTrivia.IsKind(VisualBasic.SyntaxKind.CommentTrivia)
-        || syntaxTrivia.IsKind(
-            VisualBasic.SyntaxKind.DocumentationCommentTrivia
-        );
+        ) => syntaxTrivia.IsKind(VisualBasic.SyntaxKind.CommentTrivia) ||
+        syntaxTrivia.IsKind(VisualBasic.SyntaxKind.DocumentationCommentTrivia);
 
         internal static async Task<bool> IsGeneratedCodeAsync(
             SyntaxTree syntaxTree,
@@ -41,8 +39,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
                 return true;
             }
 
-            var isCommentTrivia = syntaxTree.Options.Language
-                == LanguageNames.CSharp
+            var isCommentTrivia = syntaxTree.Options.Language ==
+                LanguageNames.CSharp
                 ? s_isCSharpCommentTrivia
                 : s_isVisualBasicCommentTrivia;
 
@@ -76,16 +74,16 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
                         fileNameWithoutExtension.EndsWith(
                             ".designer",
                             StringComparison.OrdinalIgnoreCase
-                        )
-                        || fileNameWithoutExtension.EndsWith(
+                        ) ||
+                        fileNameWithoutExtension.EndsWith(
                             ".generated",
                             StringComparison.OrdinalIgnoreCase
-                        )
-                        || fileNameWithoutExtension.EndsWith(
+                        ) ||
+                        fileNameWithoutExtension.EndsWith(
                             ".g",
                             StringComparison.OrdinalIgnoreCase
-                        )
-                        || fileNameWithoutExtension.EndsWith(
+                        ) ||
+                        fileNameWithoutExtension.EndsWith(
                             ".g.i",
                             StringComparison.OrdinalIgnoreCase
                         )
@@ -135,8 +133,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             // Check for explicit user configuration for generated code.
             //     generated_code = true | false
             if (
-                options.TryGetValue("generated_code", out var optionValue)
-                && bool.TryParse(optionValue, out var boolValue)
+                options.TryGetValue("generated_code", out var optionValue) &&
+                bool.TryParse(optionValue, out var boolValue)
             ) {
                 return boolValue;
             }

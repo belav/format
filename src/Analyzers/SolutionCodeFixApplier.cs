@@ -25,8 +25,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             if (
                 fixAllProvider?.GetSupportedFixAllScopes()?.Contains(
                     FixAllScope.Solution
-                )
-                != true
+                ) !=
+                true
             ) {
                 logger.LogWarning(
                     Resources.Unable_to_fix_0_Code_fix_1_doesnt_support_Fix_All_in_Solution,
@@ -152,8 +152,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     );
                 return projectDiagnostics.Where(
                         diagnostic =>
-                            diagnostic.Location.SourceTree?.FilePath
-                            == document.FilePath
+                            diagnostic.Location.SourceTree?.FilePath ==
+                            document.FilePath
                     )
                     .ToImmutableArray();
             }

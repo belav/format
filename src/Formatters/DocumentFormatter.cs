@@ -153,11 +153,11 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                     )
                     .ConfigureAwait(false);
 
-            return !formattedSourceText.ContentEquals(originalSourceText)
-                || !formattedSourceText.Encoding?.Equals(
+            return !formattedSourceText.ContentEquals(originalSourceText) ||
+                !formattedSourceText.Encoding?.Equals(
                     originalSourceText.Encoding
-                )
-                == true
+                ) ==
+                true
                 ? (originalSourceText, formattedSourceText)
                 : (originalSourceText, null);
         }
@@ -252,8 +252,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 fileChanges.Add(fileChange);
 
                 if (
-                    !formatOptions.SaveFormattedFiles
-                    || formatOptions.LogLevel == LogLevel.Trace
+                    !formatOptions.SaveFormattedFiles ||
+                    formatOptions.LogLevel == LogLevel.Trace
                 ) {
                     LogFormattingChanges(
                         filePath,

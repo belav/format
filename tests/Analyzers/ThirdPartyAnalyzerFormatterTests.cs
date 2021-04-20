@@ -91,7 +91,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             );
 
         [Fact]
-        public async Task TestStyleCopBlankLineFixer_RemovesUnnecessaryBlankLines() {
+        public async Task TestStyleCopBlankLineFixer_RemovesUnnecessaryBlankLines()
+        {
             var analyzerReferences = GetAnalyzerReferences("StyleCop");
 
             var testCode =
@@ -214,7 +215,8 @@ class C
         }
 
         [Fact]
-        public async Task TestLoadingAllAnalyzers_LoadsDependenciesFromAllSearchPaths() {
+        public async Task TestLoadingAllAnalyzers_LoadsDependenciesFromAllSearchPaths()
+        {
             // Loads all analyzer references.
             var analyzerReferences =
                 _analyzerReferencesProject.AnalyzerReferences;

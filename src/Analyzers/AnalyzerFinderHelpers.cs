@@ -19,9 +19,9 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     assembly.GetTypes()
                         .Where(
                             type =>
-                                !type.GetTypeInfo().IsInterface
-                                && !type.GetTypeInfo().IsAbstract
-                                && !type.GetTypeInfo().ContainsGenericParameters
+                                !type.GetTypeInfo().IsInterface &&
+                                !type.GetTypeInfo().IsAbstract &&
+                                !type.GetTypeInfo().ContainsGenericParameters
                         )
             );
 

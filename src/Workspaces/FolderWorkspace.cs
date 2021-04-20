@@ -32,8 +32,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             SourceFileMatcher fileMatcher
         ) {
             if (
-                string.IsNullOrEmpty(folderPath)
-                || !Directory.Exists(folderPath)
+                string.IsNullOrEmpty(folderPath) ||
+                !Directory.Exists(folderPath)
             ) {
                 throw new ArgumentException(
                     $"Folder '{folderPath}' does not exist.",

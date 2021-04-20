@@ -249,8 +249,8 @@ namespace Microsoft.CodeAnalysis.Tools
         ) {
             var isStandardMarkerUsed = false;
             if (
-                include.Length == 1
-                && s_standardInputKeywords.Contains(include[0])
+                include.Length == 1 &&
+                s_standardInputKeywords.Contains(include[0])
             ) {
                 if (TryReadFromStandardInput(ref include))
                 {
@@ -259,8 +259,8 @@ namespace Microsoft.CodeAnalysis.Tools
             }
 
             if (
-                exclude.Length == 1
-                && s_standardInputKeywords.Contains(exclude[0])
+                exclude.Length == 1 &&
+                s_standardInputKeywords.Contains(exclude[0])
             ) {
                 if (isStandardMarkerUsed)
                 {

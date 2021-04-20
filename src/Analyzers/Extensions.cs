@@ -44,9 +44,9 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             try
             {
                 var defaultCtor = type.GetConstructor(
-                    BindingFlags.Public
-                    | BindingFlags.NonPublic
-                    | BindingFlags.Instance,
+                    BindingFlags.Public |
+                    BindingFlags.NonPublic |
+                    BindingFlags.Instance,
                     binder: null,
                     Array.Empty<Type>(),
                     modifiers: null
@@ -55,9 +55,9 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 instance = defaultCtor != null
                     ? (T)Activator.CreateInstance(
                             type,
-                            BindingFlags.Public
-                            | BindingFlags.NonPublic
-                            | BindingFlags.Instance,
+                            BindingFlags.Public |
+                            BindingFlags.NonPublic |
+                            BindingFlags.Instance,
                             binder: null,
                             args: null,
                             culture: null
@@ -97,8 +97,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             {
                 // Is the document formattable?
                 if (
-                    document.FilePath is null
-                    || !formattablePaths.Contains(document.FilePath)
+                    document.FilePath is null ||
+                    !formattablePaths.Contains(document.FilePath)
                 ) {
                     continue;
                 }
@@ -205,8 +205,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 var parameters =
                     new object?[] { descriptor.Id, compilation.Language, null };
                 var result =
-                    (bool)(TryGetMappedOptionsMethod.Invoke(null, parameters)
-                    ?? false);
+                    (bool)(TryGetMappedOptionsMethod.Invoke(null, parameters) ??
+                    false);
 
                 if (!result)
                 {

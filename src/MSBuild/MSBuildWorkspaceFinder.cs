@@ -51,8 +51,8 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
             );
 
             if (
-                !string.IsNullOrEmpty(foundSolution)
-                && !string.IsNullOrEmpty(foundProject)
+                !string.IsNullOrEmpty(foundSolution) &&
+                !string.IsNullOrEmpty(foundProject)
             ) {
                 throw new FileNotFoundException(
                     string.Format(
@@ -89,12 +89,12 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
                 StringComparison.OrdinalIgnoreCase
             );
             var isProject =
-                !isSolution
-                && workspaceExtension.EndsWith(
+                !isSolution &&
+                workspaceExtension.EndsWith(
                     "proj",
                     StringComparison.OrdinalIgnoreCase
-                )
-                && !workspaceExtension.Equals(
+                ) &&
+                !workspaceExtension.Equals(
                     DnxProjectExtension,
                     StringComparison.OrdinalIgnoreCase
                 );

@@ -36,9 +36,12 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 () =>
                 {
                     if (
-                        !TryGetCharset(analyzerConfigOptions, out var encoding)
-                        || sourceText.Encoding?.Equals(encoding) == true
-                        || IsEncodingEquivalent(sourceText, encoding)
+                        !TryGetCharset(
+                            analyzerConfigOptions,
+                            out var encoding
+                        ) ||
+                        sourceText.Encoding?.Equals(encoding) == true ||
+                        IsEncodingEquivalent(sourceText, encoding)
                     ) {
                         return sourceText;
                     }
@@ -67,8 +70,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             var originalBytes = GetEncodedBytes(text, sourceText.Encoding);
             var encodedBytes = GetEncodedBytes(text, encoding);
 
-            return originalBytes.Length == encodedBytes.Length
-            && originalBytes.SequenceEqual(encodedBytes);
+            return originalBytes.Length == encodedBytes.Length &&
+            originalBytes.SequenceEqual(encodedBytes);
         }
 
         private static byte[] GetEncodedBytes(string text, Encoding encoding)
@@ -86,8 +89,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             [NotNullWhen(true)]out Encoding? encoding
         ) {
             if (
-                analyzerConfigOptions != null
-                && analyzerConfigOptions.TryGetValue(
+                analyzerConfigOptions != null &&
+                analyzerConfigOptions.TryGetValue(
                     "charset",
                     out var charsetOption
                 )

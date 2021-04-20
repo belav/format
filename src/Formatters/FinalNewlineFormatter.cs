@@ -29,8 +29,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 !analyzerConfigOptions.TryGetValue(
                     "insert_final_newline",
                     out var insertFinalNewlineValue
-                )
-                || !bool.TryParse(
+                ) ||
+                !bool.TryParse(
                     insertFinalNewlineValue,
                     out var insertFinalNewline
                 )
@@ -68,8 +68,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                     var lineBeforeLast = sourceText.Lines[^2];
                     var finalNewlineSpan = new TextSpan(
                         lineBeforeLast.End,
-                        lineBeforeLast.EndIncludingLineBreak
-                        - lineBeforeLast.End
+                        lineBeforeLast.EndIncludingLineBreak -
+                        lineBeforeLast.End
                     );
                     var removeNewlineChange = new TextChange(
                         finalNewlineSpan,

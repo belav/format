@@ -61,7 +61,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             Assert.Empty(analyzers);
         }
 
-        private static async Task<AnalyzersAndFixers> GetAnalyzersAndFixersAsync() {
+        private static async Task<AnalyzersAndFixers> GetAnalyzersAndFixersAsync()
+        {
             var assemblies =
                 new[] {
                     await GenerateAssemblyAsync(

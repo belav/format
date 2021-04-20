@@ -68,8 +68,8 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                 // If only file paths were given to be included, then avoid matching against all
                 // the files beneath the folderPath and instead check if the specified files exist.
                 if (
-                    fileMatcher.Exclude.IsDefaultOrEmpty
-                    && AreAllFilePaths(fileMatcher.Include)
+                    fileMatcher.Exclude.IsDefaultOrEmpty &&
+                    AreAllFilePaths(fileMatcher.Include)
                 ) {
                     return ValidateFilePaths(folderPath, fileMatcher.Include);
                 }
@@ -84,9 +84,9 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                         // The FileSystemGlobbing.Matcher only supports the '*' wildcard and paths
                         // ending in a directory separator are treated as folder paths.
                         if (
-                            globs[index].Contains('*')
-                            || globs[index].EndsWith('\\')
-                            || globs[index].EndsWith('/')
+                            globs[index].Contains('*') ||
+                            globs[index].EndsWith('\\') ||
+                            globs[index].EndsWith('/')
                         ) {
                             return false;
                         }

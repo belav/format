@@ -114,11 +114,11 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             foreach (var diagnostic in diagnostics)
             {
                 if (
-                    !diagnostic.IsSuppressed
-                    && diagnostic.Severity >= severity
-                    && diagnostic.Location.IsInSource
-                    && diagnostic.Location.SourceTree != null
-                    && formattableDocumentPaths.Contains(
+                    !diagnostic.IsSuppressed &&
+                    diagnostic.Severity >= severity &&
+                    diagnostic.Location.IsInSource &&
+                    diagnostic.Location.SourceTree != null &&
+                    formattableDocumentPaths.Contains(
                         diagnostic.Location.SourceTree.FilePath
                     )
                 ) {
@@ -148,8 +148,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     )
                     .All(
                         referencedProject =>
-                            referencedProject != null
-                            && AllReferencedProjectsLoaded(referencedProject)
+                            referencedProject != null &&
+                            AllReferencedProjectsLoaded(referencedProject)
                     );
             }
         }

@@ -58,8 +58,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     descriptor.Id,
                     CancellationToken.None,
                     out severity
-                )
-                == true
+                ) ==
+                true
             ) {
                 return true;
             }
@@ -69,12 +69,12 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             //  2. Compiler diagnostics
             //  3. Non-configurable diagnostics
             if (
-                analyzerOptions == null
-                || !descriptor.IsEnabledByDefault
-                || descriptor.CustomTags.Any(
+                analyzerOptions == null ||
+                !descriptor.IsEnabledByDefault ||
+                descriptor.CustomTags.Any(
                     tag =>
-                        tag == WellKnownDiagnosticTags.Compiler
-                        || tag == WellKnownDiagnosticTags.NotConfigurable
+                        tag == WellKnownDiagnosticTags.Compiler ||
+                        tag == WellKnownDiagnosticTags.NotConfigurable
                 )
             ) {
                 severity = default;
@@ -94,8 +94,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 analyzerConfigOptions.TryGetValue(
                     categoryBasedKey,
                     out var value
-                )
-                && TryParseSeverity(value, out severity)
+                ) &&
+                TryParseSeverity(value, out severity)
             ) {
                 return true;
             }
@@ -106,8 +106,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 analyzerConfigOptions.TryGetValue(
                     DotnetAnalyzerDiagnosticSeverityKey,
                     out value
-                )
-                && TryParseSeverity(value, out severity)
+                ) &&
+                TryParseSeverity(value, out severity)
             ) {
                 return true;
             }
@@ -128,21 +128,21 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         ) {
             var optionsProvider =
                 project.CompilationOptions?.SyntaxTreeOptionsProvider;
-            return (optionsProvider != null
-            && optionsProvider.TryGetDiagnosticValue(
+            return (optionsProvider != null &&
+            optionsProvider.TryGetDiagnosticValue(
                 tree,
                 diagnosticId,
                 CancellationToken.None,
                 out _
-            ))
-            || (diagnosticCategory != null
-            && analyzerConfigOptions.TryGetValue(
+            )) ||
+            (diagnosticCategory != null &&
+            analyzerConfigOptions.TryGetValue(
                 GetCategoryBasedDotnetAnalyzerDiagnosticSeverityKey(
                     diagnosticCategory
                 ),
                 out _
-            ))
-            || analyzerConfigOptions.TryGetValue(
+            )) ||
+            analyzerConfigOptions.TryGetValue(
                 DotnetAnalyzerDiagnosticSeverityKey,
                 out _
             );
@@ -196,8 +196,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             var optionsProvider =
                 project.CompilationOptions?.SyntaxTreeOptionsProvider;
             if (
-                optionsProvider != null
-                && optionsProvider.TryGetDiagnosticValue(
+                optionsProvider != null &&
+                optionsProvider.TryGetDiagnosticValue(
                     tree,
                     diagnosticId,
                     CancellationToken.None,
@@ -219,8 +219,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     analyzerConfigOptions.TryGetValue(
                         categoryBasedKey,
                         out value
-                    )
-                    && TryParseSeverity(value, out severity)
+                    ) &&
+                    TryParseSeverity(value, out severity)
                 ) {
                     return true;
                 }
@@ -232,8 +232,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 analyzerConfigOptions.TryGetValue(
                     DotnetAnalyzerDiagnosticSeverityKey,
                     out value
-                )
-                && TryParseSeverity(value, out severity)
+                ) &&
+                TryParseSeverity(value, out severity)
             ) {
                 return true;
             }
@@ -268,8 +268,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 return true;
             }
             else if (
-                comparer.Equals(value, "silent")
-                || comparer.Equals(value, "refactoring")
+                comparer.Equals(value, "silent") ||
+                comparer.Equals(value, "refactoring")
             ) {
                 severity = ReportDiagnostic.Hidden;
                 return true;
