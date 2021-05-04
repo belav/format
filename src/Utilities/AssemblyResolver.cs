@@ -9,8 +9,7 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
 {
     internal static class AssemblyResolver
     {
-        private static readonly string[] s_extensions =
-            new[] { "ni.dll", "ni.exe", "dll", "exe" };
+        private static readonly string[] s_extensions = new[] { "ni.dll", "ni.exe", "dll", "exe" };
 
         internal static Assembly? TryResolveAssemblyFromPaths(
             AssemblyLoadContext context,
@@ -19,14 +18,10 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             Dictionary<string, Assembly>? knownAssemblyPaths = null,
             ILogger? logger = null
         ) {
-            logger?.LogTrace(
-                $"Trying to resolve assembly {assemblyName.FullName}."
-            );
+            logger?.LogTrace($"Trying to resolve assembly {assemblyName.FullName}.");
 
             foreach (
-                var cultureSubfolder in string.IsNullOrEmpty(
-                        assemblyName.CultureName
-                    )
+                var cultureSubfolder in string.IsNullOrEmpty(assemblyName.CultureName)
                     // If no culture is specified, attempt to load directly from
                     // the known dependency paths.
                     ? new[] { string.Empty }
@@ -43,16 +38,13 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
                         $"{assemblyName.Name}.{extension}"
                     );
 
-                    var isAssemblyLoaded =
-                        knownAssemblyPaths?.ContainsKey(candidatePath) == true;
+                    var isAssemblyLoaded = knownAssemblyPaths?.ContainsKey(candidatePath) == true;
                     if (isAssemblyLoaded || !File.Exists(candidatePath))
                     {
                         continue;
                     }
 
-                    var candidateAssemblyName = AssemblyLoadContext.GetAssemblyName(
-                        candidatePath
-                    );
+                    var candidateAssemblyName = AssemblyLoadContext.GetAssemblyName(candidatePath);
                     if (candidateAssemblyName.Version < assemblyName.Version)
                     {
                         continue;
@@ -60,13 +52,9 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
 
                     try
                     {
-                        var assembly = context.LoadFromAssemblyPath(
-                            candidatePath
-                        );
+                        var assembly = context.LoadFromAssemblyPath(candidatePath);
 
-                        logger?.LogTrace(
-                            $"Loaded assembly from {candidatePath}."
-                        );
+                        logger?.LogTrace($"Loaded assembly from {candidatePath}.");
 
                         return assembly;
                     }

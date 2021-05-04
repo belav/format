@@ -19,12 +19,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         public async Task TestFilterWarning()
         {
             var solution = await GetSolutionAsync();
-            var projectAnalyzersAndFixers =
-                await GetProjectAnalyzersAndFixersAsync(solution);
+            var projectAnalyzersAndFixers = await GetProjectAnalyzersAndFixersAsync(solution);
             var project = solution.Projects.First();
-            var formattablePaths = ImmutableHashSet.Create(
-                project.Documents.First().FilePath
-            );
+            var formattablePaths = ImmutableHashSet.Create(project.Documents.First().FilePath);
             var minimumSeverity = DiagnosticSeverity.Warning;
             var result =
                 await AnalyzerFormatter.FilterBySeverityAsync(
@@ -42,12 +39,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         public async Task TestFilterError()
         {
             var solution = await GetSolutionAsync();
-            var projectAnalyzersAndFixers =
-                await GetProjectAnalyzersAndFixersAsync(solution);
+            var projectAnalyzersAndFixers = await GetProjectAnalyzersAndFixersAsync(solution);
             var project = solution.Projects.First();
-            var formattablePaths = ImmutableHashSet.Create(
-                project.Documents.First().FilePath
-            );
+            var formattablePaths = ImmutableHashSet.Create(project.Documents.First().FilePath);
             var minimumSeverity = DiagnosticSeverity.Error;
             var result =
                 await AnalyzerFormatter.FilterBySeverityAsync(
@@ -66,14 +60,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             var assemblies =
                 new[] {
                     await GenerateAssemblyAsync(
-                        GenerateAnalyzerCode(
-                            "DiagnosticAnalyzer1",
-                            "DiagnosticAnalyzerId"
-                        ),
-                        GenerateCodeFix(
-                            "CodeFixProvider1",
-                            "DiagnosticAnalyzerId"
-                        )
+                        GenerateAnalyzerCode("DiagnosticAnalyzer1", "DiagnosticAnalyzerId"),
+                        GenerateCodeFix("CodeFixProvider1", "DiagnosticAnalyzerId")
                     )
                 };
 
@@ -94,9 +82,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         }
 
         private async Task<ImmutableDictionary<ProjectId,
-                AnalyzersAndFixers>> GetProjectAnalyzersAndFixersAsync(
-            Solution solution
-        ) {
+                AnalyzersAndFixers>> GetProjectAnalyzersAndFixersAsync(Solution solution)
+        {
             var analyzersAndFixers = await GetAnalyzersAndFixersAsync();
 
             return solution.Projects.ToImmutableDictionary(

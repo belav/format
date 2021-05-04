@@ -13,9 +13,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
 {
     [DebuggerDisplay(
         @"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}")]
-    public sealed class MSBuildTestCase
-        : LongLivedMarshalByRefObject,
-            IXunitTestCase
+    public sealed class MSBuildTestCase : LongLivedMarshalByRefObject, IXunitTestCase
     {
         private IXunitTestCase _testCase;
 
@@ -33,15 +31,13 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
             set => _testCase.SourceInformation = value;
         }
 
-        public Exception InitializationException =>
-            _testCase.InitializationException;
+        public Exception InitializationException => _testCase.InitializationException;
 
         public int Timeout => _testCase.Timeout;
 
         public MSBuildTestCase(IXunitTestCase testCase)
         {
-            _testCase = testCase ??
-            throw new ArgumentNullException(nameof(testCase));
+            _testCase = testCase ?? throw new ArgumentNullException(nameof(testCase));
         }
 
         [Obsolete("Called by the deserializer", error: true)]

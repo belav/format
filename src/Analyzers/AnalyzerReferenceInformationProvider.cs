@@ -9,11 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.CodeAnalysis.Tools.Analyzers
 {
-    internal class AnalyzerReferenceInformationProvider
-        : IAnalyzerInformationProvider
+    internal class AnalyzerReferenceInformationProvider : IAnalyzerInformationProvider
     {
-        public ImmutableDictionary<ProjectId,
-            AnalyzersAndFixers> GetAnalyzersAndFixers(
+        public ImmutableDictionary<ProjectId, AnalyzersAndFixers> GetAnalyzersAndFixers(
             Solution solution,
             FormatOptions formatOptions,
             ILogger logger
@@ -27,24 +25,16 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         private AnalyzersAndFixers GetAnalyzersAndFixers(Project project)
         {
             var analyzerAssemblies = project.AnalyzerReferences.Select(
-                    reference =>
-                        TryLoadAssemblyFrom(
-                            reference.FullPath,
-                            new AnalyzerLoadContext()
-                        )
+                    reference => TryLoadAssemblyFrom(reference.FullPath, new AnalyzerLoadContext())
                 )
                 .OfType<Assembly>()
                 .ToImmutableArray();
 
-            return AnalyzerFinderHelpers.LoadAnalyzersAndFixers(
-                analyzerAssemblies
-            );
+            return AnalyzerFinderHelpers.LoadAnalyzersAndFixers(analyzerAssemblies);
         }
 
-        private Assembly? TryLoadAssemblyFrom(
-            string? path,
-            AnalyzerLoadContext context
-        ) {
+        private Assembly? TryLoadAssemblyFrom(string? path, AnalyzerLoadContext context)
+        {
             // Since we are not deploying these assemblies we need to ensure the files exist.
             if (path is null || !File.Exists(path))
             {
@@ -93,9 +83,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 catch { }
 
                 // Try to load the requested assembly from the default load context.
-                return AssemblyLoadContext.Default.LoadFromAssemblyName(
-                    assemblyName
-                );
+                return AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);
             }
         }
     }

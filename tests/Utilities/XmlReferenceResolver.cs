@@ -8,8 +8,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Utilities
 {
     internal class TestXmlReferenceResolver : XmlReferenceResolver
     {
-        public Dictionary<string, string> XmlReferences { get; } =
-            new Dictionary<string, string>();
+        public Dictionary<string, string> XmlReferences { get; } = new Dictionary<string, string>();
 
         public override bool Equals(object other)
         {
@@ -31,10 +30,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Utilities
             return new MemoryStream(Encoding.UTF8.GetBytes(content));
         }
 
-        public override string ResolveReference(
-            string path,
-            string baseFilePath
-        ) {
+        public override string ResolveReference(string path, string baseFilePath)
+        {
             return path;
         }
     }

@@ -11,22 +11,21 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
     public class UnnecessaryImportsFormatterTests : CSharpFormatterTests
     {
         private const string RemoveUnnecessaryImportDiagnosticKey =
-            AnalyzerOptionsExtensions.DotnetDiagnosticPrefix +
-            "." +
-            UnnecessaryImportsFormatter.IDE0005 +
-            "." +
-            AnalyzerOptionsExtensions.SeveritySuffix;
+            AnalyzerOptionsExtensions.DotnetDiagnosticPrefix
+            + "."
+            + UnnecessaryImportsFormatter.IDE0005
+            + "."
+            + AnalyzerOptionsExtensions.SeveritySuffix;
         private const string RemoveUnnecessaryImportCategoryKey =
-            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticPrefix +
-            "." +
-            AnalyzerOptionsExtensions.CategoryPrefix +
-            "-" +
-            UnnecessaryImportsFormatter.Style +
-            "." +
-            AnalyzerOptionsExtensions.SeveritySuffix;
+            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticPrefix
+            + "."
+            + AnalyzerOptionsExtensions.CategoryPrefix
+            + "-"
+            + UnnecessaryImportsFormatter.Style
+            + "."
+            + AnalyzerOptionsExtensions.SeveritySuffix;
 
-        private protected override ICodeFormatter Formatter =>
-            new UnnecessaryImportsFormatter();
+        private protected override ICodeFormatter Formatter => new UnnecessaryImportsFormatter();
 
         public UnnecessaryImportsFormatterTests(ITestOutputHelper output)
         {
@@ -79,9 +78,7 @@ class C
         [InlineData(
             AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
             Severity.Warning)]
-        [InlineData(
-            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
-            Severity.Info)]
+        [InlineData(AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey, Severity.Info)]
         public async Task WhenIDE0005SeverityLowerThanFixSeverity_AndHasUnusedImports_NoChange(
             string key,
             string severity
@@ -92,10 +89,7 @@ class C
 {
 }";
 
-            var editorConfig = new Dictionary<string, string>()
-            {
-                [key] = severity
-            };
+            var editorConfig = new Dictionary<string, string>() { [key] = severity };
 
             await AssertCodeUnchangedAsync(
                 code,
@@ -113,9 +107,7 @@ class C
         [InlineData(
             AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
             Severity.Warning)]
-        [InlineData(
-            AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
-            Severity.Error)]
+        [InlineData(AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey, Severity.Error)]
         public async Task WhenIDE0005SeverityEqualOrGreaterThanFixSeverity_AndHasUnusedImports_ImportRemoved(
             string key,
             string severity
@@ -130,10 +122,7 @@ class C
 {
 }";
 
-            var editorConfig = new Dictionary<string, string>()
-            {
-                [key] = severity
-            };
+            var editorConfig = new Dictionary<string, string>() { [key] = severity };
 
             await AssertCodeChangedAsync(
                 testCode,

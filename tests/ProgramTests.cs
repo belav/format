@@ -120,9 +120,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var sut = FormatCommand.CreateCommandLineOptions();
 
             // Act
-            var result = sut.Parse(
-                new[] { "workspaceValue", "--verbosity", "detailed" }
-            );
+            var result = sut.Parse(new[] { "workspaceValue", "--verbosity", "detailed" });
 
             // Assert
             Assert.Equal(0, result.Errors.Count);
@@ -140,9 +138,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var sut = FormatCommand.CreateCommandLineOptions();
 
             // Act
-            var result = sut.Parse(
-                new[] { "--verbosity", "detailed", "workspaceValue" }
-            );
+            var result = sut.Parse(new[] { "--verbosity", "detailed", "workspaceValue" });
 
             // Assert
             Assert.Equal(0, result.Errors.Count);
@@ -160,9 +156,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var sut = FormatCommand.CreateCommandLineOptions();
 
             // Act
-            var result = sut.Parse(
-                new[] { "workspaceValue1", "workspaceValue2" }
-            );
+            var result = sut.Parse(new[] { "workspaceValue1", "workspaceValue2" });
 
             // Assert
             Assert.Equal(1, result.Errors.Count);
@@ -215,9 +209,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var uniqueExitCode = 143;
 
             var sut = FormatCommand.CreateCommandLineOptions();
-            sut.Handler = CommandHandler.Create(
-                new FormatCommand.Handler(TestRun)
-            );
+            sut.Handler = CommandHandler.Create(new FormatCommand.Handler(TestRun));
 
             Task<int> TestRun(
                 string workspace,

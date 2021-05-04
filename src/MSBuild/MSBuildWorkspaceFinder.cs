@@ -28,10 +28,7 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
             {
                 if (!Path.IsPathRooted(workspacePath))
                 {
-                    workspacePath = Path.GetFullPath(
-                        workspacePath,
-                        searchDirectory
-                    );
+                    workspacePath = Path.GetFullPath(workspacePath, searchDirectory);
                 }
 
                 return Directory.Exists(workspacePath)
@@ -50,10 +47,8 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
                 Resources.Multiple_MSBuild_project_files_found_in_0_Specify_which_to_use_with_the_workspace_argument
             );
 
-            if (
-                !string.IsNullOrEmpty(foundSolution) &&
-                !string.IsNullOrEmpty(foundProject)
-            ) {
+            if (!string.IsNullOrEmpty(foundSolution) && !string.IsNullOrEmpty(foundProject))
+            {
                 throw new FileNotFoundException(
                     string.Format(
                         Resources.Both_a_MSBuild_project_file_and_solution_file_found_in_0_Specify_which_to_use_with_the_workspace_argument,
@@ -80,21 +75,14 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
             );
         }
 
-        private static (bool isSolution, string workspacePath) FindFile(
-            string workspacePath
-        ) {
+        private static (bool isSolution, string workspacePath) FindFile(string workspacePath)
+        {
             var workspaceExtension = Path.GetExtension(workspacePath);
-            var isSolution = workspaceExtension.Equals(
-                ".sln",
-                StringComparison.OrdinalIgnoreCase
-            );
+            var isSolution = workspaceExtension.Equals(".sln", StringComparison.OrdinalIgnoreCase);
             var isProject =
-                !isSolution &&
-                workspaceExtension.EndsWith(
-                    "proj",
-                    StringComparison.OrdinalIgnoreCase
-                ) &&
-                !workspaceExtension.Equals(
+                !isSolution
+                && workspaceExtension.EndsWith("proj", StringComparison.OrdinalIgnoreCase)
+                && !workspaceExtension.Equals(
                     DnxProjectExtension,
                     StringComparison.OrdinalIgnoreCase
                 );
@@ -114,27 +102,17 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
                 var message = isSolution
                     ? Resources.The_solution_file_0_does_not_exist
                     : Resources.The_project_file_0_does_not_exist;
-                throw new FileNotFoundException(
-                    string.Format(message, workspacePath)
-                );
+                throw new FileNotFoundException(string.Format(message, workspacePath));
             }
 
             return (isSolution, workspacePath);
         }
 
         private static IEnumerable<string> FindSolutionFiles(string basePath) =>
-            Directory.EnumerateFileSystemEntries(
-                basePath,
-                "*.sln",
-                SearchOption.TopDirectoryOnly
-            );
+            Directory.EnumerateFileSystemEntries(basePath, "*.sln", SearchOption.TopDirectoryOnly);
 
         private static IEnumerable<string> FindProjectFiles(string basePath) =>
-            Directory.EnumerateFileSystemEntries(
-                    basePath,
-                    "*.*proj",
-                    SearchOption.TopDirectoryOnly
-                )
+            Directory.EnumerateFileSystemEntries(basePath, "*.*proj", SearchOption.TopDirectoryOnly)
                 .Where(
                     f =>
                         !DnxProjectExtension.Equals(
@@ -156,9 +134,7 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
             var files = fileSelector(searchBase).ToList();
             if (files.Count > 1)
             {
-                throw new FileNotFoundException(
-                    string.Format(multipleFilesFoundError, searchBase)
-                );
+                throw new FileNotFoundException(string.Format(multipleFilesFoundError, searchBase));
             }
 
             return files.Count == 1 ? files[0] : null;

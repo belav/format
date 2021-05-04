@@ -21,11 +21,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
             ITestMethod testMethod,
             IAttributeInfo factAttribute
         ) {
-            return _factDiscoverer.Discover(
-                    discoveryOptions,
-                    testMethod,
-                    factAttribute
-                )
+            return _factDiscoverer.Discover(discoveryOptions, testMethod, factAttribute)
                 .Select(testCase => new MSBuildTestCase(testCase));
         }
     }

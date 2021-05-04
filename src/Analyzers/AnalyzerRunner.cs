@@ -60,8 +60,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             }
 
             var compilation =
-                await project.GetCompilationAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                await project.GetCompilationAsync(cancellationToken).ConfigureAwait(false);
             if (compilation is null)
             {
                 return;
@@ -69,12 +68,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
             var compilerDiagnostics = !fixableCompilerDiagnostics.IsEmpty
                 ? compilation.GetDiagnostics(cancellationToken)
-                        .Where(
-                            diagnostic =>
-                                fixableCompilerDiagnostics.Contains(
-                                    diagnostic.Id
-                                )
-                        )
+                        .Where(diagnostic => fixableCompilerDiagnostics.Contains(diagnostic.Id))
                         .ToImmutableArray()
                 : ImmutableArray<Diagnostic>.Empty;
 
@@ -85,11 +79,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             }
             else
             {
-                logger.LogDebug(
-                    Resources.Running_0_analyzers_on_1,
-                    analyzers.Length,
-                    project.Name
-                );
+                logger.LogDebug(Resources.Running_0_analyzers_on_1, analyzers.Length, project.Name);
 
                 var analyzerOptions = new CompilationWithAnalyzersOptions(
                     project.AnalyzerOptions,
@@ -98,10 +88,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     logAnalyzerExecutionTime: false,
                     reportSuppressedDiagnostics: false
                 );
-                var analyzerCompilation = compilation.WithAnalyzers(
-                    analyzers,
-                    analyzerOptions
-                );
+                var analyzerCompilation = compilation.WithAnalyzers(analyzers, analyzerOptions);
 
                 diagnostics = await analyzerCompilation.GetAnalyzerDiagnosticsAsync(
                         cancellationToken
@@ -114,13 +101,11 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             foreach (var diagnostic in diagnostics)
             {
                 if (
-                    !diagnostic.IsSuppressed &&
-                    diagnostic.Severity >= severity &&
-                    diagnostic.Location.IsInSource &&
-                    diagnostic.Location.SourceTree != null &&
-                    formattableDocumentPaths.Contains(
-                        diagnostic.Location.SourceTree.FilePath
-                    )
+                    !diagnostic.IsSuppressed
+                    && diagnostic.Severity >= severity
+                    && diagnostic.Location.IsInSource
+                    && diagnostic.Location.SourceTree != null
+                    && formattableDocumentPaths.Contains(diagnostic.Location.SourceTree.FilePath)
                 ) {
                     result.AddDiagnostic(project, diagnostic);
                 }
@@ -133,23 +118,19 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 // Use mscorlib to represent Runtime references being loaded.
                 if (
                     !project.MetadataReferences.Any(
-                        reference =>
-                            reference.Display?.EndsWith("mscorlib.dll") == true
+                        reference => reference.Display?.EndsWith("mscorlib.dll") == true
                     )
                 ) {
                     return false;
                 }
 
                 return project.ProjectReferences.Select(
-                        projectReference =>
-                            project.Solution.GetProject(
-                                projectReference.ProjectId
-                            )
+                        projectReference => project.Solution.GetProject(projectReference.ProjectId)
                     )
                     .All(
                         referencedProject =>
-                            referencedProject != null &&
-                            AllReferencedProjectsLoaded(referencedProject)
+                            referencedProject != null
+                            && AllReferencedProjectsLoaded(referencedProject)
                     );
             }
         }

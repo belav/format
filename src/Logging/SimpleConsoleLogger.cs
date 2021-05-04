@@ -17,8 +17,7 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
         private readonly LogLevel _minimalLogLevel;
         private readonly LogLevel _minimalErrorLevel;
 
-        private static ImmutableDictionary<LogLevel,
-            ConsoleColor> LogLevelColorMap =>
+        private static ImmutableDictionary<LogLevel, ConsoleColor> LogLevelColorMap =>
             new Dictionary<LogLevel, ConsoleColor>
             {
                 [LogLevel.Critical] = ConsoleColor.Red,
@@ -77,11 +76,8 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
             return NullScope.Instance;
         }
 
-        private void LogToTerminal(
-            string message,
-            LogLevel logLevel,
-            bool logToErrorStream
-        ) {
+        private void LogToTerminal(string message, LogLevel logLevel, bool logToErrorStream)
+        {
             var messageColor = LogLevelColorMap[logLevel];
             _terminal.ForegroundColor = messageColor;
 
@@ -90,11 +86,8 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
             _terminal.ResetColor();
         }
 
-        private void LogToConsole(
-            IConsole console,
-            string message,
-            bool logToErrorStream
-        ) {
+        private void LogToConsole(IConsole console, string message, bool logToErrorStream)
+        {
             if (logToErrorStream)
             {
                 console.Error.Write($"  {message}{Environment.NewLine}");

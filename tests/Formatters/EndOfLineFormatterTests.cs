@@ -9,8 +9,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 {
     public class EndOfLineFormatterTests : CSharpFormatterTests
     {
-        private protected override ICodeFormatter Formatter =>
-            new EndOfLineFormatter();
+        private protected override ICodeFormatter Formatter => new EndOfLineFormatter();
 
         public EndOfLineFormatterTests(ITestOutputHelper output)
         {
@@ -36,10 +35,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 
             var expectedCode = $"class C{expectedNewline}{{{expectedNewline}}}";
 
-            var editorConfig = new Dictionary<string, string>()
-            {
-                ["end_of_line"] = endOfLine,
-            };
+            var editorConfig = new Dictionary<string, string>() { ["end_of_line"] = endOfLine, };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
         }
@@ -59,16 +55,11 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             string expectedNewline,
             string endOfLine
         ) {
-            var testCode =
-                $"class C{codeNewline}{{{codeNewline}}}{codeNewline}";
+            var testCode = $"class C{codeNewline}{{{codeNewline}}}{codeNewline}";
 
-            var expectedCode =
-                $"class C{expectedNewline}{{{expectedNewline}}}{expectedNewline}";
+            var expectedCode = $"class C{expectedNewline}{{{expectedNewline}}}{expectedNewline}";
 
-            var editorConfig = new Dictionary<string, string>()
-            {
-                ["end_of_line"] = endOfLine,
-            };
+            var editorConfig = new Dictionary<string, string>() { ["end_of_line"] = endOfLine, };
 
             await AssertCodeChangedAsync(testCode, expectedCode, editorConfig);
         }
@@ -77,11 +68,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         [InlineData("\n")]
         [InlineData("\r\n")]
         [InlineData("\r")]
-        public async Task TestEndOfLine_AndNoSetting_NoChanges(
-            string codeNewline
-        ) {
-            var testCode =
-                $"class C{codeNewline}{{{codeNewline}}}{codeNewline}";
+        public async Task TestEndOfLine_AndNoSetting_NoChanges(string codeNewline)
+        {
+            var testCode = $"class C{codeNewline}{{{codeNewline}}}{codeNewline}";
 
             var editorConfig = new Dictionary<string, string>();
 

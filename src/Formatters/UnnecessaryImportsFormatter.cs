@@ -17,8 +17,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
         internal const string IDE0005 = nameof(IDE0005);
         internal const string Style = nameof(Style);
 
-        protected override string FormatWarningDescription =>
-            Resources.Remove_unnecessary_import;
+        protected override string FormatWarningDescription => Resources.Remove_unnecessary_import;
 
         public override FixCategory Category => FixCategory.CodeStyle;
 
@@ -40,9 +39,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 return sourceText;
             }
 
-            var tree =
-                await document.GetSyntaxTreeAsync(cancellationToken)
-                    .ConfigureAwait(false);
+            var tree = await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
             if (tree is null)
             {
                 return sourceText;
@@ -71,11 +68,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             }
 
             var isSameVersion =
-                await IsSameDocumentAndVersionAsync(
-                        document,
-                        formattedDocument,
-                        cancellationToken
-                    )
+                await IsSameDocumentAndVersionAsync(document, formattedDocument, cancellationToken)
                     .ConfigureAwait(false);
             if (isSameVersion)
             {
@@ -83,8 +76,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             }
 
             var formattedText =
-                await formattedDocument.GetTextAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                await formattedDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
             return formattedText;
         }
     }

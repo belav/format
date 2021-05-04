@@ -10,8 +10,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 {
     public class OrganizeImportsFormatterTests : CSharpFormatterTests
     {
-        private protected override ICodeFormatter Formatter =>
-            new OrganizeImportsFormatter();
+        private protected override ICodeFormatter Formatter => new OrganizeImportsFormatter();
 
         public OrganizeImportsFormatterTests(ITestOutputHelper output)
         {
@@ -43,9 +42,7 @@ class C
 
             var editorConfig = new Dictionary<string, string>()
             {
-                ["end_of_line"] = EndOfLineFormatter.GetEndOfLineOption(
-                    Environment.NewLine
-                ),
+                ["end_of_line"] = EndOfLineFormatter.GetEndOfLineOption(Environment.NewLine),
                 ["dotnet_sort_system_directives_first"] = "false",
                 ["dotnet_separate_import_directive_groups"] = "false"
             };
@@ -78,9 +75,7 @@ class C
 
             var editorConfig = new Dictionary<string, string>()
             {
-                ["end_of_line"] = EndOfLineFormatter.GetEndOfLineOption(
-                    Environment.NewLine
-                ),
+                ["end_of_line"] = EndOfLineFormatter.GetEndOfLineOption(Environment.NewLine),
                 ["dotnet_sort_system_directives_first"] = "true",
                 ["dotnet_separate_import_directive_groups"] = "false"
             };
@@ -114,9 +109,7 @@ class C
 
             var editorConfig = new Dictionary<string, string>()
             {
-                ["end_of_line"] = EndOfLineFormatter.GetEndOfLineOption(
-                    Environment.NewLine
-                ),
+                ["end_of_line"] = EndOfLineFormatter.GetEndOfLineOption(Environment.NewLine),
                 ["dotnet_sort_system_directives_first"] = "false",
                 ["dotnet_separate_import_directive_groups"] = "true"
             };
@@ -150,9 +143,7 @@ class C
 
             var editorConfig = new Dictionary<string, string>()
             {
-                ["end_of_line"] = EndOfLineFormatter.GetEndOfLineOption(
-                    Environment.NewLine
-                ),
+                ["end_of_line"] = EndOfLineFormatter.GetEndOfLineOption(Environment.NewLine),
                 ["dotnet_sort_system_directives_first"] = "true",
                 ["dotnet_separate_import_directive_groups"] = "true"
             };
@@ -175,9 +166,7 @@ class C
 
             var editorConfig = new Dictionary<string, string>()
             {
-                ["end_of_line"] = EndOfLineFormatter.GetEndOfLineOption(
-                    Environment.NewLine
-                )
+                ["end_of_line"] = EndOfLineFormatter.GetEndOfLineOption(Environment.NewLine)
             };
 
             await AssertCodeUnchangedAsync(code, editorConfig);

@@ -10,9 +10,7 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
         {
             // If the path is to a file then remove the file name and process the
             // folder path.
-            var startPath = Directory.Exists(path)
-                ? path
-                : Path.GetDirectoryName(path);
+            var startPath = Directory.Exists(path) ? path : Path.GetDirectoryName(path);
 
             if (!Directory.Exists(startPath))
             {
@@ -24,10 +22,7 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             var directory = new DirectoryInfo(path);
 
             // Find .editorconfig files contained unders the folder path.
-            var files = directory.GetFiles(
-                ".editorconfig",
-                SearchOption.AllDirectories
-            );
+            var files = directory.GetFiles(".editorconfig", SearchOption.AllDirectories);
             for (var index = 0; index < files.Length; index++)
             {
                 editorConfigPaths.Add(files[index].FullName);
@@ -38,10 +33,7 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             {
                 directory = directory.Parent;
 
-                files = directory.GetFiles(
-                    ".editorconfig",
-                    SearchOption.TopDirectoryOnly
-                );
+                files = directory.GetFiles(".editorconfig", SearchOption.TopDirectoryOnly);
                 if (files.Length == 1)
                 {
                     editorConfigPaths.Add(files[0].FullName);

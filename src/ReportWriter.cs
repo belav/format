@@ -17,26 +17,15 @@ namespace Microsoft.CodeAnalysis.Tools
             var reportFilePath = GetReportFilePath(reportPath);
             var reportFolderPath = Path.GetDirectoryName(reportFilePath);
 
-            if (
-                !string.IsNullOrEmpty(reportFolderPath) &&
-                !Directory.Exists(reportFolderPath)
-            ) {
+            if (!string.IsNullOrEmpty(reportFolderPath) && !Directory.Exists(reportFolderPath))
+            {
                 Directory.CreateDirectory(reportFolderPath);
             }
 
-            logger.LogInformation(
-                Resources.Writing_formatting_report_to_0,
-                reportFilePath
-            );
+            logger.LogInformation(Resources.Writing_formatting_report_to_0, reportFilePath);
 
-            var seralizerOptions = new JsonSerializerOptions
-            {
-                WriteIndented = true
-            };
-            var formattedFilesJson = JsonSerializer.Serialize(
-                formattedFiles,
-                seralizerOptions
-            );
+            var seralizerOptions = new JsonSerializerOptions { WriteIndented = true };
+            var formattedFilesJson = JsonSerializer.Serialize(formattedFiles, seralizerOptions);
 
             File.WriteAllText(reportFilePath, formattedFilesJson);
         }
@@ -50,10 +39,7 @@ namespace Microsoft.CodeAnalysis.Tools
             }
             else if (reportPath == ".")
             {
-                return Path.Combine(
-                    Environment.CurrentDirectory,
-                    defaultReportName
-                );
+                return Path.Combine(Environment.CurrentDirectory, defaultReportName);
             }
             else
             {

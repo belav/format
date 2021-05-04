@@ -18,10 +18,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
 {
     public static class AnalyzerAssemblyGenerator
     {
-        public static SyntaxTree GenerateCodeFix(
-            string typeName,
-            string diagnosticId
-        ) {
+        public static SyntaxTree GenerateCodeFix(string typeName, string diagnosticId)
+        {
             var codefix =
                 $@"
 using System;
@@ -52,10 +50,8 @@ public class {typeName} : CodeFixProvider
             return CSharpSyntaxTree.ParseText(codefix);
         }
 
-        public static SyntaxTree GenerateAnalyzerCode(
-            string typeName,
-            string diagnosticId
-        ) {
+        public static SyntaxTree GenerateAnalyzerCode(string typeName, string diagnosticId)
+        {
             var analyzer =
                 $@"
 using System.Collections.Immutable;
@@ -77,27 +73,16 @@ public class {typeName} : DiagnosticAnalyzer
             return CSharpSyntaxTree.ParseText(analyzer);
         }
 
-        public static async Task<Assembly> GenerateAssemblyAsync(
-            params SyntaxTree[] trees
-        ) {
+        public static async Task<Assembly> GenerateAssemblyAsync(params SyntaxTree[] trees)
+        {
             var assemblyName = Guid.NewGuid().ToString();
             var references = new List<MetadataReference>()
             {
-                MetadataReference.CreateFromFile(
-                    typeof(ImmutableArray).Assembly.Location
-                ),
-                MetadataReference.CreateFromFile(
-                    typeof(SharedAttribute).Assembly.Location
-                ),
-                MetadataReference.CreateFromFile(
-                    typeof(CSharpCompilation).Assembly.Location
-                ),
-                MetadataReference.CreateFromFile(
-                    typeof(DiagnosticAnalyzer).Assembly.Location
-                ),
-                MetadataReference.CreateFromFile(
-                    typeof(CodeFixProvider).Assembly.Location
-                ),
+                MetadataReference.CreateFromFile(typeof(ImmutableArray).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(SharedAttribute).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(DiagnosticAnalyzer).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(CodeFixProvider).Assembly.Location),
             };
 
             var netstandardMetaDataReferences =
@@ -110,9 +95,7 @@ public class {typeName} : DiagnosticAnalyzer
                 assemblyName,
                 trees,
                 references,
-                options: new CSharpCompilationOptions(
-                    OutputKind.DynamicallyLinkedLibrary
-                )
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
             );
 
             using var ms = new MemoryStream();
@@ -121,13 +104,10 @@ public class {typeName} : DiagnosticAnalyzer
             {
                 var failures = result.Diagnostics.Where(
                         diagnostic =>
-                            diagnostic.IsWarningAsError ||
-                            diagnostic.Severity == DiagnosticSeverity.Error
+                            diagnostic.IsWarningAsError
+                            || diagnostic.Severity == DiagnosticSeverity.Error
                     )
-                    .Select(
-                        diagnostic =>
-                            $"{diagnostic.Id}: {diagnostic.GetMessage()}"
-                    );
+                    .Select(diagnostic => $"{diagnostic.Id}: {diagnostic.GetMessage()}");
 
                 throw new Exception(string.Join(Environment.NewLine, failures));
             }
