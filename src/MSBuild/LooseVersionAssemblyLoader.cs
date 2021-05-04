@@ -54,9 +54,7 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
                         var name = assembly.FullName;
                         if (name is null)
                         {
-                            throw new Exception(
-                                $"Could not get name for assembly '{assembly}'"
-                            );
+                            throw new Exception($"Could not get name for assembly '{assembly}'");
                         }
 
                         s_pathsToAssemblies[assembly.Location] = assembly;

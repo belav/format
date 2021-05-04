@@ -15,9 +15,7 @@ namespace Microsoft.CodeAnalysis.Tools.Perf
             {
                 var msBuildInstance = Build.Locator.MSBuildLocator.QueryVisualStudioInstances()
                     .First();
-                LooseVersionAssemblyLoader.Register(
-                    msBuildInstance.MSBuildPath
-                );
+                LooseVersionAssemblyLoader.Register(msBuildInstance.MSBuildPath);
                 Build.Locator.MSBuildLocator.RegisterInstance(msBuildInstance);
             }
         }

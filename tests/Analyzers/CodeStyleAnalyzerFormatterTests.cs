@@ -11,8 +11,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
 {
     public class CodeStyleAnalyzerFormatterTests : CSharpFormatterTests
     {
-        private protected override ICodeFormatter Formatter =>
-            AnalyzerFormatter.CodeStyleFormatter;
+        private protected override ICodeFormatter Formatter => AnalyzerFormatter.CodeStyleFormatter;
 
         public CodeStyleAnalyzerFormatterTests(ITestOutputHelper output)
         {

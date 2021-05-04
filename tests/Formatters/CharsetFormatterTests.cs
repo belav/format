@@ -10,8 +10,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 {
     public class CharsetFormatterTests : CSharpFormatterTests
     {
-        private protected override ICodeFormatter Formatter =>
-            new CharsetFormatter();
+        private protected override ICodeFormatter Formatter => new CharsetFormatter();
 
         public CharsetFormatterTests(ITestOutputHelper output)
         {
@@ -39,27 +38,18 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         [InlineData("utf-16le", "utf-8")]
         [InlineData("utf-16le", "utf-8-bom")]
         [InlineData("utf-16le", "utf-16be")]
-        public async Task TestCharsetWrong_CharsetFixed(
-            string codeValue,
-            string expectedValue
-        ) {
+        public async Task TestCharsetWrong_CharsetFixed(string codeValue, string expectedValue)
+        {
             var codeEncoding = CharsetFormatter.GetCharset(codeValue);
             var expectedEncoding = CharsetFormatter.GetCharset(expectedValue);
 
             // Use unicode to ensure that "latin1" and "utf8" don't look equivalent.
             var testCode = "class 🤵 { }";
 
-            var editorConfig = new Dictionary<string, string>()
-            {
-                ["charset"] = expectedValue,
-            };
+            var editorConfig = new Dictionary<string, string>() { ["charset"] = expectedValue, };
 
             var formattedText =
-                await AssertCodeUnchangedAsync(
-                    testCode,
-                    editorConfig,
-                    codeEncoding
-                );
+                await AssertCodeUnchangedAsync(testCode, editorConfig, codeEncoding);
 
             Assert.Equal(expectedEncoding, formattedText.Encoding);
         }
@@ -75,11 +65,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var editorConfig = new Dictionary<string, string>() {  };
 
             var formattedText =
-                await AssertCodeUnchangedAsync(
-                    testCode,
-                    editorConfig,
-                    codeEncoding
-                );
+                await AssertCodeUnchangedAsync(testCode, editorConfig, codeEncoding);
 
             Assert.Equal(codeEncoding, formattedText.Encoding);
         }

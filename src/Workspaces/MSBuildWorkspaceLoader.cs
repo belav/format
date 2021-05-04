@@ -27,14 +27,10 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                 StringComparer.Ordinal
             )
             {
-
                 // This property ensures that XAML files will be compiled in the current AppDomain
                 // rather than a separate one. Any tasks isolated in AppDomains or tasks that create
                 // AppDomains will likely not work due to https://github.com/Microsoft/MSBuildLocator/issues/16.
-                {
-                    "AlwaysCompileMarkupFilesInSeparateDomain",
-                    bool.FalseString
-                },
+                { "AlwaysCompileMarkupFilesInSeparateDomain", bool.FalseString },
             };
 
             var workspace = MSBuildWorkspace.Create(properties);
@@ -83,11 +79,7 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                 }
             }
 
-            LogWorkspaceDiagnostics(
-                logger,
-                logWorkspaceWarnings,
-                workspace.Diagnostics
-            );
+            LogWorkspaceDiagnostics(logger, logWorkspaceWarnings, workspace.Diagnostics);
 
             return workspace;
 

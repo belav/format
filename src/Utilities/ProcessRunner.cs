@@ -37,11 +37,8 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
 
         public int Id => Process.Id;
 
-        public ProcessInfo(
-            Process process,
-            ProcessStartInfo startInfo,
-            Task<ProcessResult> result
-        ) {
+        public ProcessInfo(Process process, ProcessStartInfo startInfo, Task<ProcessResult> result)
+        {
             Process = process;
             StartInfo = startInfo;
             Result = result;
@@ -194,9 +191,7 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
             {
                 foreach (var pair in environmentVariables)
                 {
-                    processStartInfo.EnvironmentVariables[
-                        pair.Key
-                    ] = pair.Value;
+                    processStartInfo.EnvironmentVariables[pair.Key] = pair.Value;
                 }
             }
 

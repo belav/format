@@ -27,14 +27,10 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             return new FolderWorkspace(hostServices);
         }
 
-        public Solution OpenFolder(
-            string folderPath,
-            SourceFileMatcher fileMatcher
-        ) {
-            if (
-                string.IsNullOrEmpty(folderPath) ||
-                !Directory.Exists(folderPath)
-            ) {
+        public Solution OpenFolder(string folderPath, SourceFileMatcher fileMatcher)
+        {
+            if (string.IsNullOrEmpty(folderPath) || !Directory.Exists(folderPath))
+            {
                 throw new ArgumentException(
                     $"Folder '{folderPath}' does not exist.",
                     nameof(folderPath)
@@ -43,10 +39,7 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
 
             ClearSolution();
 
-            var solutionInfo = FolderSolutionLoader.LoadSolutionInfo(
-                folderPath,
-                fileMatcher
-            );
+            var solutionInfo = FolderSolutionLoader.LoadSolutionInfo(folderPath, fileMatcher);
 
             OnSolutionAdded(solutionInfo);
 
@@ -59,24 +52,13 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             return feature == ApplyChangesKind.ChangeDocument;
         }
 
-        protected override void ApplyDocumentTextChanged(
-            DocumentId documentId,
-            SourceText text
-        ) {
+        protected override void ApplyDocumentTextChanged(DocumentId documentId, SourceText text)
+        {
             var document = CurrentSolution.GetDocument(documentId);
             if (document?.FilePath != null && text.Encoding != null)
             {
-                SaveDocumentText(
-                    documentId,
-                    document.FilePath,
-                    text,
-                    text.Encoding
-                );
-                OnDocumentTextChanged(
-                    documentId,
-                    text,
-                    PreservationMode.PreserveValue
-                );
+                SaveDocumentText(documentId, document.FilePath, text, text.Encoding);
+                OnDocumentTextChanged(documentId, text, PreservationMode.PreserveValue);
             }
         }
 
@@ -88,21 +70,13 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
         ) {
             try
             {
-                using var writer = new StreamWriter(
-                    fullPath,
-                    append: false,
-                    encoding
-                );
+                using var writer = new StreamWriter(fullPath, append: false, encoding);
                 newText.Write(writer);
             }
             catch (IOException exception)
             {
                 OnWorkspaceFailed(
-                    new DocumentDiagnostic(
-                        WorkspaceDiagnosticKind.Failure,
-                        exception.Message,
-                        id
-                    )
+                    new DocumentDiagnostic(WorkspaceDiagnosticKind.Failure, exception.Message, id)
                 );
             }
         }

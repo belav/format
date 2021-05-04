@@ -5,8 +5,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 {
     internal class CodeAnalysisResult
     {
-        private readonly Dictionary<Project,
-            List<Diagnostic>> _dictionary = new Dictionary<Project,
+        private readonly Dictionary<Project, List<Diagnostic>> _dictionary = new Dictionary<Project,
             List<Diagnostic>>();
 
         internal void AddDiagnostic(Project project, Diagnostic diagnostic)
@@ -21,7 +20,6 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             }
         }
 
-        public IReadOnlyDictionary<Project, List<Diagnostic>> Diagnostics =>
-            _dictionary;
+        public IReadOnlyDictionary<Project, List<Diagnostic>> Diagnostics => _dictionary;
     }
 }

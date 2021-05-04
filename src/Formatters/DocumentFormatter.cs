@@ -82,9 +82,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 
             for (var index = 0; index < formattableDocuments.Length; index++)
             {
-                var document = solution.GetDocument(
-                    formattableDocuments[index]
-                );
+                var document = solution.GetDocument(formattableDocuments[index]);
                 if (document is null)
                     continue;
 
@@ -92,8 +90,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                     async () =>
                     {
                         var originalSourceText =
-                            await document.GetTextAsync(cancellationToken)
-                                .ConfigureAwait(false);
+                            await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
 
                         var syntaxTree =
                             await document.GetSyntaxTreeAsync(cancellationToken)
@@ -105,8 +102,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                             syntaxTree
                         );
                         var optionSet =
-                            await document.GetOptionsAsync(cancellationToken)
-                                .ConfigureAwait(false);
+                            await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
 
                         return await GetFormattedSourceTextAsync(
                                 document,
@@ -139,8 +135,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             CancellationToken cancellationToken
         ) {
             var originalSourceText =
-                await document.GetTextAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
             var formattedSourceText =
                 await FormatFileAsync(
                         document,
@@ -153,11 +148,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                     )
                     .ConfigureAwait(false);
 
-            return !formattedSourceText.ContentEquals(originalSourceText) ||
-                !formattedSourceText.Encoding?.Equals(
-                    originalSourceText.Encoding
-                ) ==
-                true
+            return !formattedSourceText.ContentEquals(originalSourceText)
+            || !formattedSourceText.Encoding?.Equals(originalSourceText.Encoding) == true
                 ? (originalSourceText, formattedSourceText)
                 : (originalSourceText, null);
         }
@@ -188,10 +180,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                     continue;
                 }
 
-                var (
-                    originalText,
-                    formattedText
-                    ) = await formatTask.ConfigureAwait(false);
+                var (originalText, formattedText) = await formatTask.ConfigureAwait(false);
                 if (formattedText is null)
                 {
                     continue;
@@ -230,9 +219,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             var workspaceFolder = Path.GetDirectoryName(workspacePath);
             if (workspaceFolder is null)
             {
-                throw new Exception(
-                    $"Unable to find directory name for '{workspacePath}'"
-                );
+                throw new Exception($"Unable to find directory name for '{workspacePath}'");
             }
 
             var fileChanges = ImmutableArray.CreateBuilder<FileChange>();
@@ -241,20 +228,13 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             for (var index = 0; index < changes.Count; index++)
             {
                 var change = changes[index];
-                var changePosition = originalText.Lines.GetLinePosition(
-                    change.Span.Start
-                );
+                var changePosition = originalText.Lines.GetLinePosition(change.Span.Start);
 
-                var fileChange = new FileChange(
-                    changePosition,
-                    FormatWarningDescription
-                );
+                var fileChange = new FileChange(changePosition, FormatWarningDescription);
                 fileChanges.Add(fileChange);
 
-                if (
-                    !formatOptions.SaveFormattedFiles ||
-                    formatOptions.LogLevel == LogLevel.Trace
-                ) {
+                if (!formatOptions.SaveFormattedFiles || formatOptions.LogLevel == LogLevel.Trace)
+                {
                     LogFormattingChanges(
                         filePath,
                         changesAreErrors,
@@ -302,12 +282,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 return false;
             }
 
-            var aVersion =
-                await a.GetTextVersionAsync(cancellationToken)
-                    .ConfigureAwait(false);
-            var bVersion =
-                await b.GetTextVersionAsync(cancellationToken)
-                    .ConfigureAwait(false);
+            var aVersion = await a.GetTextVersionAsync(cancellationToken).ConfigureAwait(false);
+            var bVersion = await b.GetTextVersionAsync(cancellationToken).ConfigureAwait(false);
 
             return aVersion == bVersion;
         }

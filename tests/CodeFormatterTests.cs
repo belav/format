@@ -168,20 +168,11 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                     expectedFileCount: 6
                 );
 
-            var logLines = log.Split(
-                Environment.NewLine,
-                StringSplitOptions.RemoveEmptyEntries
-            );
+            var logLines = log.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            Assert.Contains(logLines, line => line.Contains("unformatted_project.AssemblyInfo.cs"));
             Assert.Contains(
                 logLines,
-                line => line.Contains("unformatted_project.AssemblyInfo.cs")
-            );
-            Assert.Contains(
-                logLines,
-                line =>
-                    line.Contains(
-                        "NETCoreApp,Version=v3.0.AssemblyAttributes.cs"
-                    )
+                line => line.Contains("NETCoreApp,Version=v3.0.AssemblyAttributes.cs")
             );
         }
 
@@ -257,10 +248,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task OnlyFormatPathsFromList()
         {
             // To match a folder pattern it needs to end with a directory separator.
-            var include =
-                new[] {
-                    s_unformattedProjectPath + Path.DirectorySeparatorChar
-                };
+            var include = new[] { s_unformattedProjectPath + Path.DirectorySeparatorChar };
 
             await TestFormatWorkspaceAsync(
                 s_unformattedProjectFilePath,
@@ -292,10 +280,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         [MSBuildFact]
         public async Task NoFilesFormattedWhenNotInList()
         {
-            var include =
-                new[] {
-                    Path.Combine(s_unformattedProjectPath, "does_not_exist.cs")
-                };
+            var include = new[] { Path.Combine(s_unformattedProjectPath, "does_not_exist.cs") };
 
             await TestFormatWorkspaceAsync(
                 s_unformattedProjectFilePath,
@@ -324,10 +309,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                     expectedFileCount: 6
                 );
 
-            var pattern = string.Format(
-                Resources.Formatted_code_file_0,
-                @"(.*)"
-            );
+            var pattern = string.Format(Resources.Formatted_code_file_0, @"(.*)");
             var match = new Regex(pattern, RegexOptions.Multiline).Match(log);
 
             Assert.True(match.Success, log);
@@ -372,37 +354,20 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 @"Program.cs(11,3): Fix whitespace formatting.",
                 @"other_items\OtherClass.cs(12,2): Add final newline.",
                 @"Program.cs(12,2): Add final newline.",
-            }.Select(path => path.Replace('\\', Path.DirectorySeparatorChar))
-                .ToArray();
+            }.Select(path => path.Replace('\\', Path.DirectorySeparatorChar)).ToArray();
 
             // We can't assert the location of the format message because different platform
             // line endings change the position in the file.
-            Assert.Equal(
-                expectedFormatLocations.Length,
-                formatLocations.Length
-            );
-            for (
-                var index = 0;
-                index < expectedFormatLocations.Length;
-                index++
-            ) {
-                var expectedParts = FindFormattingLogLine.Match(
-                    expectedFormatLocations[index]
-                );
-                var formatParts = FindFormattingLogLine.Match(
-                    formatLocations[index]
-                );
+            Assert.Equal(expectedFormatLocations.Length, formatLocations.Length);
+            for (var index = 0; index < expectedFormatLocations.Length; index++)
+            {
+                var expectedParts = FindFormattingLogLine.Match(expectedFormatLocations[index]);
+                var formatParts = FindFormattingLogLine.Match(formatLocations[index]);
 
                 // Match filename
-                Assert.Equal(
-                    expectedParts.Groups[2].Value,
-                    formatParts.Groups[2].Value
-                );
+                Assert.Equal(expectedParts.Groups[2].Value, formatParts.Groups[2].Value);
                 // Match formatter message
-                Assert.Equal(
-                    expectedParts.Groups[3].Value,
-                    formatParts.Groups[3].Value
-                );
+                Assert.Equal(expectedParts.Groups[3].Value, formatParts.Groups[3].Value);
             }
         }
 
@@ -445,10 +410,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                     expectedFileCount: 6
                 );
 
-            var pattern = string.Format(
-                Resources.Formatted_code_file_0,
-                @"(.*)"
-            );
+            var pattern = string.Format(Resources.Formatted_code_file_0, @"(.*)");
             var match = new Regex(pattern, RegexOptions.Multiline).Match(log);
 
             Assert.True(match.Success, log);
@@ -537,10 +499,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task NoFilesFormattedInCodeStyleSolution_WhenNotFixingCodeStyle()
         {
             var restoreExitCode =
-                await NuGetHelper.PerformRestore(
-                    s_codeStyleSolutionFilePath,
-                    _output
-                );
+                await NuGetHelper.PerformRestore(s_codeStyleSolutionFilePath, _output);
             Assert.Equal(0, restoreExitCode);
 
             await TestFormatWorkspaceAsync(
@@ -559,10 +518,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task NoFilesFormattedInCodeStyleSolution_WhenFixingCodeStyleErrors()
         {
             var restoreExitCode =
-                await NuGetHelper.PerformRestore(
-                    s_codeStyleSolutionFilePath,
-                    _output
-                );
+                await NuGetHelper.PerformRestore(s_codeStyleSolutionFilePath, _output);
             Assert.Equal(0, restoreExitCode);
 
             await TestFormatWorkspaceAsync(
@@ -582,10 +538,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task FilesFormattedInCodeStyleSolution_WhenFixingCodeStyleWarnings()
         {
             var restoreExitCode =
-                await NuGetHelper.PerformRestore(
-                    s_codeStyleSolutionFilePath,
-                    _output
-                );
+                await NuGetHelper.PerformRestore(s_codeStyleSolutionFilePath, _output);
             Assert.Equal(0, restoreExitCode);
 
             await TestFormatWorkspaceAsync(
@@ -605,10 +558,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task NoFilesFormattedInAnalyzersSolution_WhenNotFixingAnalyzers()
         {
             var restoreExitCode =
-                await NuGetHelper.PerformRestore(
-                    s_analyzersSolutionFilePath,
-                    _output
-                );
+                await NuGetHelper.PerformRestore(s_analyzersSolutionFilePath, _output);
             Assert.Equal(0, restoreExitCode);
 
             await TestFormatWorkspaceAsync(
@@ -627,10 +577,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task FilesFormattedInAnalyzersSolution_WhenFixingAnalyzerErrors()
         {
             var restoreExitCode =
-                await NuGetHelper.PerformRestore(
-                    s_analyzersSolutionFilePath,
-                    _output
-                );
+                await NuGetHelper.PerformRestore(s_analyzersSolutionFilePath, _output);
             Assert.Equal(0, restoreExitCode);
 
             await TestFormatWorkspaceAsync(
@@ -678,14 +625,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var logger = new TestLogger();
             var msBuildPath = MSBuildRegistrar.RegisterInstance(logger);
 
-            logger.LogDebug(
-                Resources.The_dotnet_runtime_version_is_0,
-                Program.GetRuntimeVersion()
-            );
-            logger.LogTrace(
-                Resources.Using_msbuildexe_located_in_0,
-                msBuildPath
-            );
+            logger.LogDebug(Resources.The_dotnet_runtime_version_is_0, Program.GetRuntimeVersion());
+            logger.LogTrace(Resources.Using_msbuildexe_located_in_0, msBuildPath);
 
             var fileMatcher = SourceFileMatcher.CreateMatcher(include, exclude);
             var formatOptions = new FormatOptions(
@@ -714,10 +655,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             try
             {
                 Assert.Equal(expectedExitCode, formatResult.ExitCode);
-                Assert.Equal(
-                    expectedFilesFormatted,
-                    formatResult.FilesFormatted
-                );
+                Assert.Equal(expectedFilesFormatted, formatResult.FilesFormatted);
                 Assert.Equal(expectedFileCount, formatResult.FileCount);
             }
             catch

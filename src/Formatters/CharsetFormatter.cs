@@ -14,11 +14,9 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 {
     internal sealed class CharsetFormatter : DocumentFormatter
     {
-        protected override string FormatWarningDescription =>
-            Resources.Fix_file_encoding;
+        protected override string FormatWarningDescription => Resources.Fix_file_encoding;
 
-        private static Encoding Utf8 =>
-            new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+        private static Encoding Utf8 => new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
         private static Encoding Latin1 => Encoding.GetEncoding("iso-8859-1");
 
         public override FixCategory Category => FixCategory.Whitespace;
@@ -36,12 +34,9 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 () =>
                 {
                     if (
-                        !TryGetCharset(
-                            analyzerConfigOptions,
-                            out var encoding
-                        ) ||
-                        sourceText.Encoding?.Equals(encoding) == true ||
-                        IsEncodingEquivalent(sourceText, encoding)
+                        !TryGetCharset(analyzerConfigOptions, out var encoding)
+                        || sourceText.Encoding?.Equals(encoding) == true
+                        || IsEncodingEquivalent(sourceText, encoding)
                     ) {
                         return sourceText;
                     }
@@ -55,23 +50,19 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             );
         }
 
-        private static bool IsEncodingEquivalent(
-            SourceText sourceText,
-            Encoding encoding
-        ) {
+        private static bool IsEncodingEquivalent(SourceText sourceText, Encoding encoding)
+        {
             if (sourceText.Encoding is null)
             {
-                throw new System.Exception(
-                    $"source text did not have an identifiable encoding"
-                );
+                throw new System.Exception($"source text did not have an identifiable encoding");
             }
 
             var text = sourceText.ToString();
             var originalBytes = GetEncodedBytes(text, sourceText.Encoding);
             var encodedBytes = GetEncodedBytes(text, encoding);
 
-            return originalBytes.Length == encodedBytes.Length &&
-            originalBytes.SequenceEqual(encodedBytes);
+            return originalBytes.Length == encodedBytes.Length
+                && originalBytes.SequenceEqual(encodedBytes);
         }
 
         private static byte[] GetEncodedBytes(string text, Encoding encoding)
@@ -89,11 +80,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             [NotNullWhen(true)]out Encoding? encoding
         ) {
             if (
-                analyzerConfigOptions != null &&
-                analyzerConfigOptions.TryGetValue(
-                    "charset",
-                    out var charsetOption
-                )
+                analyzerConfigOptions != null
+                && analyzerConfigOptions.TryGetValue("charset", out var charsetOption)
             ) {
                 encoding = GetCharset(charsetOption);
                 return true;

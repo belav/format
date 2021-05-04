@@ -17,7 +17,6 @@ namespace Microsoft.CodeAnalysis.Tools.Perf
 
         public bool IsEnabled(LogLevel logLevel) => false;
 
-        public IDisposable BeginScope<TState>(TState state) =>
-            NullScope.Instance;
+        public IDisposable BeginScope<TState>(TState state) => NullScope.Instance;
     }
 }

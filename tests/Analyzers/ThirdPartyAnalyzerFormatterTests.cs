@@ -15,9 +15,7 @@ using Xunit.Abstractions;
 
 namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
 {
-    public class ThirdPartyAnalyzerFormatterTests
-        : CSharpFormatterTests,
-            IAsyncLifetime
+    public class ThirdPartyAnalyzerFormatterTests : CSharpFormatterTests, IAsyncLifetime
     {
         private static readonly string s_analyzerProjectFilePath = Path.Combine(
             "for_analyzer_formatter",
@@ -43,10 +41,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             {
                 // Restore the Analyzer packages that have been added to `for_analyzer_formatter/analyzer_project/analyzer_project.csproj`
                 var exitCode =
-                    await NuGetHelper.PerformRestore(
-                        s_analyzerProjectFilePath,
-                        TestOutputHelper
-                    );
+                    await NuGetHelper.PerformRestore(s_analyzerProjectFilePath, TestOutputHelper);
                 Assert.Equal(0, exitCode);
 
                 // Load the analyzer_project into a MSBuildWorkspace.
@@ -83,9 +78,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             return Task.CompletedTask;
         }
 
-        private IEnumerable<AnalyzerReference> GetAnalyzerReferences(
-            string prefix
-        ) =>
+        private IEnumerable<AnalyzerReference> GetAnalyzerReferences(string prefix) =>
             _analyzerReferencesProject.AnalyzerReferences.Where(
                 reference => reference.Display.StartsWith(prefix)
             );
@@ -130,22 +123,14 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 // Turn off all diagnostics analyzers
-                [
-                    "dotnet_analyzer_diagnostic.severity"
-                ] = "none",
+                ["dotnet_analyzer_diagnostic.severity"] = "none",
                 // Two or more consecutive blank lines: Remove down to one blank line. SA1507
-                [
-                    "dotnet_diagnostic.SA1507.severity"
-                ] = "error",
+                ["dotnet_diagnostic.SA1507.severity"] = "error",
                 // Blank line immediately before or after a { line: remove it. SA1505, SA1509
-                [
-                    "dotnet_diagnostic.SA1505.severity"
-                ] = "error",
+                ["dotnet_diagnostic.SA1505.severity"] = "error",
                 ["dotnet_diagnostic.SA1509.severity"] = "error",
                 // Blank line immediately before a } line: remove it. SA1508
-                [
-                    "dotnet_diagnostic.SA1508.severity"
-                ] = "error",
+                ["dotnet_diagnostic.SA1508.severity"] = "error",
             };
 
             await AssertCodeChangedAsync(
@@ -196,13 +181,9 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 // Turn off all diagnostics analyzers
-                [
-                    "dotnet_analyzer_diagnostic.severity"
-                ] = "none",
+                ["dotnet_analyzer_diagnostic.severity"] = "none",
                 // Prefer using. IDISP017
-                [
-                    "dotnet_diagnostic.IDISP017.severity"
-                ] = "error",
+                ["dotnet_diagnostic.IDISP017.severity"] = "error",
             };
 
             await AssertCodeChangedAsync(
@@ -218,8 +199,7 @@ class C
         public async Task TestLoadingAllAnalyzers_LoadsDependenciesFromAllSearchPaths()
         {
             // Loads all analyzer references.
-            var analyzerReferences =
-                _analyzerReferencesProject.AnalyzerReferences;
+            var analyzerReferences = _analyzerReferencesProject.AnalyzerReferences;
 
             var testCode =
                 @"
@@ -255,13 +235,9 @@ class C
             var editorConfig = new Dictionary<string, string>()
             {
                 // Turn off all diagnostics analyzers
-                [
-                    "dotnet_analyzer_diagnostic.severity"
-                ] = "none",
+                ["dotnet_analyzer_diagnostic.severity"] = "none",
                 // Prefer using. IDISP017
-                [
-                    "dotnet_diagnostic.IDISP017.severity"
-                ] = "error",
+                ["dotnet_diagnostic.IDISP017.severity"] = "error",
             };
 
             await AssertCodeChangedAsync(
