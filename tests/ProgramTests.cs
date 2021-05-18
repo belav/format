@@ -257,10 +257,7 @@ diag
 *.vb
 --report
 report.json
---include-generated".Split(
-                Environment.NewLine,
-                StringSplitOptions.RemoveEmptyEntries
-            );
+--include-generated".Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
             // Act
             var parseResult = sut.Parse(args);
