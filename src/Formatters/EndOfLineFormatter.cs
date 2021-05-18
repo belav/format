@@ -12,8 +12,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 {
     internal sealed class EndOfLineFormatter : DocumentFormatter
     {
-        protected override string FormatWarningDescription =>
-            Resources.Fix_end_of_line_marker;
+        protected override string FormatWarningDescription => Resources.Fix_end_of_line_marker;
 
         public override FixCategory Category => FixCategory.Whitespace;
 
@@ -29,21 +28,14 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             return Task.Run(
                 () =>
                 {
-                    if (
-                        !TryGetEndOfLine(
-                            analyzerConfigOptions,
-                            out var endOfLine
-                        )
-                    ) {
+                    if (!TryGetEndOfLine(analyzerConfigOptions, out var endOfLine))
+                    {
                         return sourceText;
                     }
 
                     var newSourceText = sourceText;
-                    for (
-                        var lineIndex = 0;
-                        lineIndex < newSourceText.Lines.Count;
-                        lineIndex++
-                    ) {
+                    for (var lineIndex = 0; lineIndex < newSourceText.Lines.Count; lineIndex++)
+                    {
                         var line = newSourceText.Lines[lineIndex];
                         var lineEndingSpan = new TextSpan(
                             line.End,
@@ -63,13 +55,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                             continue;
                         }
 
-                        var newLineChange = new TextChange(
-                            lineEndingSpan,
-                            endOfLine
-                        );
-                        newSourceText = newSourceText.WithChanges(
-                            newLineChange
-                        );
+                        var newLineChange = new TextChange(lineEndingSpan, endOfLine);
+                        newSourceText = newSourceText.WithChanges(newLineChange);
                     }
 
                     return newSourceText;
@@ -79,14 +66,12 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 
         public static bool TryGetEndOfLine(
             AnalyzerConfigOptions analyzerConfigOptions,
-            [NotNullWhen(true)]out string? endOfLine
+            [NotNullWhen(true)]
+            out string? endOfLine
         ) {
             if (
-                analyzerConfigOptions != null &&
-                analyzerConfigOptions.TryGetValue(
-                    "end_of_line",
-                    out var endOfLineOption
-                )
+                analyzerConfigOptions != null
+                && analyzerConfigOptions.TryGetValue("end_of_line", out var endOfLineOption)
             ) {
                 endOfLine = GetEndOfLine(endOfLineOption);
                 return true;

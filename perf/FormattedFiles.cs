@@ -19,10 +19,7 @@ namespace Microsoft.CodeAnalysis.Tools.Perf
 
         private static EmptyLogger EmptyLogger => new EmptyLogger();
         private static SourceFileMatcher AllFileMatcher =>
-            SourceFileMatcher.CreateMatcher(
-                Array.Empty<string>(),
-                Array.Empty<string>()
-            );
+            SourceFileMatcher.CreateMatcher(Array.Empty<string>(), Array.Empty<string>());
 
         [IterationSetup]
         public void NoFilesFormattedSetup()
@@ -34,10 +31,7 @@ namespace Microsoft.CodeAnalysis.Tools.Perf
         [Benchmark(Description = "Whitespace Formatting (folder)")]
         public void FilesFormattedFolder()
         {
-            var (
-                workspacePath,
-                workspaceType
-                ) = WorkspacePathHelper.GetWorkspaceInfo(
+            var (workspacePath, workspaceType) = WorkspacePathHelper.GetWorkspaceInfo(
                 UnformattedProjectPath
             );
             var options = new FormatOptions(
@@ -53,11 +47,7 @@ namespace Microsoft.CodeAnalysis.Tools.Perf
                 reportPath: string.Empty,
                 includeGeneratedFiles: false
             );
-            _ = CodeFormatter.FormatWorkspaceAsync(
-                    options,
-                    EmptyLogger,
-                    default
-                )
+            _ = CodeFormatter.FormatWorkspaceAsync(options, EmptyLogger, default)
                 .GetAwaiter()
                 .GetResult();
         }
@@ -65,10 +55,7 @@ namespace Microsoft.CodeAnalysis.Tools.Perf
         [Benchmark(Description = "Whitespace Formatting (project)")]
         public void FilesFormattedProject()
         {
-            var (
-                workspacePath,
-                workspaceType
-                ) = WorkspacePathHelper.GetWorkspaceInfo(
+            var (workspacePath, workspaceType) = WorkspacePathHelper.GetWorkspaceInfo(
                 UnformattedProjectFilePath
             );
             var options = new FormatOptions(
@@ -84,11 +71,7 @@ namespace Microsoft.CodeAnalysis.Tools.Perf
                 reportPath: string.Empty,
                 includeGeneratedFiles: false
             );
-            _ = CodeFormatter.FormatWorkspaceAsync(
-                    options,
-                    EmptyLogger,
-                    default
-                )
+            _ = CodeFormatter.FormatWorkspaceAsync(options, EmptyLogger, default)
                 .GetAwaiter()
                 .GetResult();
         }
@@ -96,10 +79,7 @@ namespace Microsoft.CodeAnalysis.Tools.Perf
         [Benchmark(Description = "Whitespace Formatting (solution)")]
         public void FilesFormattedSolution()
         {
-            var (
-                workspacePath,
-                workspaceType
-                ) = WorkspacePathHelper.GetWorkspaceInfo(
+            var (workspacePath, workspaceType) = WorkspacePathHelper.GetWorkspaceInfo(
                 UnformattedSolutionFilePath
             );
             var options = new FormatOptions(
@@ -115,17 +95,12 @@ namespace Microsoft.CodeAnalysis.Tools.Perf
                 reportPath: string.Empty,
                 includeGeneratedFiles: false
             );
-            _ = CodeFormatter.FormatWorkspaceAsync(
-                    options,
-                    EmptyLogger,
-                    default
-                )
+            _ = CodeFormatter.FormatWorkspaceAsync(options, EmptyLogger, default)
                 .GetAwaiter()
                 .GetResult();
         }
 
         [IterationCleanup]
-        public void NoFilesFormattedCleanup() =>
-            SolutionPathSetter.UnsetCurrentDirectory();
+        public void NoFilesFormattedCleanup() => SolutionPathSetter.UnsetCurrentDirectory();
     }
 }

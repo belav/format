@@ -14,8 +14,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
     /// </summary>
     internal sealed class WhitespaceFormatter : DocumentFormatter
     {
-        protected override string FormatWarningDescription =>
-            Resources.Fix_whitespace_formatting;
+        protected override string FormatWarningDescription => Resources.Fix_whitespace_formatting;
 
         public override FixCategory Category => FixCategory.Whitespace;
 
@@ -30,11 +29,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
         ) {
             if (formatOptions.SaveFormattedFiles)
             {
-                return await GetFormattedDocument(
-                        document,
-                        optionSet,
-                        cancellationToken
-                    )
+                return await GetFormattedDocument(document, optionSet, cancellationToken)
                     .ConfigureAwait(false);
             }
             else
@@ -58,14 +53,9 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             CancellationToken cancellationToken
         ) {
             var formattedDocument =
-                await Formatter.FormatAsync(
-                        document,
-                        optionSet,
-                        cancellationToken
-                    )
+                await Formatter.FormatAsync(document, optionSet, cancellationToken)
                     .ConfigureAwait(false);
-            return await formattedDocument.GetTextAsync(cancellationToken)
-                .ConfigureAwait(false);
+            return await formattedDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -77,9 +67,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             OptionSet optionSet,
             CancellationToken cancellationToken
         ) {
-            var root =
-                await document.GetSyntaxRootAsync(cancellationToken)
-                    .ConfigureAwait(false);
+            var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
             // Since we've already checked that formatable documents support syntax tree, we know the `root` is not null.
             var formattingTextChanges = Formatter.GetFormattedTextChanges(
                 root!,

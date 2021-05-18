@@ -13,11 +13,7 @@ namespace Microsoft.CodeAnalysis.Tools.Logging
             LogLevel minimalErrorLevel
         ) {
             factory.AddProvider(
-                new SimpleConsoleLoggerProvider(
-                    console,
-                    minimalLogLevel,
-                    minimalErrorLevel
-                )
+                new SimpleConsoleLoggerProvider(console, minimalLogLevel, minimalErrorLevel)
             );
             return factory;
         }

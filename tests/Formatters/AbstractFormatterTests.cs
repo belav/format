@@ -41,20 +41,14 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
                         isNonPublicSupported: true
                     );
                     var parts = Task.Run(
-                            () => discovery.CreatePartsAsync(
-                                MefHostServices.DefaultAssemblies
-                            )
+                            () => discovery.CreatePartsAsync(MefHostServices.DefaultAssemblies)
                         )
                         .GetAwaiter()
                         .GetResult();
-                    var catalog = ComposableCatalog.Create(
-                            Resolver.DefaultInstance
-                        )
+                    var catalog = ComposableCatalog.Create(Resolver.DefaultInstance)
                         .AddParts(parts);
 
-                    var configuration = CompositionConfiguration.Create(
-                        catalog
-                    );
+                    var configuration = CompositionConfiguration.Create(catalog);
                     var runtimeComposition = RuntimeComposition.CreateRuntimeComposition(
                         configuration
                     );
@@ -77,19 +71,13 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             Path.DirectorySeparatorChar + DefaultTestProjectName;
 
         protected virtual string DefaultTestProjectPath =>
-            Path.Combine(
-                DefaultFolderPath,
-                $"{DefaultTestProjectName}.{DefaultFileExt}proj"
-            );
+            Path.Combine(DefaultFolderPath, $"{DefaultTestProjectName}.{DefaultFileExt}proj");
 
         protected virtual string DefaultEditorConfigPath =>
             Path.Combine(DefaultFolderPath, ".editorconfig");
 
         protected virtual string DefaultFilePath =>
-            Path.Combine(
-                DefaultFolderPath,
-                $"{DefaultFilePathPrefix}0.{DefaultFileExt}"
-            );
+            Path.Combine(DefaultFolderPath, $"{DefaultFilePathPrefix}0.{DefaultFileExt}");
 
         protected abstract string DefaultFileExt { get; }
 
@@ -99,10 +87,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 
         protected AbstractFormatterTest()
         {
-            TestState = new SolutionState(
-                DefaultFilePathPrefix,
-                DefaultFileExt
-            );
+            TestState = new SolutionState(DefaultFilePathPrefix, DefaultFileExt);
         }
 
         /// <summary>
@@ -112,9 +97,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 
         public SolutionState TestState { get; }
 
-        private protected string ToEditorConfig(
-            IReadOnlyDictionary<string, string> editorConfig
-        ) =>
+        private protected string ToEditorConfig(IReadOnlyDictionary<string, string> editorConfig) =>
             $@"root = true
 
 [*.{DefaultFileExt}]
@@ -150,11 +133,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             DiagnosticSeverity codeStyleSeverity = DiagnosticSeverity.Error,
             DiagnosticSeverity analyzerSeverity = DiagnosticSeverity.Error
         ) {
-            var (
-                formattedText,
-                formattedFiles,
-                logger
-                ) = await ApplyFormatterAsync(
+            var (formattedText, formattedFiles, logger) = await ApplyFormatterAsync(
                 code,
                 editorConfig,
                 encoding,
@@ -355,9 +334,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         /// </summary>
         /// <param name="solution">A Solution containing a single Project containing a single Document.</param>
         /// <returns>The only document id.</returns>
-        internal ImmutableArray<DocumentId> GetOnlyFileToFormat(
-            Solution solution
-        ) => ImmutableArray.Create(GetOnlyDocument(solution).Id);
+        internal ImmutableArray<DocumentId> GetOnlyFileToFormat(Solution solution) =>
+            ImmutableArray.Create(GetOnlyDocument(solution).Id);
 
         /// <summary>
         /// Gets the only <see cref="Document"/> contained within the only <see cref="Project"/> within the <see cref="Solution"/>.
@@ -374,8 +352,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         /// <para>Files in this collection may be referenced via <c>&lt;include&gt;</c> elements in documentation
         /// comments.</para>
         /// </remarks>
-        public Dictionary<string, string> XmlReferences { get; } =
-            new Dictionary<string, string>();
+        public Dictionary<string, string> XmlReferences { get; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Given an array of strings as sources and a language, turn them into a <see cref="Project"/> and return the
@@ -484,9 +461,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             string language,
             SourceText editorConfigText
         ) {
-            var projectId = ProjectId.CreateNewId(
-                debugName: DefaultTestProjectName
-            );
+            var projectId = ProjectId.CreateNewId(debugName: DefaultTestProjectName);
             var solution = (await CreateSolutionAsync(
                 projectId,
                 language,
@@ -497,10 +472,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             for (var i = 0; i < sources.Length; i++)
             {
                 (var newFileName, var source) = sources[i];
-                var documentId = DocumentId.CreateNewId(
-                    projectId,
-                    debugName: newFileName
-                );
+                var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
                 solution = solution.AddDocument(
                     documentId,
                     newFileName,
@@ -512,15 +484,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             for (var i = 0; i < additionalFiles.Length; i++)
             {
                 (var newFileName, var source) = additionalFiles[i];
-                var documentId = DocumentId.CreateNewId(
-                    projectId,
-                    debugName: newFileName
-                );
-                solution = solution.AddAdditionalDocument(
-                    documentId,
-                    newFileName,
-                    source
-                );
+                var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
+                solution = solution.AddAdditionalDocument(documentId, newFileName, source);
             }
 
             return solution.GetProject(projectId)!;
@@ -541,33 +506,22 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var xmlReferenceResolver = new TestXmlReferenceResolver();
             foreach (var xmlReference in XmlReferences)
             {
-                xmlReferenceResolver.XmlReferences.Add(
-                    xmlReference.Key,
-                    xmlReference.Value
-                );
+                xmlReferenceResolver.XmlReferences.Add(xmlReference.Key, xmlReference.Value);
             }
 
             var compilationOptions = CreateCompilationOptions()
                 .WithXmlReferenceResolver(xmlReferenceResolver)
-                .WithAssemblyIdentityComparer(
-                    ReferenceAssemblies.AssemblyIdentityComparer
-                );
+                .WithAssemblyIdentityComparer(ReferenceAssemblies.AssemblyIdentityComparer);
 
             var parseOptions = CreateParseOptions();
             var referenceAssemblies =
-                await ReferenceAssemblies.ResolveAsync(
-                    language,
-                    CancellationToken.None
-                );
+                await ReferenceAssemblies.ResolveAsync(language, CancellationToken.None);
 
             var editorConfigDocument = DocumentInfo.Create(
                 DocumentId.CreateNewId(projectId, DefaultEditorConfigPath),
                 name: DefaultEditorConfigPath,
                 loader: TextLoader.From(
-                    TextAndVersion.Create(
-                        editorConfigText,
-                        VersionStamp.Create()
-                    )
+                    TextAndVersion.Create(editorConfigText, VersionStamp.Create())
                 ),
                 filePath: DefaultEditorConfigPath
             );
@@ -579,29 +533,20 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
                     assemblyName: DefaultTestProjectName,
                     language,
                     filePath: DefaultTestProjectPath,
-                    outputFilePath: Path.ChangeExtension(
-                        DefaultTestProjectPath,
-                        "dll"
-                    ),
+                    outputFilePath: Path.ChangeExtension(DefaultTestProjectPath, "dll"),
                     compilationOptions: compilationOptions,
                     parseOptions: parseOptions,
                     metadataReferences: referenceAssemblies,
                     isSubmission: false
                 )
                 .WithDefaultNamespace(DefaultTestProjectName)
-                .WithAnalyzerConfigDocuments(
-                    ImmutableArray.Create(editorConfigDocument)
-                );
+                .WithAnalyzerConfigDocuments(ImmutableArray.Create(editorConfigDocument));
 
-            var solution = CreateWorkspace()
-                .CurrentSolution.AddProject(projectInfo);
+            var solution = CreateWorkspace().CurrentSolution.AddProject(projectInfo);
 
             if (language == LanguageNames.VisualBasic)
             {
-                solution = solution.AddMetadataReference(
-                    projectId,
-                    MicrosoftVisualBasicReference
-                );
+                solution = solution.AddMetadataReference(projectId, MicrosoftVisualBasicReference);
             }
 
             return solution;
@@ -610,9 +555,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         public virtual AdhocWorkspace CreateWorkspace()
         {
             var exportProvider = ExportProviderFactory.Value.CreateExportProvider();
-            var host = MefHostServices.Create(
-                exportProvider.AsCompositionContext()
-            );
+            var host = MefHostServices.Create(exportProvider.AsCompositionContext());
             return new AdhocWorkspace(host);
         }
 

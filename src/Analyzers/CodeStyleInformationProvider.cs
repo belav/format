@@ -10,8 +10,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
     internal class CodeStyleInformationProvider : IAnalyzerInformationProvider
     {
         private static readonly string s_executingPath =
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ??
-            string.Empty;
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 
         private readonly string _featuresPath = Path.Combine(
             s_executingPath,
@@ -26,8 +25,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             "Microsoft.CodeAnalysis.VisualBasic.Features.dll"
         );
 
-        public ImmutableDictionary<ProjectId,
-            AnalyzersAndFixers> GetAnalyzersAndFixers(
+        public ImmutableDictionary<ProjectId, AnalyzersAndFixers> GetAnalyzersAndFixers(
             Solution solution,
             FormatOptions formatOptions,
             ILogger logger
@@ -38,9 +36,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 _featuresVisualBasicPath
             }.Select(path => Assembly.LoadFrom(path));
 
-            var analyzersAndFixers = AnalyzerFinderHelpers.LoadAnalyzersAndFixers(
-                assemblies
-            );
+            var analyzersAndFixers = AnalyzerFinderHelpers.LoadAnalyzersAndFixers(assemblies);
             return solution.Projects.ToImmutableDictionary(
                 project => project.Id,
                 project => analyzersAndFixers

@@ -27,9 +27,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Utilities
             );
             var restoreResult = await processInfo.Result;
 
-            output.WriteLine(
-                string.Join(Environment.NewLine, restoreResult.OutputLines)
-            );
+            output.WriteLine(string.Join(Environment.NewLine, restoreResult.OutputLines));
 
             return restoreResult.ExitCode;
         }

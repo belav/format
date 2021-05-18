@@ -16,26 +16,15 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             var assemblies =
                 new[] {
                     await GenerateAssemblyAsync(
-                        GenerateAnalyzerCode(
-                            "DiagnosticAnalyzer1",
-                            "DiagnosticAnalyzerId"
-                        ),
-                        GenerateCodeFix(
-                            "CodeFixProvider1",
-                            "DiagnosticAnalyzerId"
-                        )
+                        GenerateAnalyzerCode("DiagnosticAnalyzer1", "DiagnosticAnalyzerId"),
+                        GenerateCodeFix("CodeFixProvider1", "DiagnosticAnalyzerId")
                     )
                 };
 
-            var (
-                analyzers,
-                fixers
-                ) = AnalyzerFinderHelpers.LoadAnalyzersAndFixers(assemblies);
+            var (analyzers, fixers) = AnalyzerFinderHelpers.LoadAnalyzersAndFixers(assemblies);
             var analyzer = Assert.Single(analyzers);
             var fixer = Assert.Single(fixers);
-            var analyzerDiagnosticDescriptor = Assert.Single(
-                analyzer.SupportedDiagnostics
-            );
+            var analyzerDiagnosticDescriptor = Assert.Single(analyzer.SupportedDiagnostics);
             var fixerDiagnosticId = Assert.Single(fixer.FixableDiagnosticIds);
             Assert.Equal(analyzerDiagnosticDescriptor.Id, fixerDiagnosticId);
         }
@@ -46,29 +35,14 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             var assemblies =
                 new[] {
                     await GenerateAssemblyAsync(
-                        GenerateAnalyzerCode(
-                            "DiagnosticAnalyzer1",
-                            "DiagnosticAnalyzerId1"
-                        ),
-                        GenerateAnalyzerCode(
-                            "DiagnosticAnalyzer2",
-                            "DiagnosticAnalyzerId2"
-                        ),
-                        GenerateCodeFix(
-                            "CodeFixProvider1",
-                            "DiagnosticAnalyzerId1"
-                        ),
-                        GenerateCodeFix(
-                            "CodeFixProvider2",
-                            "DiagnosticAnalyzerId2"
-                        )
+                        GenerateAnalyzerCode("DiagnosticAnalyzer1", "DiagnosticAnalyzerId1"),
+                        GenerateAnalyzerCode("DiagnosticAnalyzer2", "DiagnosticAnalyzerId2"),
+                        GenerateCodeFix("CodeFixProvider1", "DiagnosticAnalyzerId1"),
+                        GenerateCodeFix("CodeFixProvider2", "DiagnosticAnalyzerId2")
                     )
                 };
 
-            var (
-                analyzers,
-                fixers
-                ) = AnalyzerFinderHelpers.LoadAnalyzersAndFixers(assemblies);
+            var (analyzers, fixers) = AnalyzerFinderHelpers.LoadAnalyzersAndFixers(assemblies);
             Assert.Equal(2, analyzers.Length);
             Assert.Equal(2, fixers.Length);
         }
@@ -79,30 +53,15 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             var assemblies =
                 new[] {
                     await GenerateAssemblyAsync(
-                        GenerateAnalyzerCode(
-                            "DiagnosticAnalyzer1",
-                            "DiagnosticAnalyzerId1"
-                        ),
-                        GenerateCodeFix(
-                            "CodeFixProvider1",
-                            "DiagnosticAnalyzerId1"
-                        )
+                        GenerateAnalyzerCode("DiagnosticAnalyzer1", "DiagnosticAnalyzerId1"),
+                        GenerateCodeFix("CodeFixProvider1", "DiagnosticAnalyzerId1")
                     ),
                     await GenerateAssemblyAsync(
-                        GenerateAnalyzerCode(
-                            "DiagnosticAnalyzer2",
-                            "DiagnosticAnalyzerId2"
-                        ),
-                        GenerateCodeFix(
-                            "CodeFixProvider2",
-                            "DiagnosticAnalyzerId2"
-                        )
+                        GenerateAnalyzerCode("DiagnosticAnalyzer2", "DiagnosticAnalyzerId2"),
+                        GenerateCodeFix("CodeFixProvider2", "DiagnosticAnalyzerId2")
                     ),
                 };
-            var (
-                analyzers,
-                fixers
-                ) = AnalyzerFinderHelpers.LoadAnalyzersAndFixers(assemblies);
+            var (analyzers, fixers) = AnalyzerFinderHelpers.LoadAnalyzersAndFixers(assemblies);
             Assert.Equal(2, analyzers.Length);
             Assert.Equal(2, fixers.Length);
         }

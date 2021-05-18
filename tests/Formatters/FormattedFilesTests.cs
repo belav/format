@@ -16,8 +16,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 {
     public class FormattedFilesTests : CSharpFormatterTests
     {
-        private protected override ICodeFormatter Formatter =>
-            new FinalNewlineFormatter();
+        private protected override ICodeFormatter Formatter => new FinalNewlineFormatter();
 
         private Dictionary<string, string> EditorConfig =>
             new Dictionary<string, string>()
@@ -51,9 +50,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             Assert.Empty(result);
         }
 
-        private async Task<List<FormattedFile>> TestFormattedFiles(
-            string testCode
-        ) {
+        private async Task<List<FormattedFile>> TestFormattedFiles(string testCode)
+        {
             var text = SourceText.From(testCode, Encoding.UTF8);
             TestState.Sources.Add(text);
 

@@ -24,17 +24,10 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                     Directory.GetCurrentDirectory()
                 );
 
-                var filePaths = GetMatchingFilePaths(
-                    absoluteFolderPath,
-                    fileMatcher
-                );
-                var editorConfigPaths = EditorConfigFinder.GetEditorConfigPaths(
-                    folderPath
-                );
+                var filePaths = GetMatchingFilePaths(absoluteFolderPath, fileMatcher);
+                var editorConfigPaths = EditorConfigFinder.GetEditorConfigPaths(folderPath);
 
-                var projectInfos = ImmutableArray.CreateBuilder<ProjectInfo>(
-                    ProjectLoaders.Length
-                );
+                var projectInfos = ImmutableArray.CreateBuilder<ProjectInfo>(ProjectLoaders.Length);
 
                 // Create projects for each of the supported languages.
                 foreach (var loader in ProjectLoaders)
@@ -67,15 +60,12 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             ) {
                 // If only file paths were given to be included, then avoid matching against all
                 // the files beneath the folderPath and instead check if the specified files exist.
-                if (
-                    fileMatcher.Exclude.IsDefaultOrEmpty &&
-                    AreAllFilePaths(fileMatcher.Include)
-                ) {
+                if (fileMatcher.Exclude.IsDefaultOrEmpty && AreAllFilePaths(fileMatcher.Include))
+                {
                     return ValidateFilePaths(folderPath, fileMatcher.Include);
                 }
 
-                return fileMatcher.GetResultsInFullPath(folderPath)
-                    .ToImmutableArray();
+                return fileMatcher.GetResultsInFullPath(folderPath).ToImmutableArray();
 
                 static bool AreAllFilePaths(ImmutableArray<string> globs)
                 {
@@ -84,9 +74,9 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                         // The FileSystemGlobbing.Matcher only supports the '*' wildcard and paths
                         // ending in a directory separator are treated as folder paths.
                         if (
-                            globs[index].Contains('*') ||
-                            globs[index].EndsWith('\\') ||
-                            globs[index].EndsWith('/')
+                            globs[index].Contains('*')
+                            || globs[index].EndsWith('\\')
+                            || globs[index].EndsWith('/')
                         ) {
                             return false;
                         }
@@ -99,15 +89,10 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                     string folderPath,
                     ImmutableArray<string> paths
                 ) {
-                    var filePaths = ImmutableArray.CreateBuilder<string>(
-                        paths.Length
-                    );
+                    var filePaths = ImmutableArray.CreateBuilder<string>(paths.Length);
                     for (var index = 0; index < paths.Length; index++)
                     {
-                        var filePath = Path.GetFullPath(
-                            paths[index],
-                            folderPath
-                        );
+                        var filePath = Path.GetFullPath(paths[index], folderPath);
                         if (File.Exists(filePath))
                         {
                             filePaths.Add(filePath);

@@ -33,20 +33,18 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         }
 
         public static bool Any(this SolutionChanges solutionChanges) =>
-            solutionChanges.GetProjectChanges()
-                .Any(x => x.GetChangedDocuments().Any());
+            solutionChanges.GetProjectChanges().Any(x => x.GetChangedDocuments().Any());
 
         public static bool TryCreateInstance<T>(
             this Type type,
-            [NotNullWhen(returnValue: true)]out T? instance
+            [NotNullWhen(returnValue: true)]
+            out T? instance
         )
             where T : class {
             try
             {
                 var defaultCtor = type.GetConstructor(
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic |
-                    BindingFlags.Instance,
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
                     binder: null,
                     Array.Empty<Type>(),
                     modifiers: null
@@ -55,9 +53,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 instance = defaultCtor != null
                     ? (T)Activator.CreateInstance(
                             type,
-                            BindingFlags.Public |
-                            BindingFlags.NonPublic |
-                            BindingFlags.Instance,
+                            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
                             binder: null,
                             args: null,
                             culture: null
@@ -86,8 +82,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         ) {
             var severity = DiagnosticSeverity.Hidden;
             var compilation =
-                await project.GetCompilationAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                await project.GetCompilationAsync(cancellationToken).ConfigureAwait(false);
             if (compilation is null)
             {
                 return severity;
@@ -96,16 +91,13 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             foreach (var document in project.Documents)
             {
                 // Is the document formattable?
-                if (
-                    document.FilePath is null ||
-                    !formattablePaths.Contains(document.FilePath)
-                ) {
+                if (document.FilePath is null || !formattablePaths.Contains(document.FilePath))
+                {
                     continue;
                 }
 
                 var options =
-                    await document.GetOptionsAsync(cancellationToken)
-                        .ConfigureAwait(false);
+                    await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
 
                 var documentSeverity = analyzer.GetSeverity(
                     document,
@@ -122,9 +114,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             return severity;
         }
 
-        public static DiagnosticSeverity ToSeverity(
-            this ReportDiagnostic reportDiagnostic
-        ) {
+        public static DiagnosticSeverity ToSeverity(this ReportDiagnostic reportDiagnostic)
+        {
             return reportDiagnostic switch
             {
                 ReportDiagnostic.Error => DiagnosticSeverity.Error,
@@ -202,11 +193,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             ) {
                 severity = DiagnosticSeverity.Hidden;
 
-                var parameters =
-                    new object?[] { descriptor.Id, compilation.Language, null };
-                var result =
-                    (bool)(TryGetMappedOptionsMethod.Invoke(null, parameters) ??
-                    false);
+                var parameters = new object?[] { descriptor.Id, compilation.Language, null };
+                var result = (bool)(TryGetMappedOptionsMethod.Invoke(null, parameters) ?? false);
 
                 if (!result)
                 {
@@ -220,9 +208,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     var option = options.GetOption(
                         new OptionKey(
                             codeStyleOption,
-                            codeStyleOption.IsPerLanguage
-                                ? compilation.Language
-                                : null
+                            codeStyleOption.IsPerLanguage ? compilation.Language : null
                         )
                     );
                     if (option is null)
@@ -230,8 +216,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                         continue;
                     }
 
-                    var notificationProperty = option.GetType()
-                        .GetProperty("Notification");
+                    var notificationProperty = option.GetType().GetProperty("Notification");
                     if (notificationProperty is null)
                     {
                         continue;
@@ -239,16 +224,13 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
                     var notification = notificationProperty.GetValue(option);
                     var reportDiagnosticValue =
-                        notification?.GetType()
-                            .GetProperty("Severity")?.GetValue(notification);
+                        notification?.GetType().GetProperty("Severity")?.GetValue(notification);
                     if (reportDiagnosticValue is null)
                     {
                         continue;
                     }
 
-                    var codeStyleSeverity = ToSeverity(
-                        (ReportDiagnostic)reportDiagnosticValue
-                    );
+                    var codeStyleSeverity = ToSeverity((ReportDiagnostic)reportDiagnosticValue);
                     if (codeStyleSeverity > severity)
                     {
                         severity = codeStyleSeverity;

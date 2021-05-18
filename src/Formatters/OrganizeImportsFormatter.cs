@@ -16,8 +16,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
     /// </summary>
     internal sealed class OrganizeImportsFormatter : DocumentFormatter
     {
-        protected override string FormatWarningDescription =>
-            Resources.Fix_imports_ordering;
+        protected override string FormatWarningDescription => Resources.Fix_imports_ordering;
         private readonly DocumentFormatter _endOfLineFormatter = new EndOfLineFormatter();
 
         public override FixCategory Category => FixCategory.Whitespace;
@@ -35,11 +34,8 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             {
                 // Only run formatter if the user has specifically configured one of the driving properties.
                 if (
-                    !analyzerConfigOptions.TryGetValue(
-                        "dotnet_sort_system_directives_first",
-                        out _
-                    ) &&
-                    !analyzerConfigOptions.TryGetValue(
+                    !analyzerConfigOptions.TryGetValue("dotnet_sort_system_directives_first", out _)
+                    && !analyzerConfigOptions.TryGetValue(
                         "dotnet_separate_import_directive_groups",
                         out _
                     )
@@ -48,10 +44,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 }
 
                 var organizedDocument =
-                    await Formatter.OrganizeImportsAsync(
-                        document,
-                        cancellationToken
-                    );
+                    await Formatter.OrganizeImportsAsync(document, cancellationToken);
 
                 var isSameVersion =
                     await IsSameDocumentAndVersionAsync(
@@ -68,8 +61,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 // Because the Formatter does not abide the `end_of_line` option we have to fix up the ends of the organized lines.
                 // See https://github.com/dotnet/roslyn/issues/44136
                 var organizedSourceText =
-                    await organizedDocument.GetTextAsync(cancellationToken)
-                        .ConfigureAwait(false);
+                    await organizedDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
                 return await _endOfLineFormatter.FormatFileAsync(
                         organizedDocument,
                         organizedSourceText,

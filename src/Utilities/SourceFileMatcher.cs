@@ -10,14 +10,10 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
     {
         private static string[] AllFilesList => new[] { @"**/*.*" };
 
-        public static SourceFileMatcher CreateMatcher(
-            string[] include,
-            string[] exclude
-        ) => new SourceFileMatcher(include, exclude);
+        public static SourceFileMatcher CreateMatcher(string[] include, string[] exclude) =>
+            new SourceFileMatcher(include, exclude);
 
-        private readonly Matcher _matcher = new Matcher(
-            StringComparison.OrdinalIgnoreCase
-        );
+        private readonly Matcher _matcher = new Matcher(StringComparison.OrdinalIgnoreCase);
         private readonly bool _shouldMatchAll;
 
         public ImmutableArray<string> Include { get; }

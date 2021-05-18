@@ -22,12 +22,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             CancellationToken cancellationToken
         ) {
             var fixAllProvider = codeFix.GetFixAllProvider();
-            if (
-                fixAllProvider?.GetSupportedFixAllScopes()?.Contains(
-                    FixAllScope.Solution
-                ) !=
-                true
-            ) {
+            if (fixAllProvider?.GetSupportedFixAllScopes()?.Contains(FixAllScope.Solution) != true)
+            {
                 logger.LogWarning(
                     Resources.Unable_to_fix_0_Code_fix_1_doesnt_support_Fix_All_in_Solution,
                     diagnosticId,
@@ -81,8 +77,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             try
             {
                 var fixAllAction =
-                    await fixAllProvider.GetFixAsync(fixAllContext)
-                        .ConfigureAwait(false);
+                    await fixAllProvider.GetFixAsync(fixAllContext).ConfigureAwait(false);
                 if (fixAllAction is null)
                 {
                     logger.LogWarning(
@@ -94,8 +89,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 }
 
                 var operations =
-                    await fixAllAction.GetOperationsAsync(cancellationToken)
-                        .ConfigureAwait(false);
+                    await fixAllAction.GetOperationsAsync(cancellationToken).ConfigureAwait(false);
                 var applyChangesOperation = operations.OfType<ApplyChangesOperation>()
                     .SingleOrDefault();
                 if (applyChangesOperation is null)
@@ -126,8 +120,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         {
             private static Task<IEnumerable<Diagnostic>> EmptyDignosticResult =>
                 Task.FromResult(Enumerable.Empty<Diagnostic>());
-            private readonly IReadOnlyDictionary<Project,
-                List<Diagnostic>> _diagnosticsByProject;
+            private readonly IReadOnlyDictionary<Project, List<Diagnostic>> _diagnosticsByProject;
 
             internal DiagnosticProvider(CodeAnalysisResult analysisResult)
             {
@@ -146,14 +139,9 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 CancellationToken cancellationToken
             ) {
                 var projectDiagnostics =
-                    await GetProjectDiagnosticsAsync(
-                        document.Project,
-                        cancellationToken
-                    );
+                    await GetProjectDiagnosticsAsync(document.Project, cancellationToken);
                 return projectDiagnostics.Where(
-                        diagnostic =>
-                            diagnostic.Location.SourceTree?.FilePath ==
-                            document.FilePath
+                        diagnostic => diagnostic.Location.SourceTree?.FilePath == document.FilePath
                     )
                     .ToImmutableArray();
             }
@@ -163,9 +151,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 CancellationToken cancellationToken
             ) {
                 return _diagnosticsByProject.ContainsKey(project)
-                    ? Task.FromResult<IEnumerable<Diagnostic>>(
-                            _diagnosticsByProject[project]
-                        )
+                    ? Task.FromResult<IEnumerable<Diagnostic>>(_diagnosticsByProject[project])
                     : EmptyDignosticResult;
             }
         }

@@ -25,19 +25,14 @@ namespace Microsoft.CodeAnalysis.Tools
         internal const int UnableToLocateMSBuildExitCode = 3;
         internal const int UnableToLocateDotNetCliExitCode = 4;
 
-        private static readonly string[] s_standardInputKeywords = {
-            "/dev/stdin",
-            "-"
-        };
+        private static readonly string[] s_standardInputKeywords = { "/dev/stdin", "-" };
 
         private static ParseResult? s_parseResult;
 
         private static async Task<int> Main(string[] args)
         {
             var rootCommand = FormatCommand.CreateCommandLineOptions();
-            rootCommand.Handler = CommandHandler.Create(
-                new FormatCommand.Handler(Run)
-            );
+            rootCommand.Handler = CommandHandler.Create(new FormatCommand.Handler(Run));
 
             // Parse the incoming args so we can give warnings when deprecated options are used.
             s_parseResult = rootCommand.Parse(args);
@@ -87,10 +82,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 currentDirectory = Environment.CurrentDirectory;
 
                 var formatVersion = GetVersion();
-                logger.LogDebug(
-                    Resources.The_dotnet_format_version_is_0,
-                    formatVersion
-                );
+                logger.LogDebug(Resources.The_dotnet_format_version_is_0, formatVersion);
 
                 string? workspaceDirectory;
                 string workspacePath;
@@ -109,18 +101,13 @@ namespace Microsoft.CodeAnalysis.Tools
                 }
                 else
                 {
-                    var (
-                        isSolution,
-                        workspaceFilePath
-                        ) = MSBuildWorkspaceFinder.FindWorkspace(
+                    var (isSolution, workspaceFilePath) = MSBuildWorkspaceFinder.FindWorkspace(
                         currentDirectory,
                         workspace
                     );
 
                     workspacePath = workspaceFilePath;
-                    workspaceType = isSolution
-                        ? WorkspaceType.Solution
-                        : WorkspaceType.Project;
+                    workspaceType = isSolution ? WorkspaceType.Solution : WorkspaceType.Project;
 
                     // To ensure we get the version of MSBuild packaged with the dotnet SDK used by the
                     // workspace, use its directory as our working directory which will take into account
@@ -128,19 +115,14 @@ namespace Microsoft.CodeAnalysis.Tools
                     workspaceDirectory = Path.GetDirectoryName(workspacePath);
                     if (workspaceDirectory is null)
                     {
-                        throw new Exception(
-                            $"Unable to find folder at '{workspacePath}'"
-                        );
+                        throw new Exception($"Unable to find folder at '{workspacePath}'");
                     }
                 }
 
                 if (workspaceType != WorkspaceType.Folder)
                 {
                     var runtimeVersion = GetRuntimeVersion();
-                    logger.LogDebug(
-                        Resources.The_dotnet_runtime_version_is_0,
-                        runtimeVersion
-                    );
+                    logger.LogDebug(Resources.The_dotnet_runtime_version_is_0, runtimeVersion);
 
                     // Load MSBuild
                     Environment.CurrentDirectory = workspaceDirectory;
@@ -153,10 +135,7 @@ namespace Microsoft.CodeAnalysis.Tools
                         return UnableToLocateDotNetCliExitCode;
                     }
 
-                    logger.LogTrace(
-                        Resources.The_dotnet_CLI_version_is_0,
-                        dotnetVersion
-                    );
+                    logger.LogTrace(Resources.The_dotnet_CLI_version_is_0, dotnetVersion);
 
                     if (!TryLoadMSBuild(out var msBuildPath))
                     {
@@ -166,10 +145,7 @@ namespace Microsoft.CodeAnalysis.Tools
                         return UnableToLocateMSBuildExitCode;
                     }
 
-                    logger.LogTrace(
-                        Resources.Using_msbuildexe_located_in_0,
-                        msBuildPath
-                    );
+                    logger.LogTrace(Resources.Using_msbuildexe_located_in_0, msBuildPath);
                 }
 
                 var fixType = FixCategory.None;
@@ -190,22 +166,15 @@ namespace Microsoft.CodeAnalysis.Tools
 
                 HandleStandardInput(logger, ref include, ref exclude);
 
-                var fileMatcher = SourceFileMatcher.CreateMatcher(
-                    include,
-                    exclude
-                );
+                var fileMatcher = SourceFileMatcher.CreateMatcher(include, exclude);
 
                 var formatOptions = new FormatOptions(
                     workspacePath,
                     workspaceType,
                     logLevel,
                     fixType,
-                    codeStyleSeverity: GetSeverity(
-                        fixStyle ?? FixSeverity.Error
-                    ),
-                    analyzerSeverity: GetSeverity(
-                        fixAnalyzers ?? FixSeverity.Error
-                    ),
+                    codeStyleSeverity: GetSeverity(fixStyle ?? FixSeverity.Error),
+                    analyzerSeverity: GetSeverity(fixAnalyzers ?? FixSeverity.Error),
                     saveFormattedFiles: !check,
                     changesAreErrors: check,
                     fileMatcher,
@@ -248,25 +217,19 @@ namespace Microsoft.CodeAnalysis.Tools
             ref string[] exclude
         ) {
             var isStandardMarkerUsed = false;
-            if (
-                include.Length == 1 &&
-                s_standardInputKeywords.Contains(include[0])
-            ) {
+            if (include.Length == 1 && s_standardInputKeywords.Contains(include[0]))
+            {
                 if (TryReadFromStandardInput(ref include))
                 {
                     isStandardMarkerUsed = true;
                 }
             }
 
-            if (
-                exclude.Length == 1 &&
-                s_standardInputKeywords.Contains(exclude[0])
-            ) {
+            if (exclude.Length == 1 && s_standardInputKeywords.Contains(exclude[0]))
+            {
                 if (isStandardMarkerUsed)
                 {
-                    logger.LogCritical(
-                        Resources.Standard_input_used_multiple_times
-                    );
+                    logger.LogCritical(Resources.Standard_input_used_multiple_times);
                     Environment.Exit(CheckFailedExitCode);
                 }
 
@@ -285,9 +248,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 Array.Resize(ref subject, 0);
 
                 Console.InputEncoding = Encoding.UTF8;
-                using var reader = new StreamReader(
-                    Console.OpenStandardInput(8192)
-                );
+                using var reader = new StreamReader(Console.OpenStandardInput(8192));
                 Console.SetIn(reader);
 
                 for (var i = 0; Console.In.Peek() != -1; ++i)
@@ -300,10 +261,8 @@ namespace Microsoft.CodeAnalysis.Tools
             }
         }
 
-        internal static int GetExitCode(
-            WorkspaceFormatResult formatResult,
-            bool check
-        ) {
+        internal static int GetExitCode(WorkspaceFormatResult formatResult, bool check)
+        {
             if (!check)
             {
                 return formatResult.ExitCode;
@@ -354,11 +313,7 @@ namespace Microsoft.CodeAnalysis.Tools
         ) {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(
-                new LoggerFactory().AddSimpleConsole(
-                    console,
-                    minimalLogLevel,
-                    minimalErrorLevel
-                )
+                new LoggerFactory().AddSimpleConsole(console, minimalLogLevel, minimalErrorLevel)
             );
             serviceCollection.AddLogging();
 
@@ -375,7 +330,8 @@ namespace Microsoft.CodeAnalysis.Tools
         }
 
         private static bool TryGetDotNetCliVersion(
-            [NotNullWhen(returnValue: true)]out string? dotnetVersion
+            [NotNullWhen(returnValue: true)]
+            out string? dotnetVersion
         ) {
             try
             {
@@ -397,9 +353,8 @@ namespace Microsoft.CodeAnalysis.Tools
             }
         }
 
-        private static bool TryLoadMSBuild(
-            [NotNullWhen(returnValue: true)]out string? msBuildPath
-        ) {
+        private static bool TryLoadMSBuild([NotNullWhen(returnValue: true)] out string? msBuildPath)
+        {
             try
             {
                 // Since we are running as a dotnet tool we should be able to find an instance of
@@ -411,9 +366,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 // of MSBuild and because the SDK no longer ships with version matched assemblies, we
                 // register an assembly loader that will load assemblies from the msbuild path with
                 // equal or higher version numbers than requested.
-                LooseVersionAssemblyLoader.Register(
-                    msBuildInstance.MSBuildPath
-                );
+                LooseVersionAssemblyLoader.Register(msBuildInstance.MSBuildPath);
                 Build.Locator.MSBuildLocator.RegisterInstance(msBuildInstance);
 
                 msBuildPath = msBuildInstance.MSBuildPath;
@@ -429,10 +382,7 @@ namespace Microsoft.CodeAnalysis.Tools
         internal static string GetRuntimeVersion()
         {
             var pathParts = typeof(string).Assembly.Location.Split('\\', '/');
-            var netCoreAppIndex = Array.IndexOf(
-                pathParts,
-                "Microsoft.NETCore.App"
-            );
+            var netCoreAppIndex = Array.IndexOf(pathParts, "Microsoft.NETCore.App");
             return pathParts[netCoreAppIndex + 1];
         }
     }

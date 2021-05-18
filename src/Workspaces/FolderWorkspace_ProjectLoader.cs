@@ -11,25 +11,18 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
         {
             public abstract string Language { get; }
             public abstract string FileExtension { get; }
-            public virtual string ProjectName =>
-                $"{Language}{FileExtension}proj";
+            public virtual string ProjectName => $"{Language}{FileExtension}proj";
 
             public virtual ProjectInfo? LoadProjectInfo(
                 string folderPath,
                 ImmutableArray<string> filePaths,
                 ImmutableArray<string> editorConfigPaths
             ) {
-                var projectFilePaths = ImmutableArray.CreateBuilder<string>(
-                    filePaths.Length
-                );
+                var projectFilePaths = ImmutableArray.CreateBuilder<string>(filePaths.Length);
                 for (var index = 0; index < filePaths.Length; index++)
                 {
-                    if (
-                        filePaths[index].EndsWith(
-                            FileExtension,
-                            StringComparison.InvariantCulture
-                        )
-                    ) {
+                    if (filePaths[index].EndsWith(FileExtension, StringComparison.InvariantCulture))
+                    {
                         projectFilePaths.Add(filePaths[index]);
                     }
                 }
@@ -48,14 +41,9 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                         assemblyName: folderPath,
                         Language,
                         filePath: folderPath,
-                        documents: LoadDocuments(
-                            projectId,
-                            projectFilePaths.ToImmutable()
-                        )
+                        documents: LoadDocuments(projectId, projectFilePaths.ToImmutable())
                     )
-                    .WithAnalyzerConfigDocuments(
-                        LoadDocuments(projectId, editorConfigPaths)
-                    );
+                    .WithAnalyzerConfigDocuments(LoadDocuments(projectId, editorConfigPaths));
 
                 static IEnumerable<DocumentInfo> LoadDocuments(
                     ProjectId projectId,
@@ -65,15 +53,9 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
                     for (var index = 0; index < filePaths.Length; index++)
                     {
                         documents[index] = DocumentInfo.Create(
-                            DocumentId.CreateNewId(
-                                projectId,
-                                debugName: filePaths[index]
-                            ),
+                            DocumentId.CreateNewId(projectId, debugName: filePaths[index]),
                             name: filePaths[index],
-                            loader: new FileTextLoader(
-                                filePaths[index],
-                                DefaultEncoding
-                            ),
+                            loader: new FileTextLoader(filePaths[index], DefaultEncoding),
                             filePath: filePaths[index]
                         );
                     }

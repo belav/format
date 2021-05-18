@@ -147,9 +147,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     )
                     .ConfigureAwait(false);
 
-                var fixDiagnosticsMS =
-                    analysisStopwatch.ElapsedMilliseconds -
-                    projectDiagnosticsMS;
+                var fixDiagnosticsMS = analysisStopwatch.ElapsedMilliseconds - projectDiagnosticsMS;
                 logger.LogTrace(Resources.Complete_in_0_ms, fixDiagnosticsMS);
             }
 
@@ -164,8 +162,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         private async Task<ImmutableDictionary<ProjectId,
                 ImmutableHashSet<string>>> GetProjectDiagnosticsAsync(
             Solution solution,
-            ImmutableDictionary<ProjectId,
-                ImmutableArray<DiagnosticAnalyzer>> projectAnalyzers,
+            ImmutableDictionary<ProjectId, ImmutableArray<DiagnosticAnalyzer>> projectAnalyzers,
             ImmutableHashSet<string> formattablePaths,
             FormatOptions options,
             DiagnosticSeverity severity,
@@ -177,9 +174,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             var result = new CodeAnalysisResult();
             var projects = options.WorkspaceType == WorkspaceType.Solution
                 ? solution.Projects
-                : solution.Projects.Where(
-                        project => project.FilePath == options.WorkspaceFilePath
-                    );
+                : solution.Projects.Where(project => project.FilePath == options.WorkspaceFilePath);
             foreach (var project in projects)
             {
                 var analyzers = projectAnalyzers[project.Id];
@@ -213,9 +208,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
             return result.Diagnostics.ToImmutableDictionary(
                 kvp => kvp.Key.Id,
-                kvp =>
-                    kvp.Value.Select(diagnostic => diagnostic.Id)
-                        .ToImmutableHashSet()
+                kvp => kvp.Value.Select(diagnostic => diagnostic.Id).ToImmutableHashSet()
             );
 
             static void LogDiagnosticLocations(
@@ -226,16 +219,12 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 ILogger logger,
                 List<FormattedFile> formattedFiles
             ) {
-                var workspaceFolder =
-                    Path.GetDirectoryName(workspacePath) ?? workspacePath;
+                var workspaceFolder = Path.GetDirectoryName(workspacePath) ?? workspacePath;
 
                 foreach (var diagnostic in diagnostics)
                 {
-                    var message =
-                        $"{diagnostic.GetMessage()} ({diagnostic.Id})";
-                    var document = solution.GetDocument(
-                        diagnostic.Location.SourceTree
-                    );
+                    var message = $"{diagnostic.GetMessage()} ({diagnostic.Id})";
+                    var document = solution.GetDocument(diagnostic.Location.SourceTree);
                     if (document is null)
                     {
                         continue;
@@ -269,11 +258,9 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
         private async Task<Solution> FixDiagnosticsAsync(
             Solution solution,
-            ImmutableDictionary<ProjectId,
-                ImmutableArray<DiagnosticAnalyzer>> projectAnalyzers,
+            ImmutableDictionary<ProjectId, ImmutableArray<DiagnosticAnalyzer>> projectAnalyzers,
             ImmutableArray<CodeFixProvider> allFixers,
-            ImmutableDictionary<ProjectId,
-                ImmutableHashSet<string>> projectDiagnostics,
+            ImmutableDictionary<ProjectId, ImmutableHashSet<string>> projectDiagnostics,
             ImmutableHashSet<string> formattablePaths,
             DiagnosticSeverity severity,
             ImmutableHashSet<string> fixableCompilerDiagnostics,
@@ -281,9 +268,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             CancellationToken cancellationToken
         ) {
             // Determine the reported diagnostic ids
-            var reportedDiagnostics = projectDiagnostics.SelectMany(
-                    kvp => kvp.Value
-                )
+            var reportedDiagnostics = projectDiagnostics.SelectMany(kvp => kvp.Value)
                 .Distinct()
                 .ToImmutableArray();
             if (reportedDiagnostics.IsEmpty)
@@ -313,11 +298,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 {
                     // Only run analysis on projects that had previously reported the diagnostic
                     if (
-                        !projectDiagnostics.TryGetValue(
-                            project.Id,
-                            out var diagnosticIds
-                        ) ||
-                        !diagnosticIds.Contains(diagnosticId)
+                        !projectDiagnostics.TryGetValue(project.Id, out var diagnosticIds)
+                        || !diagnosticIds.Contains(diagnosticId)
                     ) {
                         continue;
                     }
@@ -342,9 +324,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                         .ConfigureAwait(false);
                 }
 
-                var hasDiagnostics = result.Diagnostics.Any(
-                    kvp => kvp.Value.Count > 0
-                );
+                var hasDiagnostics = result.Diagnostics.Any(kvp => kvp.Value.Count > 0);
                 if (hasDiagnostics)
                 {
                     foreach (var codefix in codefixes)
@@ -369,17 +349,14 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
             return solution;
 
-            static ImmutableDictionary<string,
-                ImmutableArray<CodeFixProvider>> CreateFixerMap(
+            static ImmutableDictionary<string, ImmutableArray<CodeFixProvider>> CreateFixerMap(
                 ImmutableArray<string> diagnosticIds,
                 ImmutableArray<CodeFixProvider> fixers
             ) {
                 return diagnosticIds.ToImmutableDictionary(
                     id => id,
                     id =>
-                        fixers.Where(
-                                fixer => fixer.FixableDiagnosticIds.Contains(id)
-                            )
+                        fixers.Where(fixer => fixer.FixableDiagnosticIds.Contains(id))
                             .ToImmutableArray()
                 );
             }
@@ -388,8 +365,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         internal static async Task<ImmutableDictionary<ProjectId,
                 ImmutableArray<DiagnosticAnalyzer>>> FilterBySeverityAsync(
             Solution solution,
-            ImmutableDictionary<ProjectId,
-                AnalyzersAndFixers> projectAnalyzersAndFixers,
+            ImmutableDictionary<ProjectId, AnalyzersAndFixers> projectAnalyzersAndFixers,
             ImmutableHashSet<string> formattablePaths,
             DiagnosticSeverity minimumSeverity,
             CancellationToken cancellationToken
@@ -409,21 +385,16 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 var analyzers = ImmutableArray.CreateBuilder<DiagnosticAnalyzer>();
 
                 // Filter analyzers by project's language
-                var filteredAnalyzer = projectAnalyzersAndFixers[
-                    projectId
-                ].Analyzers.Where(
-                    analyzer =>
-                        DoesAnalyzerSupportLanguage(analyzer, project.Language)
+                var filteredAnalyzer = projectAnalyzersAndFixers[projectId].Analyzers.Where(
+                    analyzer => DoesAnalyzerSupportLanguage(analyzer, project.Language)
                 );
                 foreach (var analyzer in filteredAnalyzer)
                 {
                     // Always run naming style analyzers because we cannot determine potential severity.
                     // The reported diagnostics will be filtered by severity when they are run.
                     if (
-                        analyzer.GetType().FullName?.EndsWith(
-                            "NamingStyleDiagnosticAnalyzer"
-                        ) ==
-                        true
+                        analyzer.GetType().FullName?.EndsWith("NamingStyleDiagnosticAnalyzer")
+                        == true
                     ) {
                         analyzers.Add(analyzer);
                         continue;

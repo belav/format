@@ -9,8 +9,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 {
     public class FinalNewlineFormatterTests : CSharpFormatterTests
     {
-        private protected override ICodeFormatter Formatter =>
-            new FinalNewlineFormatter();
+        private protected override ICodeFormatter Formatter => new FinalNewlineFormatter();
 
         public FinalNewlineFormatterTests(ITestOutputHelper output)
         {
@@ -25,10 +24,7 @@ class C
 {
 }";
 
-            var editorConfig = new Dictionary<string, string>()
-            {
-                ["end_of_line"] = "crlf",
-            };
+            var editorConfig = new Dictionary<string, string>() { ["end_of_line"] = "crlf", };
 
             await AssertCodeUnchangedAsync(code, editorConfig);
         }
@@ -42,10 +38,7 @@ class C
 }
 ";
 
-            var editorConfig = new Dictionary<string, string>()
-            {
-                ["end_of_line"] = "crlf",
-            };
+            var editorConfig = new Dictionary<string, string>() { ["end_of_line"] = "crlf", };
 
             await AssertCodeUnchangedAsync(code, editorConfig);
         }

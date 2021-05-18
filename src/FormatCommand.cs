@@ -91,18 +91,14 @@ namespace Microsoft.CodeAnalysis.Tools
                     Resources.A_list_of_relative_file_or_folder_paths_to_include_in_formatting_All_files_are_formatted_if_empty
                 )
                 {
-                    Argument = new Argument<string[]>(
-                        () => Array.Empty<string>()
-                    )
+                    Argument = new Argument<string[]>(() => Array.Empty<string>())
                 },
                 new Option(
                     new[] { "--exclude" },
                     Resources.A_list_of_relative_file_or_folder_paths_to_exclude_from_formatting
                 )
                 {
-                    Argument = new Argument<string[]>(
-                        () => Array.Empty<string>()
-                    )
+                    Argument = new Argument<string[]>(() => Array.Empty<string>())
                 },
                 new Option(
                     new[] { "--check" },
@@ -141,9 +137,7 @@ namespace Microsoft.CodeAnalysis.Tools
 
             rootCommand.Description = "dotnet-format";
             rootCommand.AddValidator(EnsureFolderNotSpecifiedWhenFixingStyle);
-            rootCommand.AddValidator(
-                EnsureFolderNotSpecifiedWhenFixingAnalyzers
-            );
+            rootCommand.AddValidator(EnsureFolderNotSpecifiedWhenFixingAnalyzers);
 
             return rootCommand;
         }
@@ -158,9 +152,8 @@ namespace Microsoft.CodeAnalysis.Tools
                 : null;
         }
 
-        internal static string? EnsureFolderNotSpecifiedWhenFixingStyle(
-            CommandResult symbolResult
-        ) {
+        internal static string? EnsureFolderNotSpecifiedWhenFixingStyle(CommandResult symbolResult)
+        {
             var folder = symbolResult.ValueForOption<bool>("--folder");
             var fixStyle = symbolResult.OptionResult("--fix-style");
             return folder && fixStyle != null
@@ -168,10 +161,8 @@ namespace Microsoft.CodeAnalysis.Tools
                 : null;
         }
 
-        internal static bool WasOptionUsed(
-            this ParseResult result,
-            params string[] aliases
-        ) {
+        internal static bool WasOptionUsed(this ParseResult result, params string[] aliases)
+        {
             return result.Tokens.Where(token => token.Type == TokenType.Option)
                 .Any(token => aliases.Contains(token.Value));
         }

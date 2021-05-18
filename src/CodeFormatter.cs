@@ -47,12 +47,8 @@ namespace Microsoft.CodeAnalysis.Tools
 
             var workspaceStopwatch = Stopwatch.StartNew();
 
-            using var workspace = formatOptions.WorkspaceType ==
-                WorkspaceType.Folder
-                ? OpenFolderWorkspace(
-                        formatOptions.WorkspaceFilePath,
-                        formatOptions.FileMatcher
-                    )
+            using var workspace = formatOptions.WorkspaceType == WorkspaceType.Folder
+                ? OpenFolderWorkspace(formatOptions.WorkspaceFilePath, formatOptions.FileMatcher)
                 : await OpenMSBuildWorkspaceAsync(
                             formatOptions.WorkspaceFilePath,
                             formatOptions.WorkspaceType,
@@ -65,28 +61,20 @@ namespace Microsoft.CodeAnalysis.Tools
 
             if (workspace is null)
             {
-                return new WorkspaceFormatResult(
-                    filesFormatted: 0,
-                    fileCount: 0,
-                    exitCode: 1
-                );
+                return new WorkspaceFormatResult(filesFormatted: 0, fileCount: 0, exitCode: 1);
             }
 
             var loadWorkspaceMS = workspaceStopwatch.ElapsedMilliseconds;
             logger.LogTrace(Resources.Complete_in_0_ms, loadWorkspaceMS);
 
-            var projectPath = formatOptions.WorkspaceType ==
-                WorkspaceType.Project
+            var projectPath = formatOptions.WorkspaceType == WorkspaceType.Project
                 ? formatOptions.WorkspaceFilePath
                 : string.Empty;
             var solution = workspace.CurrentSolution;
 
             logger.LogTrace(Resources.Determining_formattable_files);
 
-            var (
-                fileCount,
-                formatableFiles
-                ) = await DetermineFormattableFilesAsync(
+            var (fileCount, formatableFiles) = await DetermineFormattableFilesAsync(
                     solution,
                     projectPath,
                     formatOptions,
@@ -95,8 +83,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 )
                 .ConfigureAwait(false);
 
-            var determineFilesMS =
-                workspaceStopwatch.ElapsedMilliseconds - loadWorkspaceMS;
+            var determineFilesMS = workspaceStopwatch.ElapsedMilliseconds - loadWorkspaceMS;
             logger.LogTrace(Resources.Complete_in_0_ms, determineFilesMS);
 
             logger.LogTrace(Resources.Running_formatters);
@@ -114,45 +101,30 @@ namespace Microsoft.CodeAnalysis.Tools
                     .ConfigureAwait(false);
 
             var formatterRanMS =
-                workspaceStopwatch.ElapsedMilliseconds -
-                loadWorkspaceMS -
-                determineFilesMS;
+                workspaceStopwatch.ElapsedMilliseconds - loadWorkspaceMS - determineFilesMS;
             logger.LogTrace(Resources.Complete_in_0_ms, formatterRanMS);
 
-            var documentIdsWithErrors = formattedFiles.Select(
-                    file => file.DocumentId
-                )
+            var documentIdsWithErrors = formattedFiles.Select(file => file.DocumentId)
                 .Distinct()
                 .ToImmutableArray();
             foreach (var documentId in documentIdsWithErrors)
             {
                 var documentWithError = solution.GetDocument(documentId);
 
-                logger.LogInformation(
-                    Resources.Formatted_code_file_0,
-                    documentWithError!.FilePath
-                );
+                logger.LogInformation(Resources.Formatted_code_file_0, documentWithError!.FilePath);
             }
 
             var exitCode = 0;
 
-            if (
-                formatOptions.SaveFormattedFiles &&
-                !workspace.TryApplyChanges(formattedSolution)
-            ) {
+            if (formatOptions.SaveFormattedFiles && !workspace.TryApplyChanges(formattedSolution))
+            {
                 logger.LogError(Resources.Failed_to_save_formatting_changes);
                 exitCode = 1;
             }
 
-            if (
-                exitCode == 0 &&
-                !string.IsNullOrWhiteSpace(formatOptions.ReportPath)
-            ) {
-                ReportWriter.Write(
-                    formatOptions.ReportPath!,
-                    formattedFiles,
-                    logger
-                );
+            if (exitCode == 0 && !string.IsNullOrWhiteSpace(formatOptions.ReportPath))
+            {
+                ReportWriter.Write(formatOptions.ReportPath!, formattedFiles, logger);
             }
 
             logger.LogDebug(
@@ -166,11 +138,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 workspaceStopwatch.ElapsedMilliseconds
             );
 
-            return new WorkspaceFormatResult(
-                documentIdsWithErrors.Length,
-                fileCount,
-                exitCode
-            );
+            return new WorkspaceFormatResult(documentIdsWithErrors.Length, fileCount, exitCode);
         }
 
         private static Workspace OpenFolderWorkspace(
@@ -213,11 +181,8 @@ namespace Microsoft.CodeAnalysis.Tools
             for (var index = 0; index < s_codeFormatters.Length; index++)
             {
                 // Only run the formatter if it belongs to one of the categories being fixed.
-                if (
-                    !formatOptions.FixCategory.HasFlag(
-                        s_codeFormatters[index].Category
-                    )
-                ) {
+                if (!formatOptions.FixCategory.HasFlag(s_codeFormatters[index].Category))
+                {
                     continue;
                 }
 
@@ -242,9 +207,7 @@ namespace Microsoft.CodeAnalysis.Tools
             ILogger logger,
             CancellationToken cancellationToken
         ) {
-            var totalFileCount = solution.Projects.Sum(
-                project => project.DocumentIds.Count
-            );
+            var totalFileCount = solution.Projects.Sum(project => project.DocumentIds.Count);
             var projectFileCount = 0;
 
             var documentsCoveredByEditorConfig = ImmutableArray.CreateBuilder<DocumentId>(
@@ -265,23 +228,17 @@ namespace Microsoft.CodeAnalysis.Tools
 
                 // If a project is used as a workspace, then ignore other referenced projects.
                 if (
-                    !string.IsNullOrEmpty(projectPath) &&
-                    !project.FilePath.Equals(
-                        projectPath,
-                        StringComparison.OrdinalIgnoreCase
-                    )
+                    !string.IsNullOrEmpty(projectPath)
+                    && !project.FilePath.Equals(projectPath, StringComparison.OrdinalIgnoreCase)
                 ) {
-                    logger.LogDebug(
-                        Resources.Skipping_referenced_project_0,
-                        project.Name
-                    );
+                    logger.LogDebug(Resources.Skipping_referenced_project_0, project.Name);
                     continue;
                 }
 
                 // Ignore unsupported project types.
                 if (
-                    project.Language != LanguageNames.CSharp &&
-                    project.Language != LanguageNames.VisualBasic
+                    project.Language != LanguageNames.CSharp
+                    && project.Language != LanguageNames.VisualBasic
                 ) {
                     logger.LogWarning(
                         Resources.Could_not_format_0_Format_currently_supports_only_CSharp_and_Visual_Basic_projects,
@@ -295,39 +252,32 @@ namespace Microsoft.CodeAnalysis.Tools
                 foreach (var document in project.Documents)
                 {
                     // If we've already added this document, either via a link or multi-targeted framework, then ignore.
-                    if (
-                        document?.FilePath is null ||
-                        addedFilePaths.Contains(document.FilePath)
-                    ) {
+                    if (document?.FilePath is null || addedFilePaths.Contains(document.FilePath))
+                    {
                         continue;
                     }
 
                     addedFilePaths.Add(document.FilePath);
 
                     var isFileIncluded =
-                        formatOptions.WorkspaceType == WorkspaceType.Folder ||
-                        (formatOptions.FileMatcher.HasMatches(
-                            document.FilePath
-                        ) &&
-                        File.Exists(document.FilePath));
+                        formatOptions.WorkspaceType == WorkspaceType.Folder
+                        || (formatOptions.FileMatcher.HasMatches(document.FilePath)
+                        && File.Exists(document.FilePath));
                     if (!isFileIncluded || !document.SupportsSyntaxTree)
                     {
                         continue;
                     }
 
                     var syntaxTree =
-                        await document.GetSyntaxTreeAsync(cancellationToken)
-                            .ConfigureAwait(false);
+                        await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
                     if (syntaxTree is null)
                     {
-                        throw new Exception(
-                            $"Unable to get a syntax tree for '{document.Name}'"
-                        );
+                        throw new Exception($"Unable to get a syntax tree for '{document.Name}'");
                     }
 
                     if (
-                        !formatOptions.IncludeGeneratedFiles &&
-                        await GeneratedCodeUtilities.IsGeneratedCodeAsync(
+                        !formatOptions.IncludeGeneratedFiles
+                        && await GeneratedCodeUtilities.IsGeneratedCodeAsync(
                                 syntaxTree,
                                 cancellationToken
                             )
@@ -343,11 +293,11 @@ namespace Microsoft.CodeAnalysis.Tools
                     if (analyzerConfigOptions != null)
                     {
                         if (
-                            formatOptions.IncludeGeneratedFiles ||
-                            GeneratedCodeUtilities.GetIsGeneratedCodeFromOptions(
+                            formatOptions.IncludeGeneratedFiles
+                            || GeneratedCodeUtilities.GetIsGeneratedCodeFromOptions(
                                 analyzerConfigOptions
-                            ) !=
-                            true
+                            )
+                            != true
                         ) {
                             documentsCoveredByEditorConfig.Add(document.Id);
                         }
@@ -367,14 +317,8 @@ namespace Microsoft.CodeAnalysis.Tools
             // If no files are covered by an editorconfig, then return them all. Otherwise only return
             // files that are covered by an editorconfig.
             return documentsCoveredByEditorConfig.Count == 0
-                ? (
-                        projectFileCount,
-                        documentsNotCoveredByEditorConfig.ToImmutable()
-                    )
-                : (
-                        projectFileCount,
-                        documentsCoveredByEditorConfig.ToImmutable()
-                    );
+                ? (projectFileCount, documentsNotCoveredByEditorConfig.ToImmutable())
+                : (projectFileCount, documentsCoveredByEditorConfig.ToImmutable());
         }
     }
 }
