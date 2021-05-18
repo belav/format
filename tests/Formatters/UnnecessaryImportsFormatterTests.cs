@@ -35,7 +35,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         [Fact]
         public async Task WhenNotFixingCodeSyle_AndHasUnusedImports_NoChange()
         {
-            var code = @"using System;
+            var code =
+                @"using System;
 
 class C
 {
@@ -54,7 +55,8 @@ class C
         [Fact]
         public async Task WhenIDE0005NotConfigured_AndHasUnusedImports_NoChange()
         {
-            var code = @"using System;
+            var code =
+                @"using System;
 
 class C
 {
@@ -83,7 +85,8 @@ class C
             string key,
             string severity
         ) {
-            var code = @"using System;
+            var code =
+                @"using System;
 
 class C
 {
@@ -112,13 +115,15 @@ class C
             string key,
             string severity
         ) {
-            var testCode = @"using System;
+            var testCode =
+                @"using System;
 
 class C
 {
 }";
 
-            var expectedCode = @"class C
+            var expectedCode =
+                @"class C
 {
 }";
 
