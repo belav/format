@@ -19,7 +19,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         [Fact]
         public async Task WhenFinalNewlineUnspecified_AndFinalNewlineMissing_NoChange()
         {
-            var code = @"
+            var code =
+                @"
 class C
 {
 }";
@@ -32,7 +33,8 @@ class C
         [Fact]
         public async Task WhenFinalNewlineUnspecified_AndFinalNewlineExits_NoChange()
         {
-            var code = @"
+            var code =
+                @"
 class C
 {
 }
@@ -93,7 +95,8 @@ class C
         [Fact]
         public async Task WhenFinalNewlineRequired_AndFinalNewlineExits_NoChange()
         {
-            var code = @"
+            var code =
+                @"
 class C
 {
 }
@@ -159,7 +162,8 @@ class C
         [Fact]
         public async Task WhenFinalNewlineUnwanted_AndFinalNewlineMissing_NoChange()
         {
-            var code = @"
+            var code =
+                @"
 class C
 {
 }";
