@@ -67,16 +67,19 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 return sourceText;
             }
 
-            var isSameVersion =
-                await IsSameDocumentAndVersionAsync(document, formattedDocument, cancellationToken)
+            var isSameVersion = await IsSameDocumentAndVersionAsync(
+                        document,
+                        formattedDocument,
+                        cancellationToken
+                    )
                     .ConfigureAwait(false);
             if (isSameVersion)
             {
                 return sourceText;
             }
 
-            var formattedText =
-                await formattedDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
+            var formattedText = await formattedDocument.GetTextAsync(cancellationToken)
+                    .ConfigureAwait(false);
             return formattedText;
         }
     }

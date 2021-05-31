@@ -23,8 +23,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             var project = solution.Projects.First();
             var formattablePaths = ImmutableHashSet.Create(project.Documents.First().FilePath);
             var minimumSeverity = DiagnosticSeverity.Warning;
-            var result =
-                await AnalyzerFormatter.FilterBySeverityAsync(
+            var result = await AnalyzerFormatter.FilterBySeverityAsync(
                     solution,
                     projectAnalyzersAndFixers,
                     formattablePaths,
@@ -43,8 +42,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             var project = solution.Projects.First();
             var formattablePaths = ImmutableHashSet.Create(project.Documents.First().FilePath);
             var minimumSeverity = DiagnosticSeverity.Error;
-            var result =
-                await AnalyzerFormatter.FilterBySeverityAsync(
+            var result = await AnalyzerFormatter.FilterBySeverityAsync(
                     solution,
                     projectAnalyzersAndFixers,
                     formattablePaths,
@@ -57,8 +55,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
 
         private static async Task<AnalyzersAndFixers> GetAnalyzersAndFixersAsync()
         {
-            var assemblies =
-                new[] {
+            var assemblies = new[] {
                     await GenerateAssemblyAsync(
                         GenerateAnalyzerCode("DiagnosticAnalyzer1", "DiagnosticAnalyzerId"),
                         GenerateCodeFix("CodeFixProvider1", "DiagnosticAnalyzerId")
@@ -81,8 +78,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             );
         }
 
-        private async Task<ImmutableDictionary<ProjectId,
-                AnalyzersAndFixers>> GetProjectAnalyzersAndFixersAsync(Solution solution)
+        private async Task<
+            ImmutableDictionary<ProjectId, AnalyzersAndFixers>
+        > GetProjectAnalyzersAndFixersAsync(Solution solution)
         {
             var analyzersAndFixers = await GetAnalyzersAndFixersAsync();
 

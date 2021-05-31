@@ -69,53 +69,36 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
         /// <summary>
         /// Applies formatting and returns the changed <see cref="SourceText"/> for each <see cref="Document"/>.
         /// </summary>
-        private ImmutableArray<(Document, Task<(SourceText originalText, SourceText? formattedText)>)> FormatFiles(
+        private ImmutableArray<
+            (Document, Task<(SourceText originalText, SourceText? formattedText)>)
+        > FormatFiles(
             Solution solution,
             ImmutableArray<DocumentId> formattableDocuments,
             FormatOptions formatOptions,
             ILogger logger,
             CancellationToken cancellationToken
         ) {
-            var formattedDocuments = ImmutableArray.CreateBuilder<(Document, Task<(SourceText originalText, SourceText? formattedText)>)>(
-                formattableDocuments.Length
-            );
+            var formattedDocuments = ImmutableArray.CreateBuilder<
+                (Document, Task<(SourceText originalText, SourceText? formattedText)>)
+            >(formattableDocuments.Length);
 
             for (var index = 0; index < formattableDocuments.Length; index++)
             {
                 var document = solution.GetDocument(formattableDocuments[index]);
-                if (document is null)
-                    continue;
+                if (document is null) continue;
 
-                var formatTask = Task.Run(
-                    async () =>
+                var formatTask = Task.Run(async () =>
                     {
-                        var originalSourceText =
-                            await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
+                        var originalSourceText = await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
 
-                        var syntaxTree =
-                            await document.GetSyntaxTreeAsync(cancellationToken)
-                                .ConfigureAwait(false);
-                        if (syntaxTree is null)
-                            return (originalSourceText, null);
+                        var syntaxTree = await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
+                        if (syntaxTree is null) return (originalSourceText, null);
 
-                        var analyzerConfigOptions = document.Project.AnalyzerOptions.AnalyzerConfigOptionsProvider.GetOptions(
-                            syntaxTree
-                        );
-                        var optionSet =
-                            await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
+                        var analyzerConfigOptions = document.Project.AnalyzerOptions.AnalyzerConfigOptionsProvider.GetOptions(syntaxTree);
+                        var optionSet = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
 
-                        return await GetFormattedSourceTextAsync(
-                                document,
-                                optionSet,
-                                analyzerConfigOptions,
-                                formatOptions,
-                                logger,
-                                cancellationToken
-                            )
-                            .ConfigureAwait(false);
-                    },
-                    cancellationToken
-                );
+                        return await GetFormattedSourceTextAsync(document, optionSet, analyzerConfigOptions, formatOptions, logger, cancellationToken).ConfigureAwait(false);
+                    }, cancellationToken);
 
                 formattedDocuments.Add((document, formatTask));
             }
@@ -126,7 +109,9 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
         /// <summary>
         /// Get formatted <see cref="SourceText"/> for a <see cref="Document"/>.
         /// </summary>
-        private async Task<(SourceText originalText, SourceText? formattedText)> GetFormattedSourceTextAsync(
+        private async Task<
+            (SourceText originalText, SourceText? formattedText)
+        > GetFormattedSourceTextAsync(
             Document document,
             OptionSet optionSet,
             AnalyzerConfigOptions analyzerConfigOptions,
@@ -134,10 +119,9 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             ILogger logger,
             CancellationToken cancellationToken
         ) {
-            var originalSourceText =
-                await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
-            var formattedSourceText =
-                await FormatFileAsync(
+            var originalSourceText = await document.GetTextAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            var formattedSourceText = await FormatFileAsync(
                         document,
                         originalSourceText,
                         optionSet,
@@ -159,7 +143,9 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
         /// </summary>
         private async Task<Solution> ApplyFileChangesAsync(
             Solution solution,
-            ImmutableArray<(Document, Task<(SourceText originalText, SourceText? formattedText)>)> formattedDocuments,
+            ImmutableArray<
+                (Document, Task<(SourceText originalText, SourceText? formattedText)>)
+            > formattedDocuments,
             FormatOptions formatOptions,
             ILogger logger,
             List<FormattedFile> formattedFiles,

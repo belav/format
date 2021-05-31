@@ -37,14 +37,15 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
 
                 if (metadataType != null)
                 {
-                    var methodInfo = (
-                        from method in _exportProvider.GetType().GetTypeInfo().GetMethods()
-                        where method.Name == nameof(ExportProvider.GetExports)
-                        where method.IsGenericMethod && method.GetGenericArguments().Length == 2
-                        where
-                            method.GetParameters().Length == 1
-                            && method.GetParameters()[0].ParameterType == typeof(string)
-                        select method).Single();
+                    var methodInfo = (from method in _exportProvider.GetType()
+                        .GetTypeInfo()
+                        .GetMethods()
+                    where method.Name == nameof(ExportProvider.GetExports)
+                    where method.IsGenericMethod && method.GetGenericArguments().Length == 2
+                    where
+                        method.GetParameters().Length == 1
+                        && method.GetParameters()[0].ParameterType == typeof(string)
+                    select method).Single();
                     var parameterizedMethod = methodInfo.MakeGenericMethod(
                         contractType,
                         metadataType
@@ -56,14 +57,15 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 }
                 else if (!isArray)
                 {
-                    var methodInfo = (
-                        from method in _exportProvider.GetType().GetTypeInfo().GetMethods()
-                        where method.Name == nameof(ExportProvider.GetExports)
-                        where method.IsGenericMethod && method.GetGenericArguments().Length == 1
-                        where
-                            method.GetParameters().Length == 1
-                            && method.GetParameters()[0].ParameterType == typeof(string)
-                        select method).Single();
+                    var methodInfo = (from method in _exportProvider.GetType()
+                        .GetTypeInfo()
+                        .GetMethods()
+                    where method.Name == nameof(ExportProvider.GetExports)
+                    where method.IsGenericMethod && method.GetGenericArguments().Length == 1
+                    where
+                        method.GetParameters().Length == 1
+                        && method.GetParameters()[0].ParameterType == typeof(string)
+                    select method).Single();
                     var parameterizedMethod = methodInfo.MakeGenericMethod(contractType);
                     export = parameterizedMethod.Invoke(
                         _exportProvider,
@@ -72,12 +74,13 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 }
                 else
                 {
-                    var methodInfo = (
-                        from method in _exportProvider.GetType().GetTypeInfo().GetMethods()
-                        where method.Name == nameof(ExportProvider.GetExportedValues)
-                        where method.IsGenericMethod && method.GetGenericArguments().Length == 1
-                        where method.GetParameters().Length == 0
-                        select method).Single();
+                    var methodInfo = (from method in _exportProvider.GetType()
+                        .GetTypeInfo()
+                        .GetMethods()
+                    where method.Name == nameof(ExportProvider.GetExportedValues)
+                    where method.IsGenericMethod && method.GetGenericArguments().Length == 1
+                    where method.GetParameters().Length == 0
+                    select method).Single();
                     var parameterizedMethod = methodInfo.MakeGenericMethod(contractType);
                     export = parameterizedMethod.Invoke(_exportProvider, null);
                 }

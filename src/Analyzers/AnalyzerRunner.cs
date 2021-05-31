@@ -59,8 +59,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 return;
             }
 
-            var compilation =
-                await project.GetCompilationAsync(cancellationToken).ConfigureAwait(false);
+            var compilation = await project.GetCompilationAsync(cancellationToken)
+                    .ConfigureAwait(false);
             if (compilation is null)
             {
                 return;

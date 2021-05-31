@@ -130,26 +130,20 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
                 );
             };
 
-            var registration = cancellationToken.Register(
-                () =>
+            var registration = cancellationToken.Register(() =>
                 {
-                    if (tcs.TrySetCanceled())
-                    {
+                    if (tcs.TrySetCanceled()) {
                         // If the underlying process is still running, we should kill it
-                        if (!process.HasExited)
-                        {
-                            try
-                            {
+                        if (!process.HasExited) {
+                            try {
                                 process.Kill();
                             }
-                            catch (InvalidOperationException)
-                            {
+                            catch (InvalidOperationException) {
                                 // Ignore, since the process is already dead
                             }
                         }
                     }
-                }
-            );
+                });
 
             process.Start();
             onProcessStartHandler?.Invoke(process);
