@@ -83,8 +83,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             for (var index = 0; index < formattableDocuments.Length; index++)
             {
                 var document = solution.GetDocument(formattableDocuments[index]);
-                if (document is null)
-                    continue;
+                if (document is null) continue;
 
                 var formatTask = Task.Run(
                     async () =>
@@ -95,8 +94,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                         var syntaxTree =
                             await document.GetSyntaxTreeAsync(cancellationToken)
                                 .ConfigureAwait(false);
-                        if (syntaxTree is null)
-                            return (originalSourceText, null);
+                        if (syntaxTree is null) return (originalSourceText, null);
 
                         var analyzerConfigOptions = document.Project.AnalyzerOptions.AnalyzerConfigOptionsProvider.GetOptions(
                             syntaxTree
