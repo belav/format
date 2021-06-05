@@ -33,8 +33,7 @@ namespace System
                 );
             }
 
-            if (fromEnd)
-                _value = ~value;
+            if (fromEnd) _value = ~value;
             else
                 _value = value;
         }
@@ -90,8 +89,7 @@ namespace System
         {
             get
             {
-                if (_value < 0)
-                    return ~_value;
+                if (_value < 0) return ~_value;
                 else
                     return _value;
             }
@@ -140,8 +138,7 @@ namespace System
         /// <summary>Converts the value of the current Index object to its equivalent string representation.</summary>
         public override string ToString()
         {
-            if (IsFromEnd)
-                return $"^{(uint)Value}";
+            if (IsFromEnd) return $"^{(uint)Value}";
 
             return ((uint)Value).ToString();
         }
