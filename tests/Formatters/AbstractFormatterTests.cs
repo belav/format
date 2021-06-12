@@ -280,8 +280,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var text = SourceText.From(code, encoding ?? Encoding.UTF8);
             TestState.Sources.Add(text);
 
-            var solution =
-                await GetSolutionAsync(
+            var solution = await GetSolutionAsync(
                     TestState.Sources.ToArray(),
                     TestState.AdditionalFiles.ToArray(),
                     TestState.AdditionalReferences.ToArray(),
@@ -314,8 +313,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var logger = new TestLogger();
             var formattedFiles = new List<FormattedFile>();
 
-            var formattedSolution =
-                await Formatter.FormatAsync(
+            var formattedSolution = await Formatter.FormatAsync(
                     solution,
                     pathsToFormat,
                     formatOptions,
@@ -396,8 +394,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             IEnumerable<AnalyzerReference>? analyzerReferences = null
         ) {
             analyzerReferences ??= Enumerable.Empty<AnalyzerReference>();
-            var project =
-                await CreateProjectAsync(
+            var project = await CreateProjectAsync(
                     sources,
                     additionalFiles,
                     additionalMetadataReferences,
@@ -514,8 +511,10 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
                 .WithAssemblyIdentityComparer(ReferenceAssemblies.AssemblyIdentityComparer);
 
             var parseOptions = CreateParseOptions();
-            var referenceAssemblies =
-                await ReferenceAssemblies.ResolveAsync(language, CancellationToken.None);
+            var referenceAssemblies = await ReferenceAssemblies.ResolveAsync(
+                    language,
+                    CancellationToken.None
+                );
 
             var editorConfigDocument = DocumentInfo.Create(
                 DocumentId.CreateNewId(projectId, DefaultEditorConfigPath),

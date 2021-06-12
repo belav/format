@@ -52,8 +52,11 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             OptionSet optionSet,
             CancellationToken cancellationToken
         ) {
-            var formattedDocument =
-                await Formatter.FormatAsync(document, optionSet, cancellationToken)
+            var formattedDocument = await Formatter.FormatAsync(
+                        document,
+                        optionSet,
+                        cancellationToken
+                    )
                     .ConfigureAwait(false);
             return await formattedDocument.GetTextAsync(cancellationToken).ConfigureAwait(false);
         }
