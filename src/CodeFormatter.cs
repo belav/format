@@ -17,16 +17,17 @@ namespace Microsoft.CodeAnalysis.Tools
 {
     internal static class CodeFormatter
     {
-        private static readonly ImmutableArray<ICodeFormatter> s_codeFormatters = ImmutableArray.Create<ICodeFormatter>(
-            new WhitespaceFormatter(),
-            new FinalNewlineFormatter(),
-            new EndOfLineFormatter(),
-            new CharsetFormatter(),
-            new OrganizeImportsFormatter(),
-            new UnnecessaryImportsFormatter(),
-            AnalyzerFormatter.CodeStyleFormatter,
-            AnalyzerFormatter.ThirdPartyFormatter
-        );
+        private static readonly ImmutableArray<ICodeFormatter> s_codeFormatters =
+            ImmutableArray.Create<ICodeFormatter>(
+                new WhitespaceFormatter(),
+                new FinalNewlineFormatter(),
+                new EndOfLineFormatter(),
+                new CharsetFormatter(),
+                new OrganizeImportsFormatter(),
+                new UnnecessaryImportsFormatter(),
+                AnalyzerFormatter.CodeStyleFormatter,
+                AnalyzerFormatter.ThirdPartyFormatter
+            );
 
         public static async Task<WorkspaceFormatResult> FormatWorkspaceAsync(
             FormatOptions formatOptions,
@@ -89,8 +90,7 @@ namespace Microsoft.CodeAnalysis.Tools
             logger.LogTrace(Resources.Running_formatters);
 
             var formattedFiles = new List<FormattedFile>(fileCount);
-            var formattedSolution =
-                await RunCodeFormattersAsync(
+            var formattedSolution = await RunCodeFormattersAsync(
                         solution,
                         formatableFiles,
                         formatOptions,
@@ -268,8 +268,8 @@ namespace Microsoft.CodeAnalysis.Tools
                         continue;
                     }
 
-                    var syntaxTree =
-                        await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
+                    var syntaxTree = await document.GetSyntaxTreeAsync(cancellationToken)
+                            .ConfigureAwait(false);
                     if (syntaxTree is null)
                     {
                         throw new Exception($"Unable to get a syntax tree for '{document.Name}'");
@@ -287,9 +287,10 @@ namespace Microsoft.CodeAnalysis.Tools
                     }
 
                     // Track files covered by an editorconfig separately from those not covered.
-                    var analyzerConfigOptions = document.Project.AnalyzerOptions.AnalyzerConfigOptionsProvider.GetOptions(
-                        syntaxTree
-                    );
+                    var analyzerConfigOptions =
+                        document.Project.AnalyzerOptions.AnalyzerConfigOptionsProvider.GetOptions(
+                            syntaxTree
+                        );
                     if (analyzerConfigOptions != null)
                     {
                         if (

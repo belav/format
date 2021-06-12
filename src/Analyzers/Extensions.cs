@@ -39,8 +39,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             this Type type,
             [NotNullWhen(returnValue: true)]
             out T? instance
-        )
-            where T : class {
+        ) where T : class {
             try
             {
                 var defaultCtor = type.GetConstructor(
@@ -81,8 +80,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             CancellationToken cancellationToken
         ) {
             var severity = DiagnosticSeverity.Hidden;
-            var compilation =
-                await project.GetCompilationAsync(cancellationToken).ConfigureAwait(false);
+            var compilation = await project.GetCompilationAsync(cancellationToken)
+                    .ConfigureAwait(false);
             if (compilation is null)
             {
                 return severity;
@@ -96,8 +95,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     continue;
                 }
 
-                var options =
-                    await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
+                var options = await document.GetOptionsAsync(cancellationToken)
+                        .ConfigureAwait(false);
 
                 var documentSeverity = analyzer.GetSeverity(
                     document,
@@ -223,8 +222,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     }
 
                     var notification = notificationProperty.GetValue(option);
-                    var reportDiagnosticValue =
-                        notification?.GetType().GetProperty("Severity")?.GetValue(notification);
+                    var reportDiagnosticValue = notification?.GetType()
+                            .GetProperty("Severity")?.GetValue(notification);
                     if (reportDiagnosticValue is null)
                     {
                         continue;

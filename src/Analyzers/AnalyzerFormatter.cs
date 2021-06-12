@@ -100,8 +100,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             var severity = _informationProvider.GetSeverity(formatOptions);
 
             // Filter to analyzers that report diagnostics with equal or greater severity.
-            var projectAnalyzers =
-                await FilterBySeverityAsync(
+            var projectAnalyzers = await FilterBySeverityAsync(
                         solution,
                         projectAnalyzersAndFixers,
                         formattablePaths,
@@ -111,8 +110,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     .ConfigureAwait(false);
 
             // Determine which diagnostics are being reported for each project.
-            var projectDiagnostics =
-                await GetProjectDiagnosticsAsync(
+            var projectDiagnostics = await GetProjectDiagnosticsAsync(
                         solution,
                         projectAnalyzers,
                         formattablePaths,
@@ -159,8 +157,10 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             return solution;
         }
 
-        private async Task<ImmutableDictionary<ProjectId,
-                ImmutableHashSet<string>>> GetProjectDiagnosticsAsync(
+        private async Task<ImmutableDictionary<
+                ProjectId,
+                ImmutableHashSet<string>
+            >> GetProjectDiagnosticsAsync(
             Solution solution,
             ImmutableDictionary<ProjectId, ImmutableArray<DiagnosticAnalyzer>> projectAnalyzers,
             ImmutableHashSet<string> formattablePaths,
@@ -329,8 +329,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 {
                     foreach (var codefix in codefixes)
                     {
-                        var changedSolution =
-                            await _applier.ApplyCodeFixesAsync(
+                        var changedSolution = await _applier.ApplyCodeFixesAsync(
                                     solution,
                                     result,
                                     codefix,
@@ -362,8 +361,10 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             }
         }
 
-        internal static async Task<ImmutableDictionary<ProjectId,
-                ImmutableArray<DiagnosticAnalyzer>>> FilterBySeverityAsync(
+        internal static async Task<ImmutableDictionary<
+                ProjectId,
+                ImmutableArray<DiagnosticAnalyzer>
+            >> FilterBySeverityAsync(
             Solution solution,
             ImmutableDictionary<ProjectId, AnalyzersAndFixers> projectAnalyzersAndFixers,
             ImmutableHashSet<string> formattablePaths,
@@ -372,8 +373,10 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         ) {
             // We only want to run analyzers for each project that have the potential for reporting a diagnostic with
             // a severity equal to or greater than specified.
-            var projectAnalyzers = ImmutableDictionary.CreateBuilder<ProjectId,
-                ImmutableArray<DiagnosticAnalyzer>>();
+            var projectAnalyzers = ImmutableDictionary.CreateBuilder<
+                ProjectId,
+                ImmutableArray<DiagnosticAnalyzer>
+            >();
             foreach (var projectId in projectAnalyzersAndFixers.Keys)
             {
                 var project = solution.GetProject(projectId);
@@ -400,8 +403,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                         continue;
                     }
 
-                    var severity =
-                        await analyzer.GetSeverityAsync(
+                    var severity = await analyzer.GetSeverityAsync(
                                 project,
                                 formattablePaths,
                                 cancellationToken

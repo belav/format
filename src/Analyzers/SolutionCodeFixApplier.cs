@@ -76,8 +76,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
             try
             {
-                var fixAllAction =
-                    await fixAllProvider.GetFixAsync(fixAllContext).ConfigureAwait(false);
+                var fixAllAction = await fixAllProvider.GetFixAsync(fixAllContext)
+                        .ConfigureAwait(false);
                 if (fixAllAction is null)
                 {
                     logger.LogWarning(
@@ -88,8 +88,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     return solution;
                 }
 
-                var operations =
-                    await fixAllAction.GetOperationsAsync(cancellationToken).ConfigureAwait(false);
+                var operations = await fixAllAction.GetOperationsAsync(cancellationToken)
+                        .ConfigureAwait(false);
                 var applyChangesOperation = operations.OfType<ApplyChangesOperation>()
                     .SingleOrDefault();
                 if (applyChangesOperation is null)
@@ -138,8 +138,10 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 Document document,
                 CancellationToken cancellationToken
             ) {
-                var projectDiagnostics =
-                    await GetProjectDiagnosticsAsync(document.Project, cancellationToken);
+                var projectDiagnostics = await GetProjectDiagnosticsAsync(
+                        document.Project,
+                        cancellationToken
+                    );
                 return projectDiagnostics.Where(
                         diagnostic => diagnostic.Location.SourceTree?.FilePath == document.FilePath
                     )

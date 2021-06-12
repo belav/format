@@ -182,8 +182,7 @@ namespace Microsoft.CodeAnalysis.Tools
                     includeGenerated
                 );
 
-                var formatResult =
-                    await CodeFormatter.FormatWorkspaceAsync(
+                var formatResult = await CodeFormatter.FormatWorkspaceAsync(
                             formatOptions,
                             logger,
                             cancellationTokenSource.Token,

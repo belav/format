@@ -47,9 +47,7 @@ namespace Microsoft.CodeAnalysis.Tools
             // Sync changes to option and argument names with the FormatCommant.Handler above.
             var rootCommand = new RootCommand
             {
-                new Argument<string?>(
-                    "workspace"
-                )
+                new Argument<string?>("workspace")
                 {
                     Arity = ArgumentArity.ZeroOrOne,
                     Description = Resources.A_path_to_a_solution_file_a_project_file_or_a_folder_containing_a_solution_or_project_file_If_a_path_is_not_specified_then_the_current_directory_is_used
@@ -67,9 +65,7 @@ namespace Microsoft.CodeAnalysis.Tools
                     Resources.Run_code_style_analyzers_and_apply_fixes
                 )
                 {
-                    Argument = new Argument<string?>(
-                        "severity"
-                    )
+                    Argument = new Argument<string?>("severity")
                     {
                         Arity = ArgumentArity.ZeroOrOne
                     }.FromAmong(SeverityLevels)
@@ -79,9 +75,7 @@ namespace Microsoft.CodeAnalysis.Tools
                     Resources.Run_3rd_party_analyzers_and_apply_fixes
                 )
                 {
-                    Argument = new Argument<string?>(
-                        "severity"
-                    )
+                    Argument = new Argument<string?>("severity")
                     {
                         Arity = ArgumentArity.ZeroOrOne
                     }.FromAmong(SeverityLevels)
@@ -109,9 +103,7 @@ namespace Microsoft.CodeAnalysis.Tools
                     Resources.Accepts_a_file_path_which_if_provided_will_produce_a_format_report_json_file_in_the_given_directory
                 )
                 {
-                    Argument = new Argument<string?>(
-                        () => null
-                    )
+                    Argument = new Argument<string?>(() => null)
                     {
                         Name = "report-path"
                     }.LegalFilePathsOnly()
