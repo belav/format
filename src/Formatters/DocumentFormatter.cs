@@ -76,9 +76,10 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             ILogger logger,
             CancellationToken cancellationToken
         ) {
-            var formattedDocuments = ImmutableArray.CreateBuilder<(Document, Task<(SourceText originalText, SourceText? formattedText)>)>(
-                formattableDocuments.Length
-            );
+            var formattedDocuments =
+                ImmutableArray.CreateBuilder<(Document, Task<(SourceText originalText, SourceText? formattedText)>)>(
+                    formattableDocuments.Length
+                );
 
             for (var index = 0; index < formattableDocuments.Length; index++)
             {
@@ -88,19 +89,19 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 var formatTask = Task.Run(
                     async () =>
                     {
-                        var originalSourceText =
-                            await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
+                        var originalSourceText = await document.GetTextAsync(cancellationToken)
+                                .ConfigureAwait(false);
 
-                        var syntaxTree =
-                            await document.GetSyntaxTreeAsync(cancellationToken)
+                        var syntaxTree = await document.GetSyntaxTreeAsync(cancellationToken)
                                 .ConfigureAwait(false);
                         if (syntaxTree is null) return (originalSourceText, null);
 
-                        var analyzerConfigOptions = document.Project.AnalyzerOptions.AnalyzerConfigOptionsProvider.GetOptions(
-                            syntaxTree
-                        );
-                        var optionSet =
-                            await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
+                        var analyzerConfigOptions =
+                            document.Project.AnalyzerOptions.AnalyzerConfigOptionsProvider.GetOptions(
+                                syntaxTree
+                            );
+                        var optionSet = await document.GetOptionsAsync(cancellationToken)
+                                .ConfigureAwait(false);
 
                         return await GetFormattedSourceTextAsync(
                                 document,
@@ -132,10 +133,9 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             ILogger logger,
             CancellationToken cancellationToken
         ) {
-            var originalSourceText =
-                await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
-            var formattedSourceText =
-                await FormatFileAsync(
+            var originalSourceText = await document.GetTextAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            var formattedSourceText = await FormatFileAsync(
                         document,
                         originalSourceText,
                         optionSet,

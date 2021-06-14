@@ -55,8 +55,7 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var text = SourceText.From(testCode, Encoding.UTF8);
             TestState.Sources.Add(text);
 
-            var solution =
-                await GetSolutionAsync(
+            var solution = await GetSolutionAsync(
                     TestState.Sources.ToArray(),
                     TestState.AdditionalFiles.ToArray(),
                     TestState.AdditionalReferences.ToArray(),

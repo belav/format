@@ -10,12 +10,14 @@ namespace Microsoft.CodeAnalysis.Tools.MSBuild
 {
     internal static class LooseVersionAssemblyLoader
     {
-        private static readonly Dictionary<string,
-            Assembly> s_pathsToAssemblies = new Dictionary<string, Assembly>(
-            StringComparer.OrdinalIgnoreCase
-        );
-        private static readonly Dictionary<string,
-            Assembly> s_namesToAssemblies = new Dictionary<string, Assembly>();
+        private static readonly Dictionary<string, Assembly> s_pathsToAssemblies = new Dictionary<
+            string,
+            Assembly
+        >(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, Assembly> s_namesToAssemblies = new Dictionary<
+            string,
+            Assembly
+        >();
 
         private static readonly object s_guard = new object();
 

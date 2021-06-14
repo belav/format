@@ -23,9 +23,7 @@ namespace Microsoft.CodeAnalysis.Tools.Workspaces
             ILogger logger,
             CancellationToken cancellationToken
         ) {
-            var properties = new Dictionary<string, string>(
-                StringComparer.Ordinal
-            )
+            var properties = new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 // This property ensures that XAML files will be compiled in the current AppDomain
                 // rather than a separate one. Any tasks isolated in AppDomains or tasks that create
