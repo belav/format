@@ -58,7 +58,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
 
             // Act
             var result = sut.Parse(
-                new[] {
+                new[]
+                {
                     "--folder",
                     "--include",
                     "include1",

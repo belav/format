@@ -79,7 +79,8 @@ class C
         [InlineData(RemoveUnnecessaryImportCategoryKey, Severity.Info)]
         [InlineData(
             AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
-            Severity.Warning)]
+            Severity.Warning
+        )]
         [InlineData(AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey, Severity.Info)]
         public async Task WhenIDE0005SeverityLowerThanFixSeverity_AndHasUnusedImports_NoChange(
             string key,
@@ -109,7 +110,8 @@ class C
         [InlineData(RemoveUnnecessaryImportCategoryKey, Severity.Error)]
         [InlineData(
             AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey,
-            Severity.Warning)]
+            Severity.Warning
+        )]
         [InlineData(AnalyzerOptionsExtensions.DotnetAnalyzerDiagnosticSeverityKey, Severity.Error)]
         public async Task WhenIDE0005SeverityEqualOrGreaterThanFixSeverity_AndHasUnusedImports_ImportRemoved(
             string key,

@@ -30,7 +30,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             FormatOptions formatOptions,
             ILogger logger
         ) {
-            var assemblies = new[] {
+            var assemblies = new[]
+            {
                 _featuresPath,
                 _featuresCSharpPath,
                 _featuresVisualBasicPath

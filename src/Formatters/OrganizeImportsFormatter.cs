@@ -44,16 +44,16 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 }
 
                 var organizedDocument = await Formatter.OrganizeImportsAsync(
-                        document,
-                        cancellationToken
-                    );
+                    document,
+                    cancellationToken
+                );
 
                 var isSameVersion = await IsSameDocumentAndVersionAsync(
-                            document,
-                            organizedDocument,
-                            cancellationToken
-                        )
-                        .ConfigureAwait(false);
+                        document,
+                        organizedDocument,
+                        cancellationToken
+                    )
+                    .ConfigureAwait(false);
                 if (isSameVersion)
                 {
                     return sourceText;
@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
                 // Because the Formatter does not abide the `end_of_line` option we have to fix up the ends of the organized lines.
                 // See https://github.com/dotnet/roslyn/issues/44136
                 var organizedSourceText = await organizedDocument.GetTextAsync(cancellationToken)
-                        .ConfigureAwait(false);
+                    .ConfigureAwait(false);
                 return await _endOfLineFormatter.FormatFileAsync(
                         organizedDocument,
                         organizedSourceText,

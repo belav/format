@@ -41,9 +41,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             {
                 // Restore the Analyzer packages that have been added to `for_analyzer_formatter/analyzer_project/analyzer_project.csproj`
                 var exitCode = await NuGetHelper.PerformRestore(
-                        s_analyzerProjectFilePath,
-                        TestOutputHelper
-                    );
+                    s_analyzerProjectFilePath,
+                    TestOutputHelper
+                );
                 Assert.Equal(0, exitCode);
 
                 // Load the analyzer_project into a MSBuildWorkspace.
@@ -54,13 +54,13 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
 
                 MSBuildRegistrar.RegisterInstance(logger);
                 var analyzerWorkspace = await MSBuildWorkspaceLoader.LockedLoadAsync(
-                        workspacePath,
-                        WorkspaceType.Project,
-                        createBinaryLog: false,
-                        logWorkspaceWarnings: true,
-                        logger,
-                        CancellationToken.None
-                    );
+                    workspacePath,
+                    WorkspaceType.Project,
+                    createBinaryLog: false,
+                    logWorkspaceWarnings: true,
+                    logger,
+                    CancellationToken.None
+                );
 
                 // From this project we can get valid AnalyzerReferences to add to our test project.
                 _analyzerReferencesProject = analyzerWorkspace.CurrentSolution.Projects.Single();

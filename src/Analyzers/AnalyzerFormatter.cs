@@ -101,27 +101,27 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
             // Filter to analyzers that report diagnostics with equal or greater severity.
             var projectAnalyzers = await FilterBySeverityAsync(
-                        solution,
-                        projectAnalyzersAndFixers,
-                        formattablePaths,
-                        severity,
-                        cancellationToken
-                    )
-                    .ConfigureAwait(false);
+                    solution,
+                    projectAnalyzersAndFixers,
+                    formattablePaths,
+                    severity,
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
 
             // Determine which diagnostics are being reported for each project.
             var projectDiagnostics = await GetProjectDiagnosticsAsync(
-                        solution,
-                        projectAnalyzers,
-                        formattablePaths,
-                        formatOptions,
-                        severity,
-                        fixableCompilerDiagnostics,
-                        logger,
-                        formattedFiles,
-                        cancellationToken
-                    )
-                    .ConfigureAwait(false);
+                    solution,
+                    projectAnalyzers,
+                    formattablePaths,
+                    formatOptions,
+                    severity,
+                    fixableCompilerDiagnostics,
+                    logger,
+                    formattedFiles,
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
 
             var projectDiagnosticsMS = analysisStopwatch.ElapsedMilliseconds;
             logger.LogTrace(Resources.Complete_in_0_ms, projectDiagnosticsMS);
@@ -330,14 +330,14 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     foreach (var codefix in codefixes)
                     {
                         var changedSolution = await _applier.ApplyCodeFixesAsync(
-                                    solution,
-                                    result,
-                                    codefix,
-                                    diagnosticId,
-                                    logger,
-                                    cancellationToken
-                                )
-                                .ConfigureAwait(false);
+                                solution,
+                                result,
+                                codefix,
+                                diagnosticId,
+                                logger,
+                                cancellationToken
+                            )
+                            .ConfigureAwait(false);
                         if (changedSolution.GetChanges(solution).Any())
                         {
                             solution = changedSolution;
@@ -404,11 +404,11 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     }
 
                     var severity = await analyzer.GetSeverityAsync(
-                                project,
-                                formattablePaths,
-                                cancellationToken
-                            )
-                            .ConfigureAwait(false);
+                            project,
+                            formattablePaths,
+                            cancellationToken
+                        )
+                        .ConfigureAwait(false);
                     if (severity >= minimumSeverity)
                     {
                         analyzers.Add(analyzer);

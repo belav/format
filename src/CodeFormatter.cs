@@ -91,14 +91,14 @@ namespace Microsoft.CodeAnalysis.Tools
 
             var formattedFiles = new List<FormattedFile>(fileCount);
             var formattedSolution = await RunCodeFormattersAsync(
-                        solution,
-                        formatableFiles,
-                        formatOptions,
-                        logger,
-                        formattedFiles,
-                        cancellationToken
-                    )
-                    .ConfigureAwait(false);
+                    solution,
+                    formatableFiles,
+                    formatOptions,
+                    logger,
+                    formattedFiles,
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
 
             var formatterRanMS =
                 workspaceStopwatch.ElapsedMilliseconds - loadWorkspaceMS - determineFilesMS;
@@ -261,15 +261,17 @@ namespace Microsoft.CodeAnalysis.Tools
 
                     var isFileIncluded =
                         formatOptions.WorkspaceType == WorkspaceType.Folder
-                        || (formatOptions.FileMatcher.HasMatches(document.FilePath)
-                        && File.Exists(document.FilePath));
+                        || (
+                            formatOptions.FileMatcher.HasMatches(document.FilePath)
+                            && File.Exists(document.FilePath)
+                        );
                     if (!isFileIncluded || !document.SupportsSyntaxTree)
                     {
                         continue;
                     }
 
                     var syntaxTree = await document.GetSyntaxTreeAsync(cancellationToken)
-                            .ConfigureAwait(false);
+                        .ConfigureAwait(false);
                     if (syntaxTree is null)
                     {
                         throw new Exception($"Unable to get a syntax tree for '{document.Name}'");

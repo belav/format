@@ -23,13 +23,15 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
             MicrosoftCodeAnalysisFeaturesAssembly = Assembly.Load(
                 new AssemblyName("Microsoft.CodeAnalysis.Features")
             );
-            IDEDiagnosticIdToOptionMappingHelperType = MicrosoftCodeAnalysisFeaturesAssembly.GetType(
-                "Microsoft.CodeAnalysis.Diagnostics.IDEDiagnosticIdToOptionMappingHelper"
-            )!;
-            TryGetMappedOptionsMethod = IDEDiagnosticIdToOptionMappingHelperType.GetMethod(
-                "TryGetMappedOptions",
-                BindingFlags.Static | BindingFlags.Public
-            )!;
+            IDEDiagnosticIdToOptionMappingHelperType =
+                MicrosoftCodeAnalysisFeaturesAssembly.GetType(
+                    "Microsoft.CodeAnalysis.Diagnostics.IDEDiagnosticIdToOptionMappingHelper"
+                )!;
+            TryGetMappedOptionsMethod =
+                IDEDiagnosticIdToOptionMappingHelperType.GetMethod(
+                    "TryGetMappedOptions",
+                    BindingFlags.Static | BindingFlags.Public
+                )!;
         }
 
         public static bool Any(this SolutionChanges solutionChanges) =>
@@ -37,8 +39,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 
         public static bool TryCreateInstance<T>(
             this Type type,
-            [NotNullWhen(returnValue: true)]
-            out T? instance
+            [NotNullWhen(returnValue: true)] out T? instance
         ) where T : class {
             try
             {
@@ -81,7 +82,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
         ) {
             var severity = DiagnosticSeverity.Hidden;
             var compilation = await project.GetCompilationAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                .ConfigureAwait(false);
             if (compilation is null)
             {
                 return severity;
@@ -96,7 +97,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 }
 
                 var options = await document.GetOptionsAsync(cancellationToken)
-                        .ConfigureAwait(false);
+                    .ConfigureAwait(false);
 
                 var documentSeverity = analyzer.GetSeverity(
                     document,
@@ -222,8 +223,8 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     }
 
                     var notification = notificationProperty.GetValue(option);
-                    var reportDiagnosticValue = notification?.GetType()
-                            .GetProperty("Severity")?.GetValue(notification);
+                    var reportDiagnosticValue =
+                        notification?.GetType().GetProperty("Severity")?.GetValue(notification);
                     if (reportDiagnosticValue is null)
                     {
                         continue;

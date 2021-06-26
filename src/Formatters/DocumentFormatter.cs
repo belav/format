@@ -84,24 +84,26 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             for (var index = 0; index < formattableDocuments.Length; index++)
             {
                 var document = solution.GetDocument(formattableDocuments[index]);
-                if (document is null) continue;
+                if (document is null)
+                    continue;
 
                 var formatTask = Task.Run(
                     async () =>
                     {
                         var originalSourceText = await document.GetTextAsync(cancellationToken)
-                                .ConfigureAwait(false);
+                            .ConfigureAwait(false);
 
                         var syntaxTree = await document.GetSyntaxTreeAsync(cancellationToken)
-                                .ConfigureAwait(false);
-                        if (syntaxTree is null) return (originalSourceText, null);
+                            .ConfigureAwait(false);
+                        if (syntaxTree is null)
+                            return (originalSourceText, null);
 
                         var analyzerConfigOptions =
                             document.Project.AnalyzerOptions.AnalyzerConfigOptionsProvider.GetOptions(
                                 syntaxTree
                             );
                         var optionSet = await document.GetOptionsAsync(cancellationToken)
-                                .ConfigureAwait(false);
+                            .ConfigureAwait(false);
 
                         return await GetFormattedSourceTextAsync(
                                 document,
@@ -134,17 +136,17 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
             CancellationToken cancellationToken
         ) {
             var originalSourceText = await document.GetTextAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                .ConfigureAwait(false);
             var formattedSourceText = await FormatFileAsync(
-                        document,
-                        originalSourceText,
-                        optionSet,
-                        analyzerConfigOptions,
-                        formatOptions,
-                        logger,
-                        cancellationToken
-                    )
-                    .ConfigureAwait(false);
+                    document,
+                    originalSourceText,
+                    optionSet,
+                    analyzerConfigOptions,
+                    formatOptions,
+                    logger,
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
 
             return !formattedSourceText.ContentEquals(originalSourceText)
             || !formattedSourceText.Encoding?.Equals(originalSourceText.Encoding) == true

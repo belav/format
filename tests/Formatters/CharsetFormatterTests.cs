@@ -49,10 +49,10 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var editorConfig = new Dictionary<string, string>() { ["charset"] = expectedValue, };
 
             var formattedText = await AssertCodeUnchangedAsync(
-                    testCode,
-                    editorConfig,
-                    codeEncoding
-                );
+                testCode,
+                editorConfig,
+                codeEncoding
+            );
 
             Assert.Equal(expectedEncoding, formattedText.Encoding);
         }
@@ -68,10 +68,10 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var editorConfig = new Dictionary<string, string>() {  };
 
             var formattedText = await AssertCodeUnchangedAsync(
-                    testCode,
-                    editorConfig,
-                    codeEncoding
-                );
+                testCode,
+                editorConfig,
+                codeEncoding
+            );
 
             Assert.Equal(codeEncoding, formattedText.Encoding);
         }

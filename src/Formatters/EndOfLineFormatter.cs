@@ -66,8 +66,7 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 
         public static bool TryGetEndOfLine(
             AnalyzerConfigOptions analyzerConfigOptions,
-            [NotNullWhen(true)]
-            out string? endOfLine
+            [NotNullWhen(true)] out string? endOfLine
         ) {
             if (
                 analyzerConfigOptions != null

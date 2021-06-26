@@ -12,7 +12,8 @@ using Xunit.Sdk;
 namespace Microsoft.CodeAnalysis.Tools.Tests.XUnit
 {
     [DebuggerDisplay(
-        @"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}")]
+        @"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}"
+    )]
     public sealed class MSBuildTestCase : LongLivedMarshalByRefObject, IXunitTestCase
     {
         private IXunitTestCase _testCase;
