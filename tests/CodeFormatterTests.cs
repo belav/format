@@ -158,14 +158,14 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task GeneratedFilesFormattedInUnformattedProject()
         {
             var log = await TestFormatWorkspaceAsync(
-                    s_unformattedProjectFilePath,
-                    include: EmptyFilesList,
-                    exclude: EmptyFilesList,
-                    includeGenerated: true,
-                    expectedExitCode: 0,
-                    expectedFilesFormatted: 5,
-                    expectedFileCount: 6
-                );
+                s_unformattedProjectFilePath,
+                include: EmptyFilesList,
+                exclude: EmptyFilesList,
+                includeGenerated: true,
+                expectedExitCode: 0,
+                expectedFilesFormatted: 5,
+                expectedFileCount: 6
+            );
 
             var logLines = log.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             Assert.Contains(logLines, line => line.Contains("unformatted_project.AssemblyInfo.cs"));
@@ -223,14 +223,14 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task FSharpProjectsDoNotCreateException()
         {
             var log = await TestFormatWorkspaceAsync(
-                    s_fSharpProjectFilePath,
-                    include: EmptyFilesList,
-                    exclude: EmptyFilesList,
-                    includeGenerated: false,
-                    expectedExitCode: 1,
-                    expectedFilesFormatted: 0,
-                    expectedFileCount: 0
-                );
+                s_fSharpProjectFilePath,
+                include: EmptyFilesList,
+                exclude: EmptyFilesList,
+                includeGenerated: false,
+                expectedExitCode: 1,
+                expectedFilesFormatted: 0,
+                expectedFileCount: 0
+            );
 
             var pattern = string.Format(
                 Resources.Could_not_format_0_Format_currently_supports_only_CSharp_and_Visual_Basic_projects,
@@ -297,14 +297,14 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var include = new[] { s_unformattedProgramFilePath };
 
             var log = await TestFormatWorkspaceAsync(
-                    s_unformattedSolutionFilePath,
-                    include,
-                    exclude: EmptyFilesList,
-                    includeGenerated: false,
-                    expectedExitCode: 0,
-                    expectedFilesFormatted: 1,
-                    expectedFileCount: 6
-                );
+                s_unformattedSolutionFilePath,
+                include,
+                exclude: EmptyFilesList,
+                includeGenerated: false,
+                expectedExitCode: 0,
+                expectedFilesFormatted: 1,
+                expectedFileCount: 6
+            );
 
             var pattern = string.Format(Resources.Formatted_code_file_0, @"(.*)");
             var match = new Regex(pattern, RegexOptions.Multiline).Match(log);
@@ -317,14 +317,14 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task FormatLocationsLoggedInUnformattedProject()
         {
             var log = await TestFormatWorkspaceAsync(
-                    s_unformattedProjectFilePath,
-                    include: EmptyFilesList,
-                    exclude: EmptyFilesList,
-                    includeGenerated: false,
-                    expectedExitCode: 0,
-                    expectedFilesFormatted: 2,
-                    expectedFileCount: 6
-                );
+                s_unformattedProjectFilePath,
+                include: EmptyFilesList,
+                exclude: EmptyFilesList,
+                includeGenerated: false,
+                expectedExitCode: 0,
+                expectedFilesFormatted: 2,
+                expectedFileCount: 6
+            );
 
             var formatLocations = log.Split(
                     Environment.NewLine,
@@ -333,7 +333,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 .Where(line => FindFormattingLogLine.Match(line).Success)
                 .ToArray();
 
-            var expectedFormatLocations = new[] {
+            var expectedFormatLocations = new[]
+            {
                 @"other_items\OtherClass.cs(5,3): Fix whitespace formatting.",
                 @"other_items\OtherClass.cs(6,3): Fix whitespace formatting.",
                 @"other_items\OtherClass.cs(7,5): Fix whitespace formatting.",
@@ -371,14 +372,14 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task FormatLocationsNotLoggedInFormattedProject()
         {
             var log = await TestFormatWorkspaceAsync(
-                    s_formattedProjectFilePath,
-                    include: EmptyFilesList,
-                    exclude: EmptyFilesList,
-                    includeGenerated: false,
-                    expectedExitCode: 0,
-                    expectedFilesFormatted: 0,
-                    expectedFileCount: 3
-                );
+                s_formattedProjectFilePath,
+                include: EmptyFilesList,
+                exclude: EmptyFilesList,
+                includeGenerated: false,
+                expectedExitCode: 0,
+                expectedFilesFormatted: 0,
+                expectedFileCount: 3
+            );
 
             var formatLocations = log.Split(
                     Environment.NewLine,
@@ -395,14 +396,14 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
             var include = new[] { s_unformattedProgramFilePath };
 
             var log = await TestFormatWorkspaceAsync(
-                    s_unformattedSolutionFilePath,
-                    include,
-                    exclude: EmptyFilesList,
-                    includeGenerated: false,
-                    expectedExitCode: 0,
-                    expectedFilesFormatted: 1,
-                    expectedFileCount: 6
-                );
+                s_unformattedSolutionFilePath,
+                include,
+                exclude: EmptyFilesList,
+                includeGenerated: false,
+                expectedExitCode: 0,
+                expectedFilesFormatted: 1,
+                expectedFileCount: 6
+            );
 
             var pattern = string.Format(Resources.Formatted_code_file_0, @"(.*)");
             var match = new Regex(pattern, RegexOptions.Multiline).Match(log);
@@ -493,9 +494,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task NoFilesFormattedInCodeStyleSolution_WhenNotFixingCodeStyle()
         {
             var restoreExitCode = await NuGetHelper.PerformRestore(
-                    s_codeStyleSolutionFilePath,
-                    _output
-                );
+                s_codeStyleSolutionFilePath,
+                _output
+            );
             Assert.Equal(0, restoreExitCode);
 
             await TestFormatWorkspaceAsync(
@@ -514,9 +515,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task NoFilesFormattedInCodeStyleSolution_WhenFixingCodeStyleErrors()
         {
             var restoreExitCode = await NuGetHelper.PerformRestore(
-                    s_codeStyleSolutionFilePath,
-                    _output
-                );
+                s_codeStyleSolutionFilePath,
+                _output
+            );
             Assert.Equal(0, restoreExitCode);
 
             await TestFormatWorkspaceAsync(
@@ -536,9 +537,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task FilesFormattedInCodeStyleSolution_WhenFixingCodeStyleWarnings()
         {
             var restoreExitCode = await NuGetHelper.PerformRestore(
-                    s_codeStyleSolutionFilePath,
-                    _output
-                );
+                s_codeStyleSolutionFilePath,
+                _output
+            );
             Assert.Equal(0, restoreExitCode);
 
             await TestFormatWorkspaceAsync(
@@ -558,9 +559,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task NoFilesFormattedInAnalyzersSolution_WhenNotFixingAnalyzers()
         {
             var restoreExitCode = await NuGetHelper.PerformRestore(
-                    s_analyzersSolutionFilePath,
-                    _output
-                );
+                s_analyzersSolutionFilePath,
+                _output
+            );
             Assert.Equal(0, restoreExitCode);
 
             await TestFormatWorkspaceAsync(
@@ -579,9 +580,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
         public async Task FilesFormattedInAnalyzersSolution_WhenFixingAnalyzerErrors()
         {
             var restoreExitCode = await NuGetHelper.PerformRestore(
-                    s_analyzersSolutionFilePath,
-                    _output
-                );
+                s_analyzersSolutionFilePath,
+                _output
+            );
             Assert.Equal(0, restoreExitCode);
 
             await TestFormatWorkspaceAsync(
@@ -647,10 +648,10 @@ namespace Microsoft.CodeAnalysis.Tools.Tests
                 includeGenerated
             );
             var formatResult = await CodeFormatter.FormatWorkspaceAsync(
-                    formatOptions,
-                    logger,
-                    CancellationToken.None
-                );
+                formatOptions,
+                logger,
+                CancellationToken.None
+            );
             Environment.CurrentDirectory = currentDirectory;
 
             var log = logger.GetLog();

@@ -27,7 +27,8 @@ namespace Microsoft.CodeAnalysis.Tools
         );
 
         internal static string[] VerbosityLevels =>
-            new[] {
+            new[]
+            {
                 "q",
                 "quiet",
                 "m",
@@ -50,7 +51,8 @@ namespace Microsoft.CodeAnalysis.Tools
                 new Argument<string?>("workspace")
                 {
                     Arity = ArgumentArity.ZeroOrOne,
-                    Description = Resources.A_path_to_a_solution_file_a_project_file_or_a_folder_containing_a_solution_or_project_file_If_a_path_is_not_specified_then_the_current_directory_is_used
+                    Description =
+                        Resources.A_path_to_a_solution_file_a_project_file_or_a_folder_containing_a_solution_or_project_file_If_a_path_is_not_specified_then_the_current_directory_is_used
                 }.LegalFilePathsOnly(),
                 new Option(
                     new[] { "--folder", "-f" },
@@ -63,8 +65,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 new Option(
                     new[] { "--fix-style", "-s" },
                     Resources.Run_code_style_analyzers_and_apply_fixes
-                )
-                {
+                ) {
                     Argument = new Argument<string?>("severity")
                     {
                         Arity = ArgumentArity.ZeroOrOne
@@ -73,8 +74,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 new Option(
                     new[] { "--fix-analyzers", "-a" },
                     Resources.Run_3rd_party_analyzers_and_apply_fixes
-                )
-                {
+                ) {
                     Argument = new Argument<string?>("severity")
                     {
                         Arity = ArgumentArity.ZeroOrOne
@@ -83,15 +83,13 @@ namespace Microsoft.CodeAnalysis.Tools
                 new Option(
                     new[] { "--include" },
                     Resources.A_list_of_relative_file_or_folder_paths_to_include_in_formatting_All_files_are_formatted_if_empty
-                )
-                {
+                ) {
                     Argument = new Argument<string[]>(() => Array.Empty<string>())
                 },
                 new Option(
                     new[] { "--exclude" },
                     Resources.A_list_of_relative_file_or_folder_paths_to_exclude_from_formatting
-                )
-                {
+                ) {
                     Argument = new Argument<string[]>(() => Array.Empty<string>())
                 },
                 new Option(
@@ -101,8 +99,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 new Option(
                     new[] { "--report" },
                     Resources.Accepts_a_file_path_which_if_provided_will_produce_a_format_report_json_file_in_the_given_directory
-                )
-                {
+                ) {
                     Argument = new Argument<string?>(() => null)
                     {
                         Name = "report-path"
@@ -111,8 +108,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 new Option(
                     new[] { "--verbosity", "-v" },
                     Resources.Set_the_verbosity_level_Allowed_values_are_quiet_minimal_normal_detailed_and_diagnostic
-                )
-                {
+                ) {
                     Argument = new Argument<string?>()
                     {
                         Arity = ArgumentArity.ExactlyOne
@@ -121,8 +117,7 @@ namespace Microsoft.CodeAnalysis.Tools
                 new Option(
                     new[] { "--include-generated" },
                     Resources.Include_generated_code_files_in_formatting_operations
-                )
-                {
+                ) {
                     IsHidden = true
                 },
             };

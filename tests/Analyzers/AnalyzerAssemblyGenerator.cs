@@ -87,9 +87,9 @@ public class {typeName} : DiagnosticAnalyzer
 
             var netstandardMetaDataReferences =
                 await ReferenceAssemblies.NetStandard.NetStandard20.ResolveAsync(
-                    LanguageNames.CSharp,
-                    CancellationToken.None
-                );
+                LanguageNames.CSharp,
+                CancellationToken.None
+            );
             references.AddRange(netstandardMetaDataReferences);
             var compilation = CSharpCompilation.Create(
                 assemblyName,

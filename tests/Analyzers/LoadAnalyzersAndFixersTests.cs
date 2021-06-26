@@ -13,7 +13,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         [Fact]
         public static async Task TestSingleAnalyzerAndFixerAsync()
         {
-            var assemblies = new[] {
+            var assemblies = new[]
+            {
                 await GenerateAssemblyAsync(
                     GenerateAnalyzerCode("DiagnosticAnalyzer1", "DiagnosticAnalyzerId"),
                     GenerateCodeFix("CodeFixProvider1", "DiagnosticAnalyzerId")
@@ -31,7 +32,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         [Fact]
         public static async Task TestMultipleAnalyzersAndFixersAsync()
         {
-            var assemblies = new[] {
+            var assemblies = new[]
+            {
                 await GenerateAssemblyAsync(
                     GenerateAnalyzerCode("DiagnosticAnalyzer1", "DiagnosticAnalyzerId1"),
                     GenerateAnalyzerCode("DiagnosticAnalyzer2", "DiagnosticAnalyzerId2"),
@@ -48,7 +50,8 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
         [Fact]
         public static async Task TestMultipleAnalyzersAndFixersFromTwoAssembliesAsync()
         {
-            var assemblies = new[] {
+            var assemblies = new[]
+            {
                 await GenerateAssemblyAsync(
                     GenerateAnalyzerCode("DiagnosticAnalyzer1", "DiagnosticAnalyzerId1"),
                     GenerateCodeFix("CodeFixProvider1", "DiagnosticAnalyzerId1")

@@ -281,12 +281,12 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             TestState.Sources.Add(text);
 
             var solution = await GetSolutionAsync(
-                    TestState.Sources.ToArray(),
-                    TestState.AdditionalFiles.ToArray(),
-                    TestState.AdditionalReferences.ToArray(),
-                    editorConfig,
-                    analyzerReferences
-                );
+                TestState.Sources.ToArray(),
+                TestState.AdditionalFiles.ToArray(),
+                TestState.AdditionalReferences.ToArray(),
+                editorConfig,
+                analyzerReferences
+            );
             var project = solution.Projects.Single();
             var document = project.Documents.Single();
 
@@ -314,13 +314,13 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             var formattedFiles = new List<FormattedFile>();
 
             var formattedSolution = await Formatter.FormatAsync(
-                    solution,
-                    pathsToFormat,
-                    formatOptions,
-                    logger,
-                    formattedFiles,
-                    default
-                );
+                solution,
+                pathsToFormat,
+                formatOptions,
+                logger,
+                formattedFiles,
+                default
+            );
             var formattedDocument = GetOnlyDocument(formattedSolution);
             var formattedText = await formattedDocument.GetTextAsync();
 
@@ -395,13 +395,13 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
         ) {
             analyzerReferences ??= Enumerable.Empty<AnalyzerReference>();
             var project = await CreateProjectAsync(
-                    sources,
-                    additionalFiles,
-                    additionalMetadataReferences,
-                    analyzerReferences,
-                    Language,
-                    SourceText.From(editorConfig, Encoding.UTF8)
-                );
+                sources,
+                additionalFiles,
+                additionalMetadataReferences,
+                analyzerReferences,
+                Language,
+                SourceText.From(editorConfig, Encoding.UTF8)
+            );
             return project.Solution;
         }
 
@@ -459,11 +459,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             SourceText editorConfigText
         ) {
             var projectId = ProjectId.CreateNewId(debugName: DefaultTestProjectName);
-            var solution = (await CreateSolutionAsync(
-                projectId,
-                language,
-                editorConfigText
-            )).AddAnalyzerReferences(projectId, analyzerReferences)
+            var solution = (
+                await CreateSolutionAsync(projectId, language, editorConfigText)
+            ).AddAnalyzerReferences(projectId, analyzerReferences)
                 .AddMetadataReferences(projectId, additionalMetadataReferences);
 
             for (var i = 0; i < sources.Length; i++)
@@ -512,9 +510,9 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
 
             var parseOptions = CreateParseOptions();
             var referenceAssemblies = await ReferenceAssemblies.ResolveAsync(
-                    language,
-                    CancellationToken.None
-                );
+                language,
+                CancellationToken.None
+            );
 
             var editorConfigDocument = DocumentInfo.Create(
                 DocumentId.CreateNewId(projectId, DefaultEditorConfigPath),

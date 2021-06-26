@@ -24,12 +24,12 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             var formattablePaths = ImmutableHashSet.Create(project.Documents.First().FilePath);
             var minimumSeverity = DiagnosticSeverity.Warning;
             var result = await AnalyzerFormatter.FilterBySeverityAsync(
-                    solution,
-                    projectAnalyzersAndFixers,
-                    formattablePaths,
-                    minimumSeverity,
-                    CancellationToken.None
-                );
+                solution,
+                projectAnalyzersAndFixers,
+                formattablePaths,
+                minimumSeverity,
+                CancellationToken.None
+            );
             var (_, analyzers) = Assert.Single(result);
             Assert.Single(analyzers);
         }
@@ -43,19 +43,20 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Analyzers
             var formattablePaths = ImmutableHashSet.Create(project.Documents.First().FilePath);
             var minimumSeverity = DiagnosticSeverity.Error;
             var result = await AnalyzerFormatter.FilterBySeverityAsync(
-                    solution,
-                    projectAnalyzersAndFixers,
-                    formattablePaths,
-                    minimumSeverity,
-                    CancellationToken.None
-                );
+                solution,
+                projectAnalyzersAndFixers,
+                formattablePaths,
+                minimumSeverity,
+                CancellationToken.None
+            );
             var (_, analyzers) = Assert.Single(result);
             Assert.Empty(analyzers);
         }
 
         private static async Task<AnalyzersAndFixers> GetAnalyzersAndFixersAsync()
         {
-            var assemblies = new[] {
+            var assemblies = new[]
+            {
                 await GenerateAssemblyAsync(
                     GenerateAnalyzerCode("DiagnosticAnalyzer1", "DiagnosticAnalyzerId"),
                     GenerateCodeFix("CodeFixProvider1", "DiagnosticAnalyzerId")

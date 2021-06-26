@@ -58,28 +58,28 @@ namespace Microsoft.CodeAnalysis.Tools.Formatters
 
             var formattedDocument =
                 await RemoveUnnecessaryImportsHelper.RemoveUnnecessaryImportsAsync(
-                        document,
-                        cancellationToken
-                    )
-                    .ConfigureAwait(false);
+                    document,
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
             if (formattedDocument is null)
             {
                 return sourceText;
             }
 
             var isSameVersion = await IsSameDocumentAndVersionAsync(
-                        document,
-                        formattedDocument,
-                        cancellationToken
-                    )
-                    .ConfigureAwait(false);
+                    document,
+                    formattedDocument,
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
             if (isSameVersion)
             {
                 return sourceText;
             }
 
             var formattedText = await formattedDocument.GetTextAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                .ConfigureAwait(false);
             return formattedText;
         }
     }

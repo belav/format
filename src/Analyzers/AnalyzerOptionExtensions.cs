@@ -119,18 +119,22 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             string? diagnosticCategory
         ) {
             var optionsProvider = project.CompilationOptions?.SyntaxTreeOptionsProvider;
-            return (optionsProvider != null
-                && optionsProvider.TryGetDiagnosticValue(
-                    tree,
-                    diagnosticId,
-                    CancellationToken.None,
-                    out _
-                ))
-                || (diagnosticCategory != null
-                && analyzerConfigOptions.TryGetValue(
-                    GetCategoryBasedDotnetAnalyzerDiagnosticSeverityKey(diagnosticCategory),
-                    out _
-                ))
+            return (
+                    optionsProvider != null
+                    && optionsProvider.TryGetDiagnosticValue(
+                        tree,
+                        diagnosticId,
+                        CancellationToken.None,
+                        out _
+                    )
+                )
+                || (
+                    diagnosticCategory != null
+                    && analyzerConfigOptions.TryGetValue(
+                        GetCategoryBasedDotnetAnalyzerDiagnosticSeverityKey(diagnosticCategory),
+                        out _
+                    )
+                )
                 || analyzerConfigOptions.TryGetValue(DotnetAnalyzerDiagnosticSeverityKey, out _);
         }
 
