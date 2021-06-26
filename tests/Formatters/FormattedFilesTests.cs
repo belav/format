@@ -56,11 +56,11 @@ namespace Microsoft.CodeAnalysis.Tools.Tests.Formatters
             TestState.Sources.Add(text);
 
             var solution = await GetSolutionAsync(
-                    TestState.Sources.ToArray(),
-                    TestState.AdditionalFiles.ToArray(),
-                    TestState.AdditionalReferences.ToArray(),
-                    EditorConfig
-                );
+                TestState.Sources.ToArray(),
+                TestState.AdditionalFiles.ToArray(),
+                TestState.AdditionalReferences.ToArray(),
+                EditorConfig
+            );
             var project = solution.Projects.Single();
             var document = project.Documents.Single();
 

@@ -183,12 +183,12 @@ namespace Microsoft.CodeAnalysis.Tools
                 );
 
                 var formatResult = await CodeFormatter.FormatWorkspaceAsync(
-                            formatOptions,
-                            logger,
-                            cancellationTokenSource.Token,
-                            createBinaryLog: logLevel == LogLevel.Trace
-                        )
-                        .ConfigureAwait(false);
+                        formatOptions,
+                        logger,
+                        cancellationTokenSource.Token,
+                        createBinaryLog: logLevel == LogLevel.Trace
+                    )
+                    .ConfigureAwait(false);
 
                 return GetExitCode(formatResult, check);
             }
@@ -329,8 +329,7 @@ namespace Microsoft.CodeAnalysis.Tools
         }
 
         private static bool TryGetDotNetCliVersion(
-            [NotNullWhen(returnValue: true)]
-            out string? dotnetVersion
+            [NotNullWhen(returnValue: true)] out string? dotnetVersion
         ) {
             try
             {
